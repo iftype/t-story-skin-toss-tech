@@ -354,8 +354,18 @@ function setupCategoryTree() {
   if (!tree) return
 
   // Parse Tistory's original DOM before we replace it
-  const rootUl = tree.querySelector('.category_list') || tree.querySelector('ul.tt_category > li > ul') || tree.querySelector('ul')
+  let rootUl = tree.querySelector('ul')
   if (!rootUl) return
+
+  // If the root list has exactly one child LI, and that LI contains a nested UL,
+  // that nested UL is the actual categories list (bypassing the "All posts" root wrapper).
+  const directLis = Array.from(rootUl.children).filter(child => child.tagName === 'LI')
+  if (directLis.length === 1) {
+    const nestedUl = directLis[0].querySelector('ul')
+    if (nestedUl) {
+      rootUl = nestedUl
+    }
+  }
 
   // Helpers to check current page path & descendant active states
   const parseLevel = (ulElement) => {
