@@ -17,7 +17,7 @@
 1. `tistory-skin-toss-tech.zip` 압축을 풉니다.
 2. 티스토리 관리자 → **꾸미기 > 스킨 변경 > 스킨 등록**으로 이동합니다.
 3. **추가** 버튼을 눌러 루트 폴더의 파일을 업로드합니다.
-   - `skin.html`, `style.css`, `index.xml`, `preview.gif`, `preview1600.jpg`, `preview256.jpg`, `preview560.jpg`
+   - `skin.html`, `style.css`, `index.xml`, `preview.gif`, `preview256.jpg`, `preview560.jpg`
 4. 다시 **추가** 버튼을 눌러 `images/` 폴더 안의 파일을 업로드합니다.
    - `images/script.js`, `images/style.css`, `images/style-tight.css`
    - 티스토리가 자동으로 `./images/` 경로에 매핑합니다.
