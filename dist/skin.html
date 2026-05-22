@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>[##_page_title_##]</title>
+    <meta name="description" content="[##_desc_##]">
+    <link rel="alternate" type="application/rss+xml" title="[##_title_##] RSS" href="[##_rss_url_##]">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+	      (function () {
+	        var savedTheme = localStorage.getItem('docs-theme');
+	        var theme = savedTheme || 'dark';
+	        var path = window.location.pathname.replace(/\/+$/, '') || '/';
+	        document.documentElement.setAttribute('data-theme', theme === 'light' ? 'github-light' : 'github-dark');
+	        document.documentElement.setAttribute('data-ui-theme', theme);
+	        document.documentElement.setAttribute('data-route', path === '/category' ? 'category-index' : path.indexOf('/category') === 0 ? 'category-list' : 'default');
+	      })();
+    </script>
+    <!--
+      [본문 여백 스타일 모드 선택 안내]
+      이 스킨은 두 가지 스타일시트를 제공하며, 원하시는 모드에 맞춰 주석을 해제하거나 Tistory CSS 탭에 적용하세요.
+
+      1. 마크다운 본문 모드 (기본 / 추천):
+         - 문단 <p> 간 위아래 24px 여백이 활성화되어, 마크다운이나 기본 모드로 문서를 읽기 좋게 구성합니다.
+         - 아래의 './images/style.css' 링크를 유지하십시오.
+         
+      2. 일반/타이트 본문 모드 (여백 없음):
+         - 문단 <p> 간 위아래 여백을 0으로 꽉 줄여 한 줄 쓰고 엔터를 치는 일반 타자가 조밀하게 보이게 합니다.
+         - 'style-tight.css' 내용을 복사해 Tistory CSS 탭에 덮어쓰거나, 'style-tight.css'를 파일 업로드 탭에 올린 후 아래 './images/style-tight.css'의 주석을 해제해 사용하세요.
+    -->
+    <!-- 기본 모드: 마크다운 본문 모드 -->
+    <link rel="stylesheet" href="./images/style.css">
+    <!-- 선택 모드: 일반/타이트 본문 모드 (여백 없음) -->
+    <!-- <link rel="stylesheet" href="./images/style-tight.css"> -->
+  </head>
+  <body id="[##_body_id_##]">
+    <s_t3>
+      <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
+
+      <div class="docs-app">
+        <aside class="docs-sidebar" id="docs-sidebar">
+          <div class="docs-sidebar__inner">
+            <div class="docs-brand">
+              <a class="docs-brand__logo" href="[##_blog_link_##]" aria-label="[##_title_##] 홈">
+                <span class="docs-brand__gem"></span>
+              </a>
+              <div class="docs-brand__copy">
+                <a class="docs-brand__title" href="[##_blog_link_##]">[##_title_##]</a>
+              </div>
+              <button class="docs-sidebar__close docs-icon-button" type="button" data-action="toggle-nav" aria-label="메뉴 닫기" title="닫기">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+
+
+            <nav class="docs-nav" aria-label="문서 탐색">
+
+
+              <div class="docs-nav__section">
+                <a class="docs-nav__heading docs-nav__heading--link" href="/category">
+                  카테고리
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="flex-shrink:0"><path d="M2 5h6M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <div class="docs-nav__tree category-tree">
+                  [##_category_list_##]
+                </div>
+              </div>
+
+              <div class="docs-nav__section">
+                <a class="docs-nav__heading docs-nav__heading--link" href="/">
+                  최근 글
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="flex-shrink:0"><path d="M2 5h6M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <ul class="docs-nav__list docs-nav__list--recent">
+                  <s_rctps_rep>
+                    <li style="overflow: hidden;">
+                      <a href="[##_rctps_rep_link_##]" style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">[##_rctps_rep_title_##]</a>
+                    </li>
+                  </s_rctps_rep>
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </aside>
+        <div class="docs-sidebar-overlay" data-action="toggle-nav"></div>
+
+        <div class="docs-main-shell">
+          <header class="docs-topbar">
+            <div class="docs-topbar__left">
+              <button class="docs-icon-button docs-icon-button--menu" type="button" data-action="toggle-nav" aria-expanded="false" aria-controls="docs-sidebar" aria-label="메뉴 열기">
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+              <a class="docs-topbar__brand" href="[##_blog_link_##]">[##_title_##]</a>
+              <div class="docs-topbar__left-admin admin-only" style="display:none;">
+                <a class="docs-toplink" href="[##_owner_url_##]">관리</a>
+                <a class="docs-toplink docs-toplink--write" href="[##_blog_link_##]manage/newpost/?type=post&amp;returnURL=%2Fmanage%2Fposts%2F">글쓰기</a>
+              </div>
+            </div>
+
+            <div class="docs-topbar__right">
+              <nav class="docs-topbar__nav" aria-label="상단 탐색">
+                <a class="docs-topbar__nav-link" href="/category">Category</a>
+              </nav>
+              <s_search>
+                <div class="docs-searchbar">
+                  <span class="docs-searchbar__icon" aria-hidden="true">⌕</span>
+                  <label class="a11y-hidden" for="docs-search-input">검색</label>
+                  <input
+                    id="docs-search-input"
+                    class="docs-searchbar__input"
+                    type="text"
+                    name="[##_search_name_##]"
+                    value="[##_search_text_##]"
+                    placeholder="검색"
+                    onkeypress="if (event.keyCode == 13) { [##_search_onclick_submit_##] }"
+                  >
+                  <button class="docs-searchbar__submit" type="button" onclick="[##_search_onclick_submit_##]">⌘K</button>
+                </div>
+              </s_search>
+              <button class="docs-icon-button" type="button" data-action="toggle-theme" aria-label="테마 전환">
+                <span class="theme-mark">◐</span>
+              </button>
+            </div>
+          </header>
+
+          <div class="docs-layout">
+            <main class="docs-content" id="main-content">
+              [##_revenue_list_upper_##]
+
+
+
+              <s_list>
+                <section class="docs-page-head">
+                  <div class="docs-page-head__title-group">
+                    <h1 class="docs-page-head__title">[##_list_conform_##]</h1>
+                    <div class="docs-page-head__meta">글 [##_list_count_##]개</div>
+                  </div>
+                  <div class="docs-category-map" data-category-map hidden></div>
+                </section>
+	                <section class="docs-empty-state" data-empty-state hidden>
+	                  <div class="docs-empty-state__ghost" aria-hidden="true">
+	                    <span></span>
+	                    <span></span>
+	                  </div>
+	                  <p class="docs-empty-state__eyebrow">No results</p>
+	                  <h2>검색 결과가 없습니다</h2>
+	                  <p>다른 키워드로 다시 검색하거나 카테고리에서 글을 찾아보세요.</p>
+                </section>
+              </s_list>
+
+              <s_article_rep>
+                <s_index_article_rep>
+                  <article class="docs-list-item" data-card-href="[##_article_rep_link_##]">
+                    <div class="docs-list-item__inner">
+                      <a class="docs-list-item__thumb-link" href="[##_article_rep_link_##]" aria-label="글 썸네일">
+                        <div class="docs-list-item__thumb">
+                          <s_article_rep_thumbnail>
+                            <img src="[##_article_rep_thumbnail_url_##]" alt="[##_article_rep_title_##]" width="640" height="480" loading="eager" decoding="async" fetchpriority="high">
+                          </s_article_rep_thumbnail>
+                          <div class="docs-list-item__ghost-container" aria-hidden="true">
+                            <div class="docs-list-item__ghost"><span></span><span></span></div>
+                          </div>
+                        </div>
+                      </a>
+                      <div class="docs-list-item__content">
+                        <a class="docs-list-item__main-link" href="[##_article_rep_link_##]">
+                          <h2 class="docs-list-item__title">[##_article_rep_title_##]</h2>
+                        </a>
+                        <div class="docs-list-item__meta">
+                          <span>[##_article_rep_simple_date_##]</span>
+                          <a href="[##_article_rep_category_link_##]" class="docs-list-item__category">[##_article_rep_category_##]</a>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </s_index_article_rep>
+
+                <s_permalink_article_rep>
+                  <div class="docs-article-layout">
+                    <article class="docs-article">
+                      <header class="docs-article__header">
+                        <div class="docs-article__meta">
+                          <a class="docs-article__category" href="[##_article_rep_category_link_##]">[##_article_rep_category_##]</a>
+                          <span>[##_article_rep_simple_date_##]</span>
+                        </div>
+                        <h1 class="docs-article__title">[##_article_rep_title_##]</h1>
+                      </header>
+  
+                      <div class="docs-article__body article-body" data-docs-article>
+                        [##_article_rep_desc_##]
+                      </div>
+  
+                      <s_ad_div>
+                        <div class="docs-admin-actions">
+                          <a class="docs-admin-actions__link" href="[##_s_ad_m_link_##]">수정</a>
+                          <a class="docs-admin-actions__link" href="#" onclick="[##_s_ad_s2_onclick_##]">[##_s_ad_s2_label_##]</a>
+                          <a class="docs-admin-actions__link" href="#" onclick="[##_s_ad_d_onclick_##]">삭제</a>
+                        </div>
+                      </s_ad_div>
+  
+                      <s_tag_label>
+                        <div class="docs-tags">
+                          <span class="docs-tags__label">Tags</span>
+                          <div class="docs-tags__items">[##_tag_label_rep_##]</div>
+                        </div>
+                      </s_tag_label>
+  
+                      <nav class="docs-article-nav">
+                        <div class="docs-article-nav__slot docs-article-nav__slot--prev">
+                          <s_article_prev>
+                            <a class="docs-article-nav__item docs-article-nav__item--prev" href="[##_article_prev_link_##]">
+                              <span class="docs-article-nav__eyebrow">Previous</span>
+                              <strong>[##_article_prev_title_##]</strong>
+                            </a>
+                          </s_article_prev>
+                        </div>
+                        <div class="docs-article-nav__slot docs-article-nav__slot--next">
+                          <s_article_next>
+                            <a class="docs-article-nav__item docs-article-nav__item--next" href="[##_article_next_link_##]">
+                              <span class="docs-article-nav__eyebrow">Next</span>
+                              <strong>[##_article_next_title_##]</strong>
+                            </a>
+                          </s_article_next>
+                        </div>
+                      </nav>
+  
+                      <section class="docs-comments" id="comments">
+                        <s_rp>
+                          [##_comment_group_##]
+                        </s_rp>
+                      </section>
+                    </article>
+  
+                    <aside class="docs-toc" data-docs-toc>
+                      <div class="docs-toc__inner">
+                        <div class="docs-toc__title">목차</div>
+                        <nav class="docs-toc__nav" id="toc-content"></nav>
+                      </div>
+                    </aside>
+                  </div>
+                </s_permalink_article_rep>
+              </s_article_rep>
+
+              <s_page_rep>
+                <article class="docs-article">
+                  <header class="docs-article__header">
+                    <div class="docs-article__meta">
+                      <span>Page</span>
+                      <span>[##_article_rep_simple_date_##]</span>
+                    </div>
+                    <h1 class="docs-article__title">[##_article_rep_title_##]</h1>
+                  </header>
+                  <div class="docs-article__body article-body" data-docs-article>
+                    [##_article_rep_desc_##]
+                  </div>
+                </article>
+              </s_page_rep>
+
+              <s_guest>
+                <article class="docs-article docs-guestbook">
+                  <header class="docs-article__header">
+                    <div class="docs-article__meta">
+                      <span>Guestbook</span>
+                    </div>
+                    <h1 class="docs-article__title">방명록</h1>
+                  </header>
+                  <section class="docs-comments docs-comments--guestbook">
+                    [##_guestbook_group_##]
+                  </section>
+                </article>
+              </s_guest>
+
+              <s_article_protected>
+                <article class="docs-article">
+                  <header class="docs-article__header">
+                    <div class="docs-article__meta">
+                      <a class="docs-article__category" href="[##_article_rep_category_link_##]">[##_article_rep_category_##]</a>
+                      <span>[##_article_rep_simple_date_##]</span>
+                    </div>
+                    <h1 class="docs-article__title">[##_article_rep_title_##]</h1>
+                  </header>
+                  <div class="docs-protected">
+                    <p>보호된 글입니다. 비밀번호를 입력하면 내용을 볼 수 있습니다.</p>
+                    <div class="docs-protected__row">
+                      <label for="[##_article_password_##]">Password</label>
+                      <input
+                        id="[##_article_password_##]"
+                        type="password"
+                        maxlength="16"
+                        name="[##_article_password_##]"
+                        onkeydown="if (event.keyCode == 13) [##_article_dissolve_##]"
+                      >
+                      <button type="button" onclick="[##_article_dissolve_##]">Open</button>
+                    </div>
+                  </div>
+                </article>
+              </s_article_protected>
+
+              <s_paging>
+                <nav class="docs-paging" aria-label="페이지 이동">
+                  <a [##_prev_page_##] class="docs-paging__button [##_no_more_prev_##]">Prev</a>
+                  <div class="docs-paging__numbers">
+                    <s_paging_rep>
+                      <a [##_paging_rep_link_##] class="docs-paging__number">[##_paging_rep_link_num_##]</a>
+                    </s_paging_rep>
+                  </div>
+                  <a [##_next_page_##] class="docs-paging__button [##_no_more_next_##]">Next</a>
+                </nav>
+              </s_paging>
+            </main>
+
+          </div>
+        </div>
+      </div>
+
+      <script src="./images/script.js"></script>
+    </s_t3>
+  </body>
+</html>

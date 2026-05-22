@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<skin>
+  <information>
+    <name>Dev Docs Tistory</name>
+    <version>0.1.0</version>
+    <description><![CDATA[개발 문서 사이트 레이아웃을 참고한 티스토리 문서형 스킨입니다. 긴 튜토리얼 글과 코드 블록 가독성에 초점을 맞췄습니다.]]></description>
+    <license><![CDATA[Personal and commercial use allowed with attribution.]]></license>
+  </information>
+  <author>
+    <name>OpenAI Codex</name>
+    <homepage>https://openai.com</homepage>
+    <email>support@openai.com</email>
+  </author>
+  <default>
+    <recentEntries>8</recentEntries>
+    <recentComments>5</recentComments>
+    <recentTrackbacks>5</recentTrackbacks>
+    <itemsOnGuestbook>10</itemsOnGuestbook>
+    <tagsInCloud>20</tagsInCloud>
+    <sortInCloud>2</sortInCloud>
+    <expandComment>1</expandComment>
+    <expandTrackback>0</expandTrackback>
+    <lengthOfRecentNotice>25</lengthOfRecentNotice>
+    <lengthOfRecentEntry>38</lengthOfRecentEntry>
+    <lengthOfRecentComment>30</lengthOfRecentComment>
+    <lengthOfRecentTrackback>30</lengthOfRecentTrackback>
+    <lengthOfLink>30</lengthOfLink>
+    <entriesOnPage>12</entriesOnPage>
+    <entriesOnList>18</entriesOnList>
+    <showListOnCategory>1</showListOnCategory>
+    <showListOnArchive>1</showListOnArchive>
+    <showListLock>0</showListLock>
+    <liststyle>docs</liststyle>
+    <commentMessage>
+      <none>댓글이 없습니다.</none>
+      <single>댓글이 하나 있습니다.</single>
+    </commentMessage>
+    <tree>
+      <color>4b5563</color>
+      <bgColor>f8fafc</bgColor>
+      <activeColor>111827</activeColor>
+      <activeBgColor>e2e8f0</activeBgColor>
+      <labelLength>36</labelLength>
+      <showValue>1</showValue>
+    </tree>
+    <contentWidth>860</contentWidth>
+  </default>
+  <liststyle>
+    <item>
+      <label>Docs</label>
+      <value>docs</value>
+    </item>
+    <item>
+      <label>Compact</label>
+      <value>compact</value>
+    </item>
+  </liststyle>
+</skin>

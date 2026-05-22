@@ -1,0 +1,227 @@
+body.has-list-page .docs-list-item {
+  min-height: 282px !important;
+  padding: 10px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 18px !important;
+  background: var(--comment-panel-bg) !important;
+  overflow: hidden !important;
+}
+
+body.has-list-page .docs-list-item__inner {
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  gap: 14px !important;
+  height: 100% !important;
+  min-height: 260px !important;
+  padding: 0 !important;
+}
+
+body.has-list-page .docs-list-item__thumb-link {
+  display: block !important;
+  min-height: 0 !important;
+}
+
+body.has-list-page .docs-list-item__thumb {
+  display: grid !important;
+  place-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(circle at 50% 40%, var(--accent-soft), transparent 42%),
+    var(--bg-soft) !important;
+}
+
+body.has-list-page .docs-list-item__thumb img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Skeleton styling for cards without thumbnail */
+body.has-list-page .docs-list-item__ghost-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* Hide ghost skeleton when thumbnail image is present */
+body.has-list-page .docs-list-item__thumb:has(img) .docs-list-item__ghost-container {
+  display: none !important;
+}
+body.has-list-page .docs-list-item__thumb img ~ .docs-list-item__ghost-container {
+  display: none !important;
+}
+
+/* Soft border styling for thumbnails without an image */
+body.has-list-page .docs-list-item__thumb:not(:has(img)) {
+  border: 1px solid color-mix(in srgb, var(--line-soft) 72%, transparent) !important;
+}
+
+body.has-list-page .docs-list-item__ghost {
+  position: relative !important;
+  width: 46px !important;
+  height: 52px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 24px 24px 15px 15px !important;
+  background: var(--comment-card-bg) !important;
+  animation: ghost-float 2.8s ease-in-out infinite !important;
+}
+
+body.has-list-page .docs-list-item__ghost::before,
+body.has-list-page .docs-list-item__ghost::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 20px !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 999px !important;
+  background: var(--accent-strong) !important;
+}
+
+body.has-list-page .docs-list-item__ghost::before {
+  left: 14px !important;
+}
+
+body.has-list-page .docs-list-item__ghost::after {
+  right: 14px !important;
+}
+
+body.has-list-page .docs-list-item__ghost span:first-child {
+  position: absolute !important;
+  right: 9px !important;
+  bottom: -5px !important;
+  left: 9px !important;
+  height: 10px !important;
+  border-radius: 999px !important;
+  background: var(--comment-panel-bg) !important;
+}
+
+body.has-list-page .docs-list-item__ghost span:last-child {
+  position: absolute !important;
+  bottom: 14px !important;
+  left: 50% !important;
+  width: 12px !important;
+  height: 4px !important;
+  border-radius: 999px !important;
+  background: var(--line) !important;
+  transform: translateX(-50%) !important;
+}
+
+body.has-list-page .docs-list-item__content {
+  display: grid !important;
+  grid-template-rows: auto auto !important;
+  gap: 12px !important;
+  min-height: 82px !important;
+  padding: 0 2px 2px !important;
+}
+
+body.has-list-page .docs-list-item__main-link {
+  min-height: 42px !important;
+}
+
+body.has-list-page .docs-list-item__title {
+  margin: 0 !important;
+  font-size: 15px !important;
+  line-height: 1.42 !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+body.has-list-page .docs-list-item__meta {
+  align-self: end !important;
+  min-height: 18px !important;
+  margin-top: 0 !important;
+}
+
+@media (max-width: 760px) {
+  body.has-list-page .docs-list-item {
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  body.has-list-page .docs-list-item__inner {
+    grid-template-columns: minmax(0, 1fr) 104px !important;
+    grid-template-rows: auto !important;
+    gap: 14px !important;
+    align-items: center !important;
+    min-height: 86px !important;
+    padding: 12px 0 !important;
+    border-bottom: 1px solid var(--line-soft) !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb-link {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: stretch !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb {
+    width: 104px !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+  }
+
+  body.has-list-page .docs-list-item__ghost {
+    width: 30px !important;
+    height: 34px !important;
+    border-radius: 16px 16px 10px 10px !important;
+  }
+
+  body.has-list-page .docs-list-item__ghost::before,
+  body.has-list-page .docs-list-item__ghost::after {
+    top: 13px !important;
+    width: 4px !important;
+    height: 4px !important;
+  }
+
+  body.has-list-page .docs-list-item__ghost::before {
+    left: 9px !important;
+  }
+
+  body.has-list-page .docs-list-item__ghost::after {
+    right: 9px !important;
+  }
+
+  body.has-list-page .docs-list-item__ghost span:first-child {
+    right: 6px !important;
+    bottom: -4px !important;
+    left: 6px !important;
+    height: 8px !important;
+  }
+
+  body.has-list-page .docs-list-item__ghost span:last-child {
+    bottom: 9px !important;
+    width: 9px !important;
+    height: 3px !important;
+  }
+
+  body.has-list-page .docs-list-item__content {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    gap: 8px !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__main-link {
+    min-height: 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__title {
+    font-size: 16px !important;
+    line-height: 1.35 !important;
+  }
+}

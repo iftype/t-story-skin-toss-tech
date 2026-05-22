@@ -1,0 +1,1423 @@
+/* ==========================================================================
+   Final Tistory comment layer
+   Keep all comment layout overrides here. Tistory injects strong defaults.
+   ========================================================================== */
+
+body .docs-comments {
+  --cmt-form-avatar: 48px;
+  --cmt-card-avatar: 32px;
+  --cmt-gap: 16px;
+  --cmt-card-gap: 12px;
+  --cmt-card-padding: 20px;
+  --cmt-card-radius: 20px;
+  --cmt-input-height: 40px;
+  --cmt-input-radius: 10px;
+  --cmt-input-font: 15px;
+  --cmt-textarea-font: 14px;
+  --cmt-textarea-line: 1.6;
+  --cmt-textarea-height: 112px;
+  --cmt-button-height: 40px;
+  position: relative !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-top: 40px !important;
+  padding-top: 40px !important;
+  border-top: 1px solid var(--line-soft) !important;
+  overflow: visible !important;
+}
+
+body .docs-comments,
+body .docs-comments * {
+  box-sizing: border-box !important;
+  letter-spacing: 0 !important;
+}
+
+body .docs-comments__title {
+  margin: 0 0 16px !important;
+  color: var(--comment-name) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+}
+
+body .docs-comments [data-tistory-react-app],
+body .docs-comments [id^="entry"][id$="Comment"],
+body .docs-comments .tt-comment-cont,
+body .docs-comments .tt-area-reply,
+body .docs-comments .tt-list-reply,
+body .docs-comments .tt-list-reply-comment,
+body .docs-comments .tt-item-reply,
+body .docs-comments .tt-wrap-cmt {
+  overflow: visible !important;
+}
+
+body .docs-comments [id^="entry"][id$="Comment"],
+body .docs-comments .tt-comment-cont,
+body .docs-comments .tt-area-reply {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body .docs-comments s_rp,
+body .docs-comments s_rp_input_form,
+body .docs-comments s_rp_member,
+body .docs-comments s_rp_guest {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Header / total */
+body .docs-comments .tt-box-total {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--comment-name) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+}
+
+/* Comment composer: avatar/name row, textarea below, action below. */
+body .docs-comments form,
+body .docs-comments .tt-comment-cont {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+body .docs-comments form:has(.tt-area-write),
+body .docs-comments .tt-area-write {
+  order: 1 !important;
+}
+
+body .docs-comments .tt-area-write {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: var(--cmt-form-avatar) minmax(0, 1fr) !important;
+  grid-template-areas:
+    "avatar account"
+    "editor editor"
+    "actions actions" !important;
+  align-items: center !important;
+  gap: var(--cmt-gap) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 40px 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+  float: none !important;
+  clear: both !important;
+}
+
+body .docs-comments .tt-area-write > .tt-box-thumb,
+body .docs-comments .tt-area-write > a:has(img),
+body .docs-comments .tt-area-write > img {
+  grid-area: avatar !important;
+  display: block !important;
+  width: var(--cmt-form-avatar) !important;
+  min-width: var(--cmt-form-avatar) !important;
+  max-width: var(--cmt-form-avatar) !important;
+  height: var(--cmt-form-avatar) !important;
+  min-height: var(--cmt-form-avatar) !important;
+  max-height: var(--cmt-form-avatar) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  align-self: start !important;
+  float: none !important;
+}
+
+body .docs-comments .tt-area-write > .tt-box-thumb .tt-thumbnail,
+body .docs-comments .tt-area-write > .tt-box-thumb img,
+body .docs-comments .tt-area-write > a:has(img) img,
+body .docs-comments .tt-area-write > img {
+  display: block !important;
+  width: var(--cmt-form-avatar) !important;
+  min-width: var(--cmt-form-avatar) !important;
+  max-width: var(--cmt-form-avatar) !important;
+  height: var(--cmt-form-avatar) !important;
+  min-height: var(--cmt-form-avatar) !important;
+  max-height: var(--cmt-form-avatar) !important;
+  border-radius: 999px !important;
+  background-color: var(--comment-avatar-bg) !important;
+  background-position: center !important;
+  background-size: cover !important;
+  object-fit: cover !important;
+  overflow: hidden !important;
+}
+
+body .docs-comments .tt-area-write > .tt_wrap_write,
+body .docs-comments .tt-area-write > .tt-wrap-write {
+  display: contents !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account,
+body .docs-comments .tt-area-write .tt-wrap-account {
+  grid-area: account !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: var(--cmt-input-height) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account:empty,
+body .docs-comments .tt-area-write .tt-wrap-account:empty {
+  display: none !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account input,
+body .docs-comments .tt-area-write .tt-wrap-account input,
+body .docs-comments .tt-area-write input.tt_txt_user,
+body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]) {
+  /* Let the flex parent handle the layout */
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: var(--cmt-input-height) !important;
+  min-height: var(--cmt-input-height) !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: var(--cmt-input-radius) !important;
+  background: var(--comment-panel-bg) !important;
+  color: var(--text) !important;
+  caret-color: var(--text) !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--cmt-input-font) !important;
+  font-weight: 500 !important;
+  line-height: var(--cmt-input-height) !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-textarea {
+  display: contents !important;
+}
+
+body .docs-comments .tt-area-write .tt-inner-g {
+  display: contents !important;
+}
+
+body .docs-comments .tt-area-write .tt-inner-g > a:not(:has(img)),
+body .docs-comments .tt-area-write .tt-inner-g > span:not(.tt-box-thumb),
+body .docs-comments .tt-area-write .tt-inner-g > .tt-name {
+  grid-area: account !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: var(--cmt-input-height) !important;
+  color: var(--comment-name) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+body .docs-comments .tt-area-write .tt-cmt,
+body .docs-comments .tt-area-write textarea.tt_inp_g,
+body .docs-comments .tt-area-write textarea.tt-cmt,
+body .docs-comments .tt-area-write [contenteditable="true"] {
+  grid-area: editor !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 46px !important;
+  height: auto;
+  max-height: 220px !important;
+  margin: 0 !important;
+  padding: 12px 14px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: var(--cmt-input-radius) !important;
+  background: var(--comment-panel-bg) !important;
+  color: var(--text) !important;
+  caret-color: var(--text) !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--cmt-textarea-font) !important;
+  font-weight: 500 !important;
+  line-height: var(--cmt-textarea-line) !important;
+  white-space: pre-wrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+  overflow: auto !important;
+  resize: vertical !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+body .docs-comments .tt-area-write .tt-cmt *,
+body .docs-comments .tt-area-write [contenteditable="true"] * {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: var(--text) !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--cmt-textarea-font) !important;
+  line-height: var(--cmt-textarea-line) !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account input::placeholder,
+body .docs-comments .tt-area-write .tt_txt_user::placeholder,
+body .docs-comments .tt-area-write .tt-cmt::placeholder,
+body .docs-comments .tt-area-write textarea.tt_inp_g::placeholder {
+  color: var(--comment-muted) !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account input:focus,
+body .docs-comments .tt-area-write .tt_txt_user:focus,
+body .docs-comments .tt-area-write .tt-cmt:focus,
+body .docs-comments .tt-area-write textarea.tt_inp_g:focus,
+body .docs-comments .tt-area-write [contenteditable="true"]:focus {
+  border-color: var(--accent-strong) !important;
+  outline: 3px solid var(--accent-soft) !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-write {
+  grid-area: actions !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-write > label,
+body .docs-comments .tt-area-write .tt-box-write > .tt-label-secret {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: var(--cmt-input-height) !important;
+  cursor: pointer !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-write > label > input[type="checkbox"] {
+  margin: 0 !important;
+}
+
+body .docs-comments .tt-btn_register,
+body .docs-comments .tt_btn_submit,
+body .docs-comments button[type="submit"],
+body .docs-comments input[type="submit"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 92px !important;
+  height: var(--cmt-button-height) !important;
+  min-height: var(--cmt-button-height) !important;
+  margin: 0 !important;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-radius: var(--cmt-input-radius) !important;
+  background: var(--accent) !important;
+  color: #fff !important;
+  font-family: var(--font-sans) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: var(--cmt-button-height) !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+}
+
+body .docs-comments .tt-btn_register:disabled,
+body .docs-comments .tt_btn_submit:disabled,
+body .docs-comments button[type="submit"]:disabled,
+body .docs-comments input[type="submit"]:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.7 !important;
+}
+
+/* Comment list and cards */
+body .docs-comments .tt-list-reply,
+body .docs-comments .tt-list-reply-comment,
+body .docs-comments .tt-list-reply-sub {
+  order: 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 24px 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  list-style: none !important;
+  gap: 12px !important;
+  overflow: visible !important;
+}
+
+body .docs-comments .tt-list-reply-comment,
+body .docs-comments .tt-list-reply-sub {
+  grid-column: 1 / -1 !important;
+  width: calc(100% - 44px) !important;
+  max-width: calc(100% - 44px) !important;
+  margin: 12px 0 0 44px !important;
+}
+
+body .docs-comments .tt-list-reply > .tt-item-reply,
+body .docs-comments .tt-list-reply-comment > .tt-item-reply,
+body .docs-comments .tt-list-reply-sub > .tt-item-reply,
+body .docs-comments .tt-list-reply-sub > li,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-list-reply > .tt-item-reply {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  list-style: none !important;
+  overflow: visible !important;
+  float: none !important;
+  clear: both !important;
+}
+
+body .docs-comments .tt-wrap-cmt,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-list-reply > .tt-item-reply:not(:has(.tt-wrap-cmt)) {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  gap: var(--cmt-card-gap) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: var(--cmt-card-padding) !important;
+  border: 0 !important;
+  border-radius: var(--cmt-card-radius) !important;
+  background: var(--comment-card-bg) !important;
+  overflow: visible !important;
+  float: none !important;
+  clear: both !important;
+}
+
+body .docs-comments .tt-wrap-cmt > .tt-box-thumb,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-thumb {
+  grid-area: avatar !important;
+  display: block !important;
+  width: var(--cmt-card-avatar) !important;
+  min-width: var(--cmt-card-avatar) !important;
+  max-width: var(--cmt-card-avatar) !important;
+  height: var(--cmt-card-avatar) !important;
+  min-height: var(--cmt-card-avatar) !important;
+  max-height: var(--cmt-card-avatar) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  float: none !important;
+}
+
+body .docs-comments .tt-wrap-cmt > .tt-box-thumb .tt-thumbnail,
+body .docs-comments .tt-wrap-cmt > .tt-box-thumb img,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-thumb .tt-thumbnail,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-thumb img {
+  display: block !important;
+  width: var(--cmt-card-avatar) !important;
+  min-width: var(--cmt-card-avatar) !important;
+  max-width: var(--cmt-card-avatar) !important;
+  height: var(--cmt-card-avatar) !important;
+  min-height: var(--cmt-card-avatar) !important;
+  max-height: var(--cmt-card-avatar) !important;
+  border-radius: 999px !important;
+  background-color: var(--comment-avatar-bg) !important;
+  background-position: center !important;
+  background-size: cover !important;
+  object-fit: cover !important;
+  overflow: hidden !important;
+}
+
+body .docs-comments .tt-wrap-cmt > .tt-box-content,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
+  display: grid !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  grid-template-columns: auto minmax(0, 1fr) 28px !important;
+  grid-template-areas:
+    "meta info menu"
+    "desc desc desc" !important;
+  align-items: center !important;
+  column-gap: var(--cmt-card-gap) !important;
+  row-gap: 6px !important;
+  overflow: visible !important;
+}
+
+body .docs-comments .tt-box-meta,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-meta {
+  grid-area: meta !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  height: var(--cmt-card-avatar) !important;
+}
+
+body .docs-comments .tt-wrap-link-comment {
+  display: none !important;
+}
+
+body .docs-comments .tt-wrap-info {
+  grid-area: info !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: var(--cmt-card-avatar) !important;
+}
+
+body .docs-comments .tt-link-user,
+body .docs-comments .tt-name,
+body .docs-comments .tt-name a,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-name,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-name a {
+  display: inline-flex !important;
+  align-items: center !important;
+  max-width: 100% !important;
+  height: var(--cmt-card-avatar) !important;
+  color: var(--comment-name) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: var(--cmt-card-avatar) !important;
+  text-decoration: none !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+}
+
+body .docs-comments .tt-date,
+body .docs-comments .tt_date,
+body .docs-comments .tt-wrap-cmt .tt_date,
+body .docs-comments .tt-link-comment,
+body .docs-comments .tt-link-comment .tt_txt_g {
+  display: inline-flex !important;
+  align-items: center !important;
+  height: var(--cmt-card-avatar) !important;
+  color: var(--comment-muted) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: var(--cmt-card-avatar) !important;
+  text-decoration: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body .docs-comments .tt-date::before,
+body .docs-comments .tt_date::before,
+body .docs-comments .tt-link-comment::before {
+  content: "·" !important;
+  margin: 0 8px 0 0 !important;
+  color: var(--comment-muted) !important;
+  font-weight: 500 !important;
+}
+
+/* Force pixel-perfect vertical centering for all nickname/date flex children */
+body .docs-comments .tt-box-meta *,
+body .docs-comments .tt-wrap-info * {
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 100% !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+body .docs-comments .tt-wrap-desc {
+  display: contents !important;
+}
+
+body .docs-comments .tt_desc,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc {
+  grid-area: desc !important;
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+body .docs-comments .tt_desc,
+body .docs-comments .tt_desc,
+body .docs-comments .tt-desc {
+  margin: 0 !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  letter-spacing: -0.3px !important;
+  color: var(--text-base) !important;
+  word-break: break-word !important;
+}
+
+/* Modify/delete menu */
+body .docs-comments .tt-box-modify {
+  grid-area: menu !important;
+  position: relative !important;
+  z-index: 20 !important;
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  align-self: center !important;
+  justify-self: end !important;
+}
+
+body .docs-comments .tt-button-modify {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  text-indent: -9999px !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+}
+
+body .docs-comments .tt-button-modify::before {
+  content: "" !important;
+  display: block !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 999px !important;
+  background: var(--comment-muted) !important;
+  box-shadow: 0 -7px 0 var(--comment-muted), 0 7px 0 var(--comment-muted) !important;
+}
+
+body .docs-comments .tt-button-modify::after,
+body .docs-comments .tt-button-modify * {
+  display: none !important;
+}
+
+body .docs-comments .tt-list-modify {
+  position: absolute !important;
+  top: 32px !important;
+  right: 0 !important;
+  left: auto !important;
+  z-index: 40 !important;
+  min-width: 128px !important;
+  margin: 0 !important;
+  padding: 8px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 12px !important;
+  background: var(--panel) !important;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.18) !important;
+  list-style: none !important;
+  overflow: visible !important;
+  pointer-events: auto !important;
+}
+
+body .docs-comments .tt-list-modify li {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+body .docs-comments .tt-list-modify a,
+body .docs-comments .tt-list-modify button {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 9px 10px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.35 !important;
+  text-align: left !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+body .docs-comments .tt-list-modify a:hover,
+body .docs-comments .tt-list-modify button:hover {
+  background: var(--accent-soft) !important;
+}
+
+body .docs-comments .tt-wrap-cmt.is-comment-menu-open,
+body .docs-comments .tt-item-reply.is-comment-menu-open,
+body .docs-comments .tt-item-reply:has(.tt-box-modify-open),
+body .docs-comments .tt-wrap-cmt:has(.tt-box-modify-open) {
+  position: relative !important;
+  z-index: 30 !important;
+}
+
+html[data-ui-theme="dark"] body .docs-comments {
+  --comment-card-bg: #2b2b2b;
+}
+
+html[data-ui-theme="dark"] body .docs-comments .tt-list-modify {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38) !important;
+}
+
+html[data-ui-theme="dark"] body .docs-comments .tt-btn_register,
+html[data-ui-theme="dark"] body .docs-comments .tt_btn_submit,
+html[data-ui-theme="dark"] body .docs-comments button[type="submit"],
+html[data-ui-theme="dark"] body .docs-comments input[type="submit"] {
+  color: #101419 !important;
+}
+
+@media (max-width: 768px) {
+  body .docs-comments {
+    --cmt-form-avatar: 40px;
+    --cmt-card-avatar: 32px;
+    --cmt-gap: 12px;
+    --cmt-card-padding: 12px;
+    --cmt-card-radius: 16px;
+    --cmt-input-font: 14px;
+    --cmt-textarea-font: 13px;
+    margin-top: 32px !important;
+    padding-top: 32px !important;
+  }
+
+  body .docs-comments__title,
+  body .docs-comments .tt-box-total {
+    font-size: 14px !important;
+  }
+
+  body .docs-comments .tt-area-write {
+    grid-template-columns: var(--cmt-form-avatar) minmax(0, 1fr) !important;
+    margin-top: 32px !important;
+    gap: var(--cmt-gap) !important;
+  }
+
+  body .docs-comments .tt-area-write .tt-box-account,
+  body .docs-comments .tt-area-write .tt-wrap-account {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  body .docs-comments .tt-area-write .tt-box-account input,
+  body .docs-comments .tt-area-write .tt-wrap-account input,
+  body .docs-comments .tt-area-write input.tt_txt_user,
+  body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]) {
+    font-size: 14px !important;
+  }
+
+  body .docs-comments .tt-area-write .tt-box-write {
+    justify-content: flex-end !important;
+    gap: 12px !important;
+  }
+
+  body .docs-comments .tt-btn_register,
+  body .docs-comments .tt_btn_submit,
+  body .docs-comments button[type="submit"],
+  body .docs-comments input[type="submit"] {
+    width: auto !important;
+    min-width: 92px !important;
+    margin-left: 0 !important;
+  }
+
+  body .docs-comments .tt-list-reply {
+    margin-top: 20px !important;
+    gap: 10px !important;
+  }
+
+  body .docs-comments .tt-list-reply-comment,
+  body .docs-comments .tt-list-reply-sub {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 10px 0 0 !important;
+  }
+
+  body .docs-comments .tt-link-user,
+  body .docs-comments .tt-name,
+  body .docs-comments .tt-name a,
+  body .docs-comments [id^="entry"][id$="Comment"] .tt-name,
+  body .docs-comments [id^="entry"][id$="Comment"] .tt-name a {
+    font-size: 14px !important;
+  }
+
+  body .docs-comments .tt-date,
+  body .docs-comments .tt_date,
+  body .docs-comments .tt-wrap-cmt .tt_date,
+  body .docs-comments .tt-link-comment {
+    font-size: 13px !important;
+  }
+
+  body .docs-comments .tt_desc,
+  body .docs-comments .tt-wrap-desc,
+  body .docs-comments .tt-wrap-desc p {
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+    letter-spacing: -0.2px !important;
+  }
+
+  body .docs-comments .tt-wrap-cmt > .tt-box-content,
+  body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
+    grid-template-columns: auto minmax(0, 1fr) 28px !important;
+    border-radius: var(--cmt-card-radius) !important;
+  }
+}
+
+/* Final stacking and editor overrides.
+   Keep at bottom: Tistory renders modify menus inside each card. */
+body .docs-comments .tt-list-reply > .tt-item-reply,
+body .docs-comments .tt-list-reply-comment > .tt-item-reply,
+body .docs-comments .tt-list-reply-sub > .tt-item-reply,
+body .docs-comments .tt-wrap-cmt {
+  isolation: auto !important;
+  transform: none !important;
+}
+
+body .docs-comments .tt-list-reply > .tt-item-reply,
+body .docs-comments .tt-list-reply-comment > .tt-item-reply,
+body .docs-comments .tt-list-reply-sub > .tt-item-reply {
+  position: relative !important;
+}
+
+body .docs-comments .tt-wrap-cmt {
+  z-index: auto !important;
+}
+
+body .docs-comments .tt-box-modify {
+  z-index: 2 !important;
+}
+
+body .docs-comments .tt-item-reply.is-comment-menu-open,
+body .docs-comments .tt-wrap-cmt.is-comment-menu-open,
+body .docs-comments li.is-comment-menu-open,
+body .docs-comments .tt-box-modify.is-comment-menu-open,
+body .docs-comments .tt-item-reply:has(.tt-box-modify-open),
+body .docs-comments .tt-wrap-cmt:has(.tt-box-modify-open),
+body .docs-comments li:has(.tt-box-modify-open),
+body .docs-comments .tt-item-reply:hover,
+body .docs-comments .tt-wrap-cmt:hover,
+body .docs-comments .tt-item-reply:focus-within,
+body .docs-comments .tt-wrap-cmt:focus-within {
+  position: relative !important;
+  z-index: 50 !important;
+}
+
+body .docs-comments .tt-box-modify,
+body .docs-comments .tt-wrap-cmt.is-comment-menu-open .tt-box-modify,
+body .docs-comments .tt-box-modify.is-comment-menu-open,
+body .docs-comments .tt-box-modify-open {
+  z-index: 20 !important;
+}
+
+body .docs-comments .tt-list-modify,
+body .docs-comments .tt-box-modify-open .tt-list-modify {
+  top: 32px !important;
+  right: 0 !important;
+  z-index: 80 !important;
+}
+
+body .docs-comments .tt-list-reply > .tt-item-reply:has(.tt-box-modify-open),
+body .docs-comments .tt-list-reply-comment > .tt-item-reply:has(.tt-box-modify-open),
+body .docs-comments .tt-list-reply-sub > .tt-item-reply:has(.tt-box-modify-open) {
+  position: relative !important;
+  z-index: 50 !important;
+}
+
+body .docs-comments .tt-area-write .tt-cmt,
+body .docs-comments .tt-area-write textarea.tt_inp_g,
+body .docs-comments .tt-area-write textarea.tt-cmt,
+body .docs-comments .tt-area-write [contenteditable="true"] {
+  min-height: 46px !important;
+  height: auto;
+  max-height: 220px !important;
+  resize: vertical !important;
+  overflow: auto !important;
+}
+
+body .docs-comments .tt-wrap-cmt .tt-area-write,
+body .docs-comments .tt-item-reply .tt-area-write {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 16px 0 0 !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account,
+body .docs-comments .tt-area-write .tt-wrap-account {
+  min-width: 0 !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-textarea,
+body .docs-comments .tt-area-write .tt-inner-g,
+body .docs-comments .tt-area-write .tt-cmt {
+  min-width: 0 !important;
+}
+
+@media (max-width: 768px) {
+  body .docs-comments .tt-wrap-cmt > .tt-box-content,
+  body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
+    grid-template-areas:
+      "meta info menu"
+      "desc desc desc" !important;
+    row-gap: 6px !important;
+  }
+
+  body .docs-comments .tt-box-modify {
+    z-index: 20 !important;
+  }
+
+  body .docs-comments .tt-list-modify {
+    min-width: 118px !important;
+  }
+}
+
+/* Editing forms and Tistory contenteditable fixes.
+   Keep this last: external Tistory CSS adds textarea/contenteditable heights. */
+body .docs-comments .tt-wrap-cmt form:has(.tt-area-write),
+body .docs-comments .tt-item-reply form:has(.tt-area-write) {
+  grid-column: 1 / -1 !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 16px 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+body .docs-comments .tt-wrap-cmt .tt-area-write,
+body .docs-comments .tt-item-reply .tt-area-write {
+  display: grid !important;
+  grid-template-columns: var(--cmt-form-avatar) minmax(0, 1fr) !important;
+  grid-template-areas:
+    "avatar account"
+    "avatar editor"
+    "avatar actions" !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 12px !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-textarea {
+  display: contents !important;
+}
+
+body .docs-comments .tt-area-write .tt-inner-g {
+  display: contents !important;
+}
+
+body .docs-comments .tt-area-write .tt-cmt,
+body .docs-comments .tt-area-write textarea.tt_inp_g,
+body .docs-comments .tt-area-write textarea.tt-cmt,
+body .docs-comments .tt-area-write [contenteditable="true"] {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 46px !important;
+  height: auto;
+  max-height: 220px !important;
+  padding: 12px 14px !important;
+  line-height: 1.55 !important;
+  white-space: pre-wrap !important;
+  resize: vertical !important;
+  overflow: auto !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+body .docs-comments .tt-area-write .tt-cmt > div,
+body .docs-comments .tt-area-write .tt-cmt > p,
+body .docs-comments .tt-area-write [contenteditable="true"] > div,
+body .docs-comments .tt-area-write [contenteditable="true"] > p {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.55 !important;
+  color: var(--text) !important;
+  font: inherit !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+body .docs-comments .tt-area-write .tt-cmt > div + div,
+body .docs-comments .tt-area-write .tt-cmt > p + p,
+body .docs-comments .tt-area-write [contenteditable="true"] > div + div,
+body .docs-comments .tt-area-write [contenteditable="true"] > p + p {
+  margin-top: 0 !important;
+}
+
+body .docs-comments .tt-area-write .tt-cmt br,
+body .docs-comments .tt-area-write [contenteditable="true"] br {
+  line-height: 1.55 !important;
+}
+
+@media (max-width: 768px) {
+  body .docs-comments .tt-wrap-cmt .tt-area-write,
+  body .docs-comments .tt-item-reply .tt-area-write {
+    grid-template-columns: var(--cmt-form-avatar) minmax(0, 1fr) !important;
+  }
+}
+
+/* Composer structure: avatar + nickname, full-width editor, password + submit. */
+body .docs-comments {
+  --cmt-form-avatar: 42px;
+  --cmt-card-avatar: 28px;
+  --cmt-card-padding: 16px;
+  --cmt-card-gap: 10px;
+}
+
+body .docs-comments .tt-area-write,
+body .docs-comments .tt-wrap-cmt .tt-area-write,
+body .docs-comments .tt-item-reply .tt-area-write {
+  display: grid !important;
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: var(--cmt-form-avatar) minmax(0, 1fr) !important;
+  grid-template-areas:
+    "avatar account"
+    "editor editor"
+    "actions actions" !important;
+  align-items: center !important;
+  column-gap: 12px !important;
+  row-gap: 12px !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account,
+body .docs-comments .tt-area-write .tt-wrap-account {
+  display: contents !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  min-height: 0 !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account input,
+body .docs-comments .tt-area-write .tt-wrap-account input,
+body .docs-comments .tt-area-write .tt_txt_user,
+body .docs-comments .tt-area-write .tt-name,
+body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]) {
+  grid-area: account !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account input[type="password"],
+body .docs-comments .tt-area-write .tt-wrap-account input[type="password"],
+body .docs-comments .tt-area-write input.tt_inp_g[type="password"],
+body .docs-comments .tt-area-write .tt-box-account input:nth-of-type(2),
+body .docs-comments .tt-area-write .tt-wrap-account input:nth-of-type(2) {
+  grid-area: password !important;
+}
+
+/* removed tt-box-textarea grid area assignment */
+
+body .docs-comments .tt-area-write .tt-inner-g {
+  display: contents !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-write {
+  grid-area: actions !important;
+  justify-content: flex-end !important;
+}
+
+body .docs-comments .tt-btn_register,
+body .docs-comments .tt_btn_submit,
+body .docs-comments button[type="submit"],
+body .docs-comments input[type="submit"] {
+  min-width: 92px !important;
+  width: auto !important;
+}
+
+body .docs-comments .tt-wrap-cmt,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-list-reply > .tt-item-reply:not(:has(.tt-wrap-cmt)) {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  gap: var(--cmt-card-gap) !important;
+}
+
+body .docs-comments .tt-wrap-cmt > .tt-box-content,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
+  grid-template-columns: auto minmax(0, 1fr) 28px !important;
+  grid-template-areas:
+    "meta info menu"
+    "desc desc desc" !important;
+  align-items: center !important;
+  column-gap: var(--cmt-card-gap) !important;
+  row-gap: 6px !important;
+}
+
+body .docs-comments .tt-box-meta,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-meta,
+body .docs-comments .tt-wrap-info {
+  align-items: center !important;
+  min-height: var(--cmt-card-avatar) !important;
+  gap: 6px !important;
+}
+
+body .docs-comments .tt-link-user,
+body .docs-comments .tt-name,
+body .docs-comments .tt-name a,
+body .docs-comments .tt-date,
+body .docs-comments .tt_date,
+body .docs-comments .tt-link-comment,
+body .docs-comments .tt-link-comment .tt_txt_g {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1.35 !important;
+}
+
+body .docs-comments .tt_desc,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc,
+body .docs-comments .tt-wrap-desc,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc {
+  grid-area: desc !important;
+  grid-column: 1 / -1 !important;
+}
+
+@media (max-width: 768px) {
+  body .docs-comments {
+    --cmt-form-avatar: 38px;
+    --cmt-card-avatar: 28px;
+    --cmt-card-padding: 12px;
+  }
+
+  body .docs-comments .tt-area-write,
+  body .docs-comments .tt-wrap-cmt .tt-area-write,
+  body .docs-comments .tt-item-reply .tt-area-write {
+    grid-template-columns: var(--cmt-form-avatar) minmax(0, 1fr) !important;
+    grid-template-areas:
+      "avatar account"
+      "editor editor"
+      "actions actions" !important;
+  }
+
+  body .docs-comments .tt-area-write .tt-box-account input[type="password"],
+  body .docs-comments .tt-area-write .tt-wrap-account input[type="password"],
+  body .docs-comments .tt-area-write input.tt_inp_g[type="password"],
+  body .docs-comments .tt-area-write .tt-box-account input:nth-of-type(2),
+  body .docs-comments .tt-area-write .tt-wrap-account input:nth-of-type(2) {
+    min-width: 0 !important;
+  }
+
+  body .docs-comments .tt-wrap-cmt > .tt-box-content,
+  body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
+    grid-template-areas:
+      "meta info menu"
+      "desc desc desc" !important;
+  }
+}
+
+/* Tistory password confirmation popup for modify/delete.
+   Do not force display, otherwise hidden popups stay open. */
+body .docs-comments .tt-box-pwd,
+body .docs-comments .tt_box_pwd {
+  position: absolute !important;
+  top: 46px !important;
+  right: 0 !important;
+  z-index: 90 !important;
+  width: min(320px, calc(100vw - 48px)) !important;
+  max-width: min(320px, calc(100vw - 48px)) !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 14px !important;
+  background: var(--panel) !important;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.18) !important;
+  overflow: visible !important;
+}
+
+body .docs-comments .tt-box-pwd:not([style*="display: none"]),
+body .docs-comments .tt_box_pwd:not([style*="display: none"]) {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 42px !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+body .docs-comments .tt-box-pwd input,
+body .docs-comments .tt_box_pwd input,
+body .docs-comments .tt-box-pwd input[type="password"],
+body .docs-comments .tt_box_pwd input[type="password"] {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 10px !important;
+  background: var(--comment-panel-bg) !important;
+  color: var(--text) !important;
+  caret-color: var(--text) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 42px !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+body .docs-comments .tt-box-pwd input::placeholder,
+body .docs-comments .tt_box_pwd input::placeholder {
+  color: var(--comment-muted) !important;
+}
+
+body .docs-comments .tt-box-pwd input:focus,
+body .docs-comments .tt_box_pwd input:focus {
+  border-color: var(--accent-strong) !important;
+  outline: 3px solid var(--accent-soft) !important;
+}
+
+body .docs-comments .tt-box-pwd button,
+body .docs-comments .tt_box_pwd button,
+body .docs-comments .tt-box-pwd input[type="button"],
+body .docs-comments .tt_box_pwd input[type="button"],
+body .docs-comments .tt-box-pwd input[type="submit"],
+body .docs-comments .tt_box_pwd input[type="submit"],
+body .docs-comments .tt-box-pwd .tt-btn_register,
+body .docs-comments .tt_box_pwd .tt-btn_register,
+body .docs-comments .tt-box-pwd .tt_btn_submit,
+body .docs-comments .tt_box_pwd .tt_btn_submit {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  max-width: 42px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: var(--accent) !important;
+  color: #fff !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+body .docs-comments .tt-box-pwd button::before,
+body .docs-comments .tt_box_pwd button::before,
+body .docs-comments .tt-box-pwd input[type="button"]::before,
+body .docs-comments .tt_box_pwd input[type="button"]::before,
+body .docs-comments .tt-box-pwd input[type="submit"]::before,
+body .docs-comments .tt_box_pwd input[type="submit"]::before {
+  content: "✓" !important;
+  color: currentColor !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+
+html[data-ui-theme="dark"] body .docs-comments .tt-box-pwd,
+html[data-ui-theme="dark"] body .docs-comments .tt_box_pwd {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38) !important;
+}
+
+@media (max-width: 768px) {
+  body .docs-comments .tt-box-pwd,
+  body .docs-comments .tt_box_pwd {
+    right: 0 !important;
+    width: min(280px, calc(100vw - 40px)) !important;
+    max-width: min(280px, calc(100vw - 40px)) !important;
+  }
+}
+
+/* Final composer/card alignment pass. */
+body .docs-comments .tt-area-write,
+body .docs-comments .tt-wrap-cmt .tt-area-write,
+body .docs-comments .tt-item-reply .tt-area-write {
+  position: relative !important;
+  grid-template-columns: var(--cmt-form-avatar) minmax(0, 1fr) !important;
+  grid-template-areas:
+    "avatar account"
+    "editor editor"
+    "actions actions" !important;
+  align-items: center !important;
+  row-gap: 10px !important;
+}
+
+body .docs-comments .tt-area-write > .tt-box-thumb,
+body .docs-comments .tt-area-write > a:has(img),
+body .docs-comments .tt-area-write > img {
+  grid-area: avatar !important;
+  align-self: center !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* header assignment removed because containers are display: contents */
+
+/* removed tt-box-textarea grid area assignment */
+
+html body .docs-comments .tt-area-write .tt-wrap-desc {
+  display: contents !important;
+}
+
+body .docs-comments .tt-box-textarea {
+  display: contents !important;
+}
+
+html body .docs-comments .tt-area-write .tt-inner-g,
+body .docs-comments .tt-area-write div.tt-inner-g,
+body .docs-comments .tt-area-write .tt-inner-g.tt-inner-g {
+  display: contents !important;
+}
+
+body .docs-comments .tt-area-write .tt-inner-g > a:has(img),
+body .docs-comments .tt-area-write .tt-inner-g > .tt-box-thumb {
+  grid-area: avatar !important;
+  align-self: center !important;
+  width: var(--cmt-form-avatar) !important;
+  height: var(--cmt-form-avatar) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+}
+
+body .docs-comments .tt-area-write .tt-inner-g > a:has(img) img {
+  display: block !important;
+  width: var(--cmt-form-avatar) !important;
+  height: var(--cmt-form-avatar) !important;
+  object-fit: cover !important;
+  border-radius: 999px !important;
+}
+
+body .docs-comments .tt-area-write .tt-inner-g > a:not(:has(img)),
+body .docs-comments .tt-area-write .tt-inner-g > span:not(.tt-box-thumb),
+body .docs-comments .tt-area-write .tt-inner-g > .tt_txt_user,
+body .docs-comments .tt-area-write .tt-inner-g > .tt-name {
+  grid-area: account !important;
+  align-self: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: var(--cmt-input-height) !important;
+  min-height: var(--cmt-input-height) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  line-height: var(--cmt-input-height) !important;
+  color: var(--comment-name) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+body .docs-comments .tt-area-write .tt-inner-g > label,
+body .docs-comments .tt-area-write .tt-inner-g > .screen_out {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+body .docs-comments .tt-area-write .tt-inner-g > .tt-cmt,
+body .docs-comments .tt-area-write .tt-inner-g > textarea.tt_inp_g,
+body .docs-comments .tt-area-write .tt-inner-g > textarea.tt-cmt,
+body .docs-comments .tt-area-write .tt-inner-g > [contenteditable="true"] {
+  grid-area: editor !important;
+}
+
+body .docs-comments .tt-area-write .tt-box-account input[type="password"],
+body .docs-comments .tt-area-write .tt-wrap-account input[type="password"],
+body .docs-comments .tt-area-write input.tt_inp_g[type="password"],
+body .docs-comments .tt-area-write .tt-box-account input:nth-of-type(2),
+body .docs-comments .tt-area-write .tt-wrap-account input:nth-of-type(2) {
+  /* Let flexbox handle it */
+}
+
+body .docs-comments .tt-area-write .tt-box-write {
+  grid-area: actions !important;
+}
+
+body .docs-comments .tt-area-write .tt-cmt,
+body .docs-comments .tt-area-write textarea.tt_inp_g,
+body .docs-comments .tt-area-write textarea.tt-cmt,
+body .docs-comments .tt-area-write [contenteditable="true"] {
+  height: auto;
+  max-height: 220px !important;
+  resize: vertical !important;
+  overflow: auto !important;
+}
+
+body .docs-comments .tt-wrap-cmt,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-list-reply > .tt-item-reply:not(:has(.tt-wrap-cmt)) {
+  padding-top: var(--cmt-card-padding) !important;
+  padding-bottom: var(--cmt-card-padding) !important;
+}
+
+body .docs-comments .tt-wrap-cmt > .tt-box-content,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
+  grid-template-areas:
+    "meta info menu"
+    "desc desc desc" !important;
+  row-gap: 6px !important;
+}
+
+body .docs-comments .tt_desc,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc,
+body .docs-comments .tt-wrap-desc,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc {
+  align-self: start !important;
+  margin-top: 0 !important;
+}
+
+body .docs-comments .tt_desc,
+body .docs-comments .tt-wrap-desc,
+body .docs-comments .tt-wrap-desc p {
+  line-height: 1.5 !important;
+}

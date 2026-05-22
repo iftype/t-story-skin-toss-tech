@@ -1,0 +1,289 @@
+/* ==========================================================================
+   Article reading layout
+   Overrides the legacy bundled base so post spacing stays Toss-like.
+   ========================================================================== */
+
+.docs-layout {
+  --article-font-size: 17px;
+  --article-line-height: 1.6;
+  --article-letter-spacing: 0em; /* Zero negative tracking */
+  --article-h2-size: 30px;
+  --article-h2-line-height: 1.55;
+  --article-h3-size: 24px;
+  --article-h3-line-height: 1.6;
+  overflow: visible !important;
+}
+
+/* Perfect horizontal alignment matching Toss Tech */
+body.has-article-page .docs-layout {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 40px 0 32px !important;
+}
+
+body.has-article-page .docs-article-layout {
+  display: block !important;
+  max-width: 740px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+body.has-article-page .docs-article {
+  max-width: 740px !important;
+  margin: 0 auto !important;
+  padding: 40px 20px 24px !important; /* Elegant 24px bottom padding */
+}
+
+/* Premium article meta styles */
+.docs-article__meta {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+  font-size: 14px !important;
+  color: var(--text-soft) !important;
+}
+
+.docs-article__category {
+  font-weight: 600 !important;
+  color: var(--accent) !important;
+}
+
+.docs-article__body,
+.article-body {
+  color: var(--article-text) !important;
+  font-size: var(--article-font-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--article-line-height) !important;
+  letter-spacing: var(--article-letter-spacing) !important;
+  word-break: keep-all !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  -webkit-hyphens: none !important;
+  hyphens: none !important;
+}
+
+.article-body p,
+.article-body li,
+.article-body span:not(.tt-thumbnail):not(.code-dots span):not(.hljs *),
+.article-body div:not(.code-frame):not(.code-frame *),
+.article-body a,
+.article-body strong,
+.article-body em,
+.article-body b,
+.article-body i,
+.article-body font,
+.article-body u,
+.article-body s {
+  color: inherit !important;
+  font-family: var(--font-sans) !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  word-break: keep-all !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  -webkit-hyphens: none !important;
+  hyphens: none !important;
+}
+
+/* Universal child fallback to catch all nested structures robustly */
+.docs-article__body :not(pre):not(pre *):not(code):not(code *):not(.code-frame):not(.code-frame *),
+.article-body :not(pre):not(pre *):not(code):not(code *):not(.code-frame):not(.code-frame *) {
+  word-break: keep-all !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.article-body p {
+  margin: var(--p-margin, 24px 0 8px) !important;
+}
+
+.article-body p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.article-body h2 {
+  margin: 40px 0 4px !important;
+  font-size: var(--article-h2-size) !important;
+  font-weight: 700 !important;
+  line-height: var(--article-h2-line-height) !important;
+  letter-spacing: 0em !important; /* Zero negative tracking */
+}
+
+.article-body h3 {
+  margin: 24px 0 4px !important;
+  font-size: var(--article-h3-size) !important;
+  font-weight: 700 !important;
+  line-height: var(--article-h3-line-height) !important;
+  letter-spacing: 0em !important; /* Zero negative tracking */
+}
+
+.article-body ul,
+.article-body ol {
+  margin: 24px 0 8px !important;
+  padding-left: 20px !important;
+}
+
+.article-body li {
+  margin-bottom: 12px !important;
+  line-height: inherit !important;
+}
+
+.article-body li:last-child {
+  margin-bottom: 0 !important;
+}
+
+.article-body blockquote,
+.article-body blockquote[data-ke-style],
+.article-body blockquote[data-ke-style="style3"] {
+  margin: 40px 0 !important;
+  padding: 28px 32px !important;
+  border: 0 !important;
+  border-left: 4px solid var(--accent-strong) !important;
+  border-radius: 0 6px 6px 0 !important;
+  background: var(--accent-soft) !important;
+  color: var(--text) !important;
+  font-size: inherit !important;
+  font-weight: 400 !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  text-align: left !important;
+  quotes: none !important;
+}
+
+.article-body blockquote::before,
+.article-body blockquote::after,
+.article-body blockquote[data-ke-style]::before,
+.article-body blockquote[data-ke-style]::after {
+  content: none !important;
+  display: none !important;
+}
+
+.article-body blockquote p {
+  margin: 0 !important;
+}
+
+.article-body blockquote p + p {
+  margin-top: 12px !important;
+}
+
+.article-body blockquote strong {
+  color: var(--text) !important;
+  font-weight: 700 !important;
+}
+
+@media (max-width: 768px) {
+  .docs-layout {
+    --article-font-size: 17px; /* Keep premium 17px font size on mobile */
+    --article-line-height: 1.6;
+    --article-letter-spacing: 0em; /* Zero negative tracking */
+    --article-h2-size: 26px; /* Elegant scale-down for smaller mobile viewports */
+    --article-h2-line-height: 1.4;
+    --article-h3-size: 22px;
+    --article-h3-line-height: 1.45;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  body.has-article-page .docs-layout {
+    padding: 0 0 24px !important; /* Top-bottom padding only, left-right handled by article container */
+  }
+
+  body.has-article-page .docs-article-layout,
+  body.has-article-page .docs-article-layout .docs-article {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  body.has-article-page .docs-article {
+    padding: 24px 16px 20px !important; /* Elegant 20px padding on mobile */
+  }
+
+  .docs-article__header {
+    margin-bottom: 32px !important;
+  }
+
+  .docs-article__body,
+  .article-body {
+    font-size: var(--article-font-size) !important;
+    line-height: var(--article-line-height) !important;
+    letter-spacing: var(--article-letter-spacing) !important;
+  }
+
+  .article-body p {
+    margin: var(--p-margin, 24px 0 8px) !important; /* Consistent vertical paragraph margins on mobile */
+  }
+
+  .article-body p:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .article-body ul,
+  .article-body ol {
+    margin: 24px 0 8px !important;
+  }
+
+  .article-body blockquote,
+  .article-body blockquote[data-ke-style],
+  .article-body blockquote[data-ke-style="style3"] {
+    margin: 24px 0 !important;
+    padding: 20px 18px !important;
+    border-left-width: 3px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Prevent any double padding issues on extremely small mobile screens */
+  body.has-article-page .docs-layout {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+  }
+
+  .docs-article__body,
+  .article-body {
+    font-size: var(--article-font-size) !important;
+    line-height: var(--article-line-height) !important;
+  }
+}
+
+/* ==========================================================================
+   Tistory Editor Attribute [data-ke-size] Override System
+   ========================================================================== */
+#tt-body-page .article-body p[data-ke-size],
+#tt-body-page .article-body span[data-ke-size],
+#tt-body-page .article-body div[data-ke-size],
+#tt-body-page .article-body li[data-ke-size],
+#tt-body-page .article-body a[data-ke-size],
+.docs-article__body p[data-ke-size],
+.docs-article__body span[data-ke-size],
+.docs-article__body div[data-ke-size],
+.docs-article__body li[data-ke-size],
+.docs-article__body a[data-ke-size],
+.article-body p[data-ke-size],
+.article-body span[data-ke-size],
+.article-body div[data-ke-size],
+.article-body li[data-ke-size],
+.article-body a[data-ke-size] {
+  font-size: var(--article-font-size) !important;
+  line-height: var(--article-line-height) !important;
+  letter-spacing: var(--article-letter-spacing) !important;
+}
+
+#tt-body-page .article-body h2[data-ke-size],
+.docs-article__body h2[data-ke-size],
+.article-body h2[data-ke-size] {
+  font-size: var(--article-h2-size) !important;
+  line-height: var(--article-h2-line-height) !important;
+}
+
+#tt-body-page .article-body h3[data-ke-size],
+.docs-article__body h3[data-ke-size],
+.article-body h3[data-ke-size] {
+  font-size: var(--article-h3-size) !important;
+  line-height: var(--article-h3-line-height) !important;
+}
