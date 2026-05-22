@@ -152,10 +152,30 @@ body.has-article-page .docs-article {
   margin-bottom: 0 !important;
 }
 
-.article-body blockquote,
-.article-body blockquote[data-ke-style],
-.article-body blockquote[data-ke-style="style3"] {
+.article-body blockquote {
   margin: 40px 0 !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  text-align: left !important;
+  quotes: none !important;
+}
+
+/* Style 1: Line quote (Photo 2 style) */
+.article-body blockquote[data-ke-style="style1"] {
+  padding: 8px 0 8px 24px !important;
+  border: 0 !important;
+  border-left: 4px solid var(--text) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+}
+
+/* Style 2 & default fallback: Box quote with left line (Photo 4 style) */
+.article-body blockquote:not([data-ke-style]),
+.article-body blockquote[data-ke-style="style2"],
+.article-body blockquote[data-ke-style="style4"] {
   padding: 28px 32px !important;
   border: 0 !important;
   border-left: 4px solid var(--accent-strong) !important;
@@ -164,10 +184,17 @@ body.has-article-page .docs-article {
   color: var(--text) !important;
   font-size: inherit !important;
   font-weight: 400 !important;
-  line-height: inherit !important;
-  letter-spacing: inherit !important;
-  text-align: left !important;
-  quotes: none !important;
+}
+
+/* Style 3: Rounded Card (Photo 3 style) */
+.article-body blockquote[data-ke-style="style3"] {
+  padding: 32px 36px !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  background: var(--bg-soft) !important;
+  color: var(--text) !important;
+  font-size: inherit !important;
+  font-weight: 400 !important;
 }
 
 .article-body blockquote::before,
@@ -251,12 +278,25 @@ body.has-article-page .docs-article {
     margin: 24px 0 8px !important;
   }
 
-  .article-body blockquote,
-  .article-body blockquote[data-ke-style],
-  .article-body blockquote[data-ke-style="style3"] {
+  .article-body blockquote {
     margin: 24px 0 !important;
+  }
+
+  .article-body blockquote[data-ke-style="style1"] {
+    padding: 6px 0 6px 16px !important;
+    border-left-width: 3px !important;
+    font-size: 1.08rem !important;
+  }
+
+  .article-body blockquote:not([data-ke-style]),
+  .article-body blockquote[data-ke-style="style2"],
+  .article-body blockquote[data-ke-style="style4"] {
     padding: 20px 18px !important;
     border-left-width: 3px !important;
+  }
+
+  .article-body blockquote[data-ke-style="style3"] {
+    padding: 20px 24px !important;
   }
 }
 
