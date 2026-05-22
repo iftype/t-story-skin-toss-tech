@@ -6,3 +6,19 @@
 @import "./styles/cards.css";
 @import "./styles/category-tree.css";
 
+/* Synchronize theme transitions across all main containers, cards, and interactive elements */
+body,
+.docs-main-shell,
+.docs-topbar,
+.docs-sidebar,
+.docs-namecard,
+.docs-category-map,
+.vs-tree--large,
+.docs-article-nav__item,
+.docs-related__list a,
+.docs-comments,
+.tt-wrap-cmt,
+.tt-box-content {
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+

@@ -1029,18 +1029,27 @@ body .docs-comments .tt-item-reply .tt-area-write {
 
 body .docs-comments .tt-area-write .tt-box-account,
 body .docs-comments .tt-area-write .tt-wrap-account {
-  display: contents !important;
-  width: auto !important;
+  grid-area: account !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
   min-width: 0 !important;
-  max-width: none !important;
-  min-height: 0 !important;
+  max-width: 100% !important;
+  min-height: var(--cmt-input-height) !important;
 }
 
 body .docs-comments .tt-area-write .tt-box-account input,
-body .docs-comments .tt-area-write .tt-wrap-account input,
+body .docs-comments .tt-area-write .tt-wrap-account input {
+  grid-area: auto !important;
+  flex: 1 1 0% !important;
+  width: 0 !important;
+  min-width: 0 !important;
+}
+
 body .docs-comments .tt-area-write .tt_txt_user,
 body .docs-comments .tt-area-write .tt-name,
-body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]) {
+body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]):not(.tt-box-account *):not(.tt-wrap-account *) {
   grid-area: account !important;
 }
 
@@ -1049,7 +1058,7 @@ body .docs-comments .tt-area-write .tt-wrap-account input[type="password"],
 body .docs-comments .tt-area-write input.tt_inp_g[type="password"],
 body .docs-comments .tt-area-write .tt-box-account input:nth-of-type(2),
 body .docs-comments .tt-area-write .tt-wrap-account input:nth-of-type(2) {
-  grid-area: password !important;
+  grid-area: auto !important;
 }
 
 /* removed tt-box-textarea grid area assignment */

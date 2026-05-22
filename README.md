@@ -10,7 +10,7 @@
 
 티스토리 스킨 등록에 필요한 모든 파일이 규격 폴더 구조로 구성된 올인원 압축 패키지입니다.
 
-### [⚡ 최신 버전 스킨 패키지 다운로드](https://github.com/iftype/t-story-skin-toss-tech/raw/main/dist/tistory-skin-toss-tech.zip)
+### [⚡ 최신 버전 스킨 패키지 다운로드](https://github.com/iftype/t-story-skin-toss-tech/releases/latest/download/tistory-skin-toss-tech.zip)
 
 > [!TIP]
 > **스킨 적용 방법**: 위의 링크를 클릭하여 `tistory-skin-toss-tech.zip`을 다운로드 받아 압축을 해제한 뒤 바로 티스토리에 업로드하여 적용하실 수 있습니다.

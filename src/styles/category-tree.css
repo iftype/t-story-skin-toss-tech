@@ -44,7 +44,7 @@
 }
 
 /* Link reset and styling */
-.category-tree .vs-tree-link {
+.vs-tree-link {
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
@@ -178,4 +178,97 @@
 
 .vs-tree-item.is-open > .vs-tree-sub-list {
   display: flex;
+}
+
+/* Spacious layout for Category Map Explorer */
+.vs-tree--large {
+  font-size: 15px;
+  gap: 4px;
+  margin-top: 1rem;
+  background-color: var(--bg-elevated);
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid var(--line-soft);
+}
+
+.vs-tree--large .vs-tree-row {
+  height: 36px;
+  border-radius: 8px;
+  padding: 0 10px;
+}
+
+.vs-tree--large .vs-tree-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.vs-tree--large .vs-tree-chevron {
+  width: 22px;
+  height: 22px;
+}
+
+.vs-tree--large .vs-tree-chevron-spacer {
+  width: 22px;
+  height: 22px;
+}
+
+.vs-tree--large .vs-tree-sub-list {
+  margin-left: 20px;
+  padding-left: 6px;
+  gap: 4px;
+  border-left: 1px solid var(--line);
+}
+
+.vs-tree--large .vs-tree-count {
+  font-size: 12px;
+  padding: 3px 8px;
+}
+
+/* Compact layout for mobile viewports to prevent squishing */
+@media (max-width: 760px) {
+  .docs-category-map {
+    padding: 14px 12px !important;
+    border-radius: 14px !important;
+  }
+
+  .vs-tree--large {
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 10px;
+    gap: 3px;
+    margin-top: 0.75rem;
+  }
+
+  .vs-tree--large .vs-tree-row {
+    height: 32px;
+    border-radius: 6px;
+    padding: 0 6px;
+  }
+
+  .vs-tree--large .vs-tree-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .vs-tree--large .vs-tree-chevron {
+    width: 18px;
+    height: 18px;
+  }
+
+  .vs-tree--large .vs-tree-chevron-spacer {
+    width: 18px;
+    height: 18px;
+  }
+
+  .vs-tree--large .vs-tree-sub-list {
+    margin-left: 12px;
+    padding-left: 4px;
+    gap: 3px;
+    border-left: 1px solid var(--line-soft);
+  }
+
+  .vs-tree--large .vs-tree-count {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
 }

@@ -77,7 +77,6 @@ body.has-article-page .docs-article {
 .article-body font,
 .article-body u,
 .article-body s {
-  color: inherit !important;
   font-family: var(--font-sans) !important;
   font-size: inherit !important;
   font-weight: inherit !important;
@@ -88,6 +87,22 @@ body.has-article-page .docs-article {
   overflow-wrap: break-word !important;
   -webkit-hyphens: none !important;
   hyphens: none !important;
+}
+
+/* Apply color override globally except when the elements have explicit inline style colors/backgrounds */
+.article-body p,
+.article-body li,
+.article-body span:not([style*="color"]):not([style*="background"]):not(.tt-thumbnail):not(.code-dots span):not(.hljs *),
+.article-body div:not([style*="color"]):not([style*="background"]):not(.code-frame):not(.code-frame *),
+.article-body a,
+.article-body strong,
+.article-body em,
+.article-body b,
+.article-body i,
+.article-body font:not([color]):not([style*="color"]),
+.article-body u,
+.article-body s {
+  color: inherit !important;
 }
 
 /* Universal child fallback to catch all nested structures robustly */
