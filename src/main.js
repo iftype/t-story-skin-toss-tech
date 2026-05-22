@@ -357,26 +357,16 @@ function setupCategoryTree() {
   let rootUl = tree.querySelector('ul')
   if (!rootUl) return
 
-  // If the root list has exactly one child LI, and that LI contains a nested UL,
-  // that nested UL is the actual categories list (bypassing the "All posts" root wrapper).
-  const directLis = Array.from(rootUl.children).filter(child => child.tagName === 'LI')
-  if (directLis.length === 1) {
-    const nestedUl = directLis[0].querySelector('ul')
-    if (nestedUl) {
-      rootUl = nestedUl
-    }
-  }
-
   // Helpers to check current page path & descendant active states
   const parseLevel = (ulElement) => {
     const items = []
-    const lis = Array.from(ulElement.children).filter(child => child.tagName === 'LI')
+    const lis = Array.from(ulElement.children).filter(child => child.tagName && child.tagName.toUpperCase() === 'LI')
 
     for (const li of lis) {
-      const link = Array.from(li.children).find(child => child.tagName === 'A')
+      const link = Array.from(li.children).find(child => child.tagName && child.tagName.toUpperCase() === 'A')
       if (!link) continue
 
-      const childUl = Array.from(li.children).find(child => child.tagName === 'UL')
+      const childUl = Array.from(li.children).find(child => child.tagName && child.tagName.toUpperCase() === 'UL')
       const href = link.getAttribute('href') || '/category'
       const name = categoryName(link)
       const count = categoryCount(link)
@@ -395,7 +385,23 @@ function setupCategoryTree() {
     return items
   }
 
-  const categoryData = parseLevel(rootUl)
+  // Smart resolution: If the root list has exactly one child LI, and that LI contains a nested UL,
+  // that nested UL is the actual categories list (bypassing the "All posts" root wrapper).
+  let targetUl = rootUl
+  const directLis = Array.from(rootUl.children).filter(child => child.tagName && child.tagName.toUpperCase() === 'LI')
+  if (directLis.length === 1) {
+    const nestedUl = directLis[0].querySelector('ul')
+    if (nestedUl) {
+      targetUl = nestedUl
+    }
+  }
+
+  let categoryData = parseLevel(targetUl)
+
+  // Fallback: If bypassing resulted in an empty list, fall back to parsing the outermost list directly
+  if (categoryData.length === 0 && targetUl !== rootUl) {
+    categoryData = parseLevel(rootUl)
+  }
 
   const hasCurrentDescendant = (node) => {
     if (node.isCurrent) return true
@@ -502,7 +508,7 @@ function setupCategoryTree() {
       if (item) {
         const href = item.getAttribute('data-href')
         const isOpen = item.classList.toggle('is-open')
-        localStorage.setItem(`vs-tree-folder:${href}`, isOpen ? 'true' : 'false')
+        localStorage.setItem('vs-tree-folder:' + href, isOpen ? 'true' : 'false')
       }
       return
     }
@@ -517,7 +523,7 @@ function setupCategoryTree() {
           e.preventDefault()
           const href = item.getAttribute('data-href')
           const isOpen = item.classList.toggle('is-open')
-          localStorage.setItem(`vs-tree-folder:${href}`, isOpen ? 'true' : 'false')
+          localStorage.setItem('vs-tree-folder:' + href, isOpen ? 'true' : 'false')
         }
       }
     }
@@ -1081,12 +1087,12 @@ function init() {
   applyTheme(getSavedTheme())
   decorateWriteLinks()
   showAdminElements()
+  renderCategoryMap()
   setupCategoryTree()
   bindGlobalActions()
   enhanceCodeBlocks()
   markPageState()
   normalizeArticleMedia()
-  renderCategoryMap()
   showEmptyStateWhenNeeded()
   normalizeListMeta()
   normalizeListCards()
