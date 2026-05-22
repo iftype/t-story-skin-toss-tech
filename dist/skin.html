@@ -46,6 +46,9 @@
         if (bodyId === 'tt-body-page') {
           document.body.classList.add('has-article-page');
         }
+        if (localStorage.getItem('docs-is-admin') === 'true') {
+          document.body.classList.add('is-admin');
+        }
       })();
     </script>
     <s_t3>

@@ -456,6 +456,7 @@ body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-thumb 
 
 body .docs-comments .tt-wrap-cmt > .tt-box-content,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
+  position: relative !important;
   display: grid !important;
   flex: 1 !important;
   min-width: 0 !important;
@@ -558,12 +559,10 @@ body .docs-comments .tt-wrap-info * {
   padding-bottom: 0 !important;
 }
 
-body .docs-comments .tt-wrap-desc {
-  display: contents !important;
-}
-
+body .docs-comments .tt-wrap-desc,
 body .docs-comments .tt_desc,
-body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc {
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc {
   grid-area: desc !important;
   grid-column: 1 / -1 !important;
   width: 100% !important;
@@ -574,7 +573,6 @@ body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc {
   border: 0 !important;
 }
 
-body .docs-comments .tt_desc,
 body .docs-comments .tt_desc,
 body .docs-comments .tt-desc {
   margin: 0 !important;
@@ -587,16 +585,15 @@ body .docs-comments .tt-desc {
 
 /* Modify/delete menu */
 body .docs-comments .tt-box-modify {
-  grid-area: menu !important;
-  position: relative !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
   z-index: 20 !important;
   width: 28px !important;
   height: 28px !important;
   margin: 0 !important;
   padding: 0 !important;
   overflow: visible !important;
-  align-self: center !important;
-  justify-self: end !important;
 }
 
 body .docs-comments .tt-button-modify {
@@ -825,7 +822,6 @@ body .docs-comments .tt-box-modify {
 body .docs-comments .tt-item-reply.is-comment-menu-open,
 body .docs-comments .tt-wrap-cmt.is-comment-menu-open,
 body .docs-comments li.is-comment-menu-open,
-body .docs-comments .tt-box-modify.is-comment-menu-open,
 body .docs-comments .tt-item-reply:has(.tt-box-modify-open),
 body .docs-comments .tt-wrap-cmt:has(.tt-box-modify-open),
 body .docs-comments li:has(.tt-box-modify-open),

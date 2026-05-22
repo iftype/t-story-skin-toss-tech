@@ -52,6 +52,7 @@ function showAdminElements() {
   const checkAdmin = () => {
     if ((window.T && window.T.config && window.T.config.ROLE === 'owner') || document.querySelector('#tistory-admin-bar')) {
       document.body.classList.add('is-admin')
+      localStorage.setItem('docs-is-admin', 'true')
       document.querySelectorAll('.admin-only').forEach((el) => {
         el.style.display = 'inline-flex'
       })
@@ -64,7 +65,15 @@ function showAdminElements() {
     const interval = setInterval(() => {
       if (checkAdmin()) clearInterval(interval)
     }, 500)
-    setTimeout(() => clearInterval(interval), 5000)
+    
+    // Clear interval and clean up cache if still not admin after 5 seconds (means user logged out)
+    setTimeout(() => {
+      clearInterval(interval)
+      if (!document.body.classList.contains('is-admin')) {
+        localStorage.removeItem('docs-is-admin')
+        document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none')
+      }
+    }, 5000)
   }
 }
 
