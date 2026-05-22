@@ -107,7 +107,7 @@ body.has-article-page .docs-article {
 }
 
 .article-body h2 {
-  margin: 40px 0 4px !important;
+  margin: 56px 0 16px !important;
   font-size: var(--article-h2-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h2-line-height) !important;
@@ -115,7 +115,7 @@ body.has-article-page .docs-article {
 }
 
 .article-body h3 {
-  margin: 24px 0 4px !important;
+  margin: 36px 0 12px !important;
   font-size: var(--article-h3-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h3-line-height) !important;
@@ -221,6 +221,14 @@ body.has-article-page .docs-article {
 
   .article-body p:last-child {
     margin-bottom: 0 !important;
+  }
+
+  .article-body h2 {
+    margin: 38px 0 12px !important;
+  }
+
+  .article-body h3 {
+    margin: 28px 0 8px !important;
   }
 
   .article-body ul,
