@@ -1,0 +1,181 @@
+/* VS Code Category Explorer styling */
+
+.vs-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-muted);
+  user-select: none;
+  margin-top: 0.5rem;
+}
+
+.vs-tree-item {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Row styling */
+.vs-tree-row {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  position: relative;
+  width: 100%;
+}
+
+/* Hover effect */
+.vs-tree-row:hover {
+  background-color: var(--bg-soft);
+  color: var(--text);
+}
+
+/* Active current row */
+.vs-tree-row.is-active {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Link reset and styling */
+.category-tree .vs-tree-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  line-height: inherit !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Chevron expansion toggle button */
+.vs-tree-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.vs-tree-chevron:hover {
+  color: var(--text);
+}
+
+/* Rotation of chevron */
+.vs-tree-chevron svg {
+  transition: transform 0.15s ease;
+  transform: rotate(0deg);
+}
+
+.vs-tree-item.is-open > .vs-tree-row .vs-tree-chevron svg {
+  transform: rotate(90deg);
+}
+
+/* Spacers for alignment */
+.vs-tree-chevron-spacer {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Icons */
+.vs-tree-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Folder Colors & States */
+.folder-icon {
+  color: #e8a838; /* VS Code warm folder yellow */
+}
+
+/* Toggle open/closed folder SVGs */
+.vs-tree-item .folder-open {
+  display: none;
+}
+
+.vs-tree-item .folder-closed {
+  display: inline-block;
+}
+
+.vs-tree-item.is-open > .vs-tree-row .folder-open {
+  display: inline-block;
+}
+
+.vs-tree-item.is-open > .vs-tree-row .folder-closed {
+  display: none;
+}
+
+/* Document file icon styling */
+.file-icon {
+  color: var(--text-soft);
+}
+
+.vs-tree-row.is-active .file-icon {
+  color: var(--accent);
+}
+
+/* Name label */
+.vs-tree-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Post Count Badges */
+.vs-tree-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-soft);
+  background-color: var(--line-soft);
+  padding: 2px 6px;
+  border-radius: 999px;
+  margin-left: auto;
+  flex-shrink: 0;
+  opacity: 0.85;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.vs-tree-row:hover .vs-tree-count {
+  background-color: var(--line);
+  color: var(--text-muted);
+}
+
+.vs-tree-row.is-active .vs-tree-count {
+  background-color: var(--accent);
+  color: var(--bg);
+}
+
+/* Sub-list nesting and tree lines */
+.vs-tree-sub-list {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 14px;
+  padding-left: 4px;
+  border-left: 1px solid var(--line-soft);
+  margin-top: 2px;
+}
+
+.vs-tree-item.is-open > .vs-tree-sub-list {
+  display: flex;
+}
