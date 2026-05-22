@@ -6,40 +6,43 @@
 
 ---
 
-## 📥 바로 다운로드 (Direct Downloads)
+## 📥 원클릭 패키지 다운로드 (Download ZIP)
 
-아래 링크를 **마우스 우클릭 > 다른 이름으로 링크 저장(Save Link As...)** 하여 바로 다운로드 받아 티스토리에 적용하세요.
+티스토리 스킨 등록에 필요한 모든 파일이 규격 폴더 구조로 구성된 올인원 압축 패키지입니다.
 
-| 파일 이름 | 용도 | 다운로드 링크 |
-| :--- | :--- | :--- |
-| **`skin.html`** | 스킨 메인 HTML 템플릿 (테마 토글, 트리 카테고리 내장) | [📥 skin.html 다운로드](https://github.com/iftype/t-story-skin-toss-tech/raw/main/dist/skin.html) |
-| **`style.css`** | 🌿 **마크다운 본문 모드 (기본/추천)**<br>문단 간 위아래 24px 여백이 활성화되어 글의 호흡과 가독성이 우수함 | [📥 style.css 다운로드](https://github.com/iftype/t-story-skin-toss-tech/raw/main/dist/style.css) |
-| **`style-tight.css`** | ⚡ **일반/타이트 본문 모드**<br>문단 위아래 여백이 0으로 조밀하여 엔터(Enter)를 많이 치는 타법에 최적화됨 | [📥 style-tight.css 다운로드](https://github.com/iftype/t-story-skin-toss-tech/raw/main/dist/style-tight.css) |
-| **`script.js`** | 자바스크립트 빌드 파일 (TOC 빌더, 드롭다운 로직 등 내장) | [📥 script.js 다운로드](https://github.com/iftype/t-story-skin-toss-tech/raw/main/dist/script.js) |
-| **`index.xml`** | 티스토리 스킨 설정 및 정보 파일 | [📥 index.xml 다운로드](https://github.com/iftype/t-story-skin-toss-tech/raw/main/dist/index.xml) |
+### [⚡ 최신 버전 스킨 패키지 다운로드](https://github.com/iftype/t-story-skin-toss-tech/raw/main/dist/tistory-skin-toss-tech.zip)
+
+> [!TIP]
+> **스킨 적용 방법**: 위의 링크를 클릭하여 `tistory-skin-toss-tech.zip`을 다운로드 받아 압축을 해제한 뒤 바로 티스토리에 업로드하여 적용하실 수 있습니다.
 
 ---
 
-## 🚀 티스토리 스킨 편집창 적용 및 구분 가이드
+## 🚀 티스토리 스킨 등록 및 설정 가이드
 
-### 📌 방법 A: CSS 탭에 바로 덮어씌워 적용하기 (권장)
-티스토리 **스킨 편집 > Html 편집 > CSS 탭**에 직접 코드를 입력하여 간편하게 적용하는 방식입니다.
+### 📌 Step 1: 스킨 등록하기 (최초 1회)
 
-1. **마크다운 모드**를 원하시는 경우:
-   - 위의 `style.css` 전체 내용을 복사하여 티스토리 **CSS 편집 창**의 기존 내용을 모두 지우고 붙여넣은 뒤 **적용**을 누릅니다.
-2. **일반/타이트 모드**를 원하시는 경우:
-   - 위의 `style-tight.css` 전체 내용을 복사하여 티스토리 **CSS 편집 창**의 기존 내용을 모두 지우고 붙여넣은 뒤 **적용**을 누릅니다.
-
-> [!NOTE]
-> 파일 최상단에 주석으로 `[Tistory 스킨용 - 마크다운 본문 모드]` 또는 `[Tistory 스킨용 - 일반/타이트 본문 모드]` 배너가 삽입되어 있으므로, 현재 블로그에 어떤 버전이 적용되어 있는지 한눈에 구분할 수 있습니다.
+1. 다운로드한 **`tistory-skin-toss-tech.zip`**의 압축을 해제합니다.
+2. 티스토리 블로그 관리자 홈에서 **꾸미기 > 스킨 변경 > 스킨 등록** 버튼을 클릭합니다.
+3. 우측 상단의 **추가** 버튼을 누르고, 압축 해제한 폴더의 **루트(Root)에 있는 다음 파일들**을 먼저 선택하여 업로드합니다.
+   * `skin.html`, `style.css`, `index.xml`, `preview.gif`, `preview1600.jpg`, `preview256.jpg`, `preview560.jpg`
+4. 다시 **추가** 버튼을 누르고, **`images/` 폴더 내의 모든 파일**을 선택하여 업로드합니다. (티스토리가 파일들을 자동으로 `./images/` 경로에 매핑합니다.)
+   * `images/script.js`, `images/style.css`, `images/style-tight.css`
+5. 하단의 **저장** 버튼을 누르고 원하는 스킨명(예: `Toss Tech Style`)을 입력하여 저장합니다.
+6. **스킨 변경 > 스킨 보관함**으로 이동하여 방금 등록한 스킨을 선택하고 **적용**을 누릅니다.
 
 ---
 
-### 📌 방법 B: HTML에서 주석 토글로 전환하기
-HTML 소스 상에서 직관적으로 링크를 끄고 켜고 싶으실 때 사용합니다.
+### 📌 Step 2: 본문 여백 모드 선택하기
 
-1. 티스토리 **Html 편집 > 파일 업로드 탭**에 다운로드한 `style.css`와 `style-tight.css`, `script.js`를 업로드합니다.
-2. **HTML 탭**으로 이동하여 22~37번 줄 사이의 stylesheet 링크 코드를 다음과 같이 조절합니다.
+이 스킨은 가독성을 극대화한 **🌿 마크다운 모드**와 조밀한 레이아웃의 **⚡ 일반/타이트 모드**를 모두 내장하고 있으며, 기본값은 마크다운 모드입니다.
+
+#### 방법 A: CSS 탭 덮어쓰기 (가장 간편하고 즉각적인 방법)
+티스토리 **스킨 편집 > Html 편집 > CSS 탭**에 아래 내용 중 원하는 파일의 전체 코드를 복사하여 붙여넣고 **적용**을 누릅니다.
+* **마크다운 모드 (기본/추천):** 압축 해제한 폴더의 `style.css` 내용 전체를 복사하여 덮어씁니다.
+* **일반/타이트 모드:** 압축 해제한 폴더의 `images/style-tight.css` 내용 전체를 복사하여 덮어씁니다.
+
+#### 방법 B: HTML 주석 토글로 전환하기
+티스토리 **스킨 편집 > Html 편집 > HTML 탭**의 `22~37번` 줄 부근에서 다음과 같이 주석 처리 상태를 제어합니다.
 
 * **마크다운 모드로 적용할 때:**
   ```html
