@@ -37,6 +37,17 @@
     <!-- <link rel="stylesheet" href="./images/style-tight.css"> -->
   </head>
   <body id="[##_body_id_##]">
+    <script>
+      (function() {
+        var bodyId = document.body.id;
+        if (bodyId === 'tt-body-index' || bodyId === 'tt-body-category' || bodyId === 'tt-body-search' || bodyId === 'tt-body-tag' || bodyId === 'tt-body-archive') {
+          document.body.classList.add('has-list-page', 'is-list-context');
+        }
+        if (bodyId === 'tt-body-page') {
+          document.body.classList.add('has-article-page');
+        }
+      })();
+    </script>
     <s_t3>
       <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
 

@@ -6,19 +6,85 @@
 @import "./styles/cards.css";
 @import "./styles/category-tree.css";
 
-/* Synchronize theme transitions across all main containers, cards, and interactive elements */
+/* ==========================================================================
+   Premium Unified Theme Transitions System
+   Ensures seamless, synchronized dark mode animations with zero lag or stutter.
+   All transitions are locked to 0.25s ease to guarantee perfect visual sync.
+   ========================================================================== */
+
+/* 1. Core Layout Containers, Shells & Dynamic Panels */
 body,
+.docs-app,
 .docs-main-shell,
 .docs-topbar,
 .docs-sidebar,
 .docs-namecard,
 .docs-category-map,
-.vs-tree--large,
+.docs-category-map__grid a,
 .docs-article-nav__item,
 .docs-related__list a,
 .docs-comments,
 .tt-wrap-cmt,
-.tt-box-content {
-  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+.tt-box-content,
+.docs-empty-state,
+.docs-paging__button,
+.docs-paging__number,
+.docs-icon-button,
+.category-toggle,
+.docs-list-item__ghost {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* 2. Article Text & Dynamic Document Flow Elements */
+.article-body,
+.article-body h1,
+.article-body h2,
+.article-body h3,
+.article-body p,
+.article-body li,
+.article-body span:not(.tt-thumbnail):not(.code-dots span):not(.hljs *),
+.article-body div:not(.code-frame):not(.code-frame *),
+.article-body a,
+.article-body strong,
+.article-body em,
+.article-body b,
+.article-body i,
+.article-body font,
+.article-body u,
+.article-body s {
+  transition: color 0.25s ease !important;
+}
+
+/* 3. Blockquotes (Tistory Quotes style 1, 2, 3, 4) */
+.article-body blockquote,
+.article-body blockquote[data-ke-style] {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease !important;
+}
+
+/* 4. Code Blocks & In-line Code Tags */
+.article-body code,
+.article-body pre,
+.code-frame,
+.code-header,
+.code-title,
+.code-copy,
+.expressive-code-host,
+.expressive-code-host .frame {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* 5. Document List Item Cards - Keep Hover Transform but Synchronize Colors */
+body.has-list-page .docs-list-item {
+  transition: transform 0.18s ease, background-color 0.25s ease !important, border-color 0.25s ease !important, box-shadow 0.25s ease !important;
+}
+
+body.has-list-page .docs-list-item__thumb {
+  transition: background 0.25s ease, background-color 0.25s ease !important;
+}
+
+.docs-list-item__title,
+.docs-list-item__meta,
+.docs-list-item__category {
+  transition: color 0.25s ease !important;
 }
 

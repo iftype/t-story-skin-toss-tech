@@ -82,7 +82,7 @@ function cleanInlineStyles() {
 
   styledElements.forEach(el => {
     // Preserve custom source-code blocks or math blocks if present
-    if (el.closest('pre') || el.closest('.hljs') || el.closest('.code-frame')) return
+    if (el.closest('pre') || el.closest('.hljs') || el.closest('.code-frame') || el.closest('.container_postbtn')) return
 
     const style = el.getAttribute('style')
     if (!style) return
@@ -1211,10 +1211,57 @@ function trackOpenCommentMenus() {
   refresh()
 }
 
+function setupThumbnailFallbacks() {
+  const thumbs = document.querySelectorAll('.docs-list-item__thumb')
+  thumbs.forEach(thumb => {
+    const img = thumb.querySelector('img')
+    if (!img) return
+
+    const handleFallback = () => {
+      img.remove()
+    }
+
+    const src = img.getAttribute('src') || ''
+
+    // 1. 치환자가 제대로 치환되지 않은 상태인 경우
+    if (src.startsWith('[##_') || src === '') {
+      handleFallback()
+      return
+    }
+
+    // 2. 이미 로드가 완료되었고 깨진 이미지인 경우 (naturalWidth가 0인 경우)
+    if (img.complete && img.naturalWidth === 0) {
+      handleFallback()
+      return
+    }
+
+    // 3. 디폴트 썸네일 경로가 포함된 경우
+    if (
+      src.includes('opengraph-default.png') ||
+      src.includes('tistory_admin') ||
+      src.includes('default_thumb') ||
+      src.includes('cfile10.uf.tistory.com/image') ||
+      src.includes('t1.daumcdn.net/tistory_admin')
+    ) {
+      handleFallback()
+      return
+    }
+
+    // 4. 로딩 중 실패하거나 완료 시점에 크기가 0인 경우 대응
+    img.addEventListener('load', () => {
+      if (img.naturalWidth === 0) {
+        handleFallback()
+      }
+    })
+    img.addEventListener('error', handleFallback)
+  })
+}
+
 function init() {
   applyTheme(getSavedTheme())
   decorateWriteLinks()
   showAdminElements()
+  setupThumbnailFallbacks()
   renderCategoryMap()
   setupCategoryTree()
   bindGlobalActions()
@@ -1235,14 +1282,17 @@ function init() {
   preserveWordCombination()
   const article = document.querySelector('[data-docs-article]')
   if (article && 'MutationObserver' in window) {
+    let mutationTimer = null
     const observer = new MutationObserver((mutations, obs) => {
-      // Disconnect observer during styling/DOM adjustments to prevent recursion
-      obs.disconnect()
-      
-      cleanInlineStyles()
-      preserveWordCombination()
-      
-      obs.observe(article, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] })
+      clearTimeout(mutationTimer)
+      mutationTimer = setTimeout(() => {
+        obs.disconnect()
+        
+        cleanInlineStyles()
+        preserveWordCombination()
+        
+        obs.observe(article, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] })
+      }, 150)
     })
     observer.observe(article, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] })
   }

@@ -42,7 +42,7 @@ body.has-list-page .docs-list-item__thumb img {
   object-fit: cover !important;
 }
 
-/* Skeleton styling for cards without thumbnail */
+/* Placeholder styling for cards without thumbnail */
 body.has-list-page .docs-list-item__ghost-container {
   display: flex !important;
   align-items: center !important;
@@ -52,7 +52,7 @@ body.has-list-page .docs-list-item__ghost-container {
   min-height: 0 !important;
 }
 
-/* Hide ghost skeleton when thumbnail image is present */
+/* Hide fallback container when thumbnail image is present */
 body.has-list-page .docs-list-item__thumb:has(img) .docs-list-item__ghost-container {
   display: none !important;
 }
