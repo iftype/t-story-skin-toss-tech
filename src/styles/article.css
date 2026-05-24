@@ -112,15 +112,18 @@ body.has-article-page .docs-article {
   overflow-wrap: break-word !important;
 }
 
-.article-body p {
+.docs-article .article-body p,
+.docs-article .article-body p[data-ke-size] {
   margin: var(--p-margin, 32px 0 0 0) !important;
 }
 
-.article-body p:first-child {
+.docs-article .article-body p:first-child,
+.docs-article .article-body p[data-ke-size]:first-child {
   margin-top: 0 !important;
 }
 
-.article-body p:last-child {
+.docs-article .article-body p:last-child,
+.docs-article .article-body p[data-ke-size]:last-child {
   margin-bottom: 0 !important;
 }
 
@@ -385,6 +388,7 @@ body.has-article-page .docs-article {
   font-size: var(--article-font-size) !important;
   line-height: var(--article-line-height) !important;
   letter-spacing: var(--article-letter-spacing) !important;
+  margin: var(--p-margin, 32px 0 0 0) !important;
 }
 
 #tt-body-page .article-body h1[data-ke-size],
