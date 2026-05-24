@@ -116,6 +116,16 @@ body .docs-comments .tt-area-write {
   clear: both !important;
 }
 
+body .docs-comments .tt-area-write[style*="display: none"],
+body .docs-comments .tt-area-write[style*="display:none"],
+body .docs-comments .tt-wrap-cmt .tt-area-write[style*="display: none"],
+body .docs-comments .tt-wrap-cmt .tt-area-write[style*="display:none"],
+body .docs-comments .tt-item-reply .tt-area-write[style*="display: none"],
+body .docs-comments .tt-item-reply .tt-area-write[style*="display:none"] {
+  display: none !important;
+}
+
+
 body .docs-comments .tt-area-write > .tt-box-thumb,
 body .docs-comments .tt-area-write > a:has(img),
 body .docs-comments .tt-area-write > img {
@@ -259,7 +269,7 @@ body .docs-comments .tt-area-write [contenteditable="true"] {
   font-weight: 500 !important;
   line-height: var(--cmt-textarea-line) !important;
   white-space: pre-wrap !important;
-  word-break: keep-all !important;
+  word-break: break-all !important;
   overflow-wrap: anywhere !important;
   overflow: auto !important;
   resize: vertical !important;
@@ -400,10 +410,14 @@ body .docs-comments [id^="entry"][id$="Comment"] .tt-list-reply > .tt-item-reply
 body .docs-comments .tt-wrap-cmt,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-list-reply > .tt-item-reply:not(:has(.tt-wrap-cmt)) {
   position: relative !important;
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: flex-start !important;
-  gap: var(--cmt-card-gap) !important;
+  display: grid !important;
+  grid-template-columns: var(--cmt-card-avatar) auto minmax(0, 1fr) 28px !important;
+  grid-template-areas:
+    "avatar meta info menu"
+    "desc desc desc desc" !important;
+  align-items: center !important;
+  column-gap: var(--cmt-card-gap) !important;
+  row-gap: 6px !important;
   width: 100% !important;
   max-width: 100% !important;
   min-height: 0 !important;
@@ -456,14 +470,7 @@ body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-thumb 
 
 body .docs-comments .tt-wrap-cmt > .tt-box-content,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
-  position: relative !important;
   display: grid !important;
-  flex: 1 !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
   grid-template-columns: auto minmax(0, 1fr) 28px !important;
   grid-template-areas:
     "meta info menu"
@@ -471,7 +478,8 @@ body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wra
   align-items: center !important;
   column-gap: var(--cmt-card-gap) !important;
   row-gap: 6px !important;
-  overflow: visible !important;
+  flex: 1 !important;
+  min-width: 0 !important;
 }
 
 body .docs-comments .tt-box-meta,
@@ -501,6 +509,7 @@ body .docs-comments .tt-wrap-info {
   margin: 0 !important;
   padding: 0 !important;
   height: var(--cmt-card-avatar) !important;
+  font-size: 0 !important; /* Hide native Tistory raw text separator dots */
 }
 
 body .docs-comments .tt-link-user,
@@ -517,7 +526,7 @@ body .docs-comments [id^="entry"][id$="Comment"] .tt-name a {
   font-weight: 600 !important;
   line-height: var(--cmt-card-avatar) !important;
   text-decoration: none !important;
-  word-break: keep-all !important;
+  word-break: break-all !important;
   overflow-wrap: anywhere !important;
 }
 
@@ -540,6 +549,12 @@ body .docs-comments .tt-link-comment .tt_txt_g {
 
 body .docs-comments .tt-date::before,
 body .docs-comments .tt_date::before,
+body .docs-comments .tt-wrap-info .tt-wrap-link-comment::before,
+body .docs-comments .tt-wrap-info .tt_date + .tt-wrap-link-comment::before {
+  content: "" !important;
+  display: none !important;
+}
+
 body .docs-comments .tt-link-comment::before {
   content: "·" !important;
   margin: 0 8px 0 0 !important;
@@ -559,10 +574,24 @@ body .docs-comments .tt-wrap-info * {
   padding-bottom: 0 !important;
 }
 
+/* Keep original comment DOM nodes present in layout but visually hidden for React's virtual DOM */
 body .docs-comments .tt-wrap-desc,
 body .docs-comments .tt_desc,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Beautiful custom markdown renderer aligned to the comment card grid */
+body .docs-comments .docs-comment-markdown {
   grid-area: desc !important;
   grid-column: 1 / -1 !important;
   width: 100% !important;
@@ -571,12 +600,25 @@ body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc 
   margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  letter-spacing: -0.3px !important;
+  color: var(--text-base) !important;
+  align-self: start !important;
+}
+
+/* Sync visibility of custom markdown with the original elements' display state */
+body .docs-comments .tt_desc[style*="display: none"] ~ .docs-comment-markdown,
+body .docs-comments .tt_desc[style*="display:none"] ~ .docs-comment-markdown,
+body .docs-comments .tt-wrap-desc[style*="display: none"] ~ .docs-comment-markdown,
+body .docs-comments .tt-wrap-desc[style*="display:none"] ~ .docs-comment-markdown {
+  display: none !important;
 }
 
 body .docs-comments .tt_desc,
 body .docs-comments .tt-desc {
   margin: 0 !important;
-  font-size: 15px !important;
+  font-size: 14px !important;
   line-height: 1.6 !important;
   letter-spacing: -0.3px !important;
   color: var(--text-base) !important;
@@ -586,8 +628,8 @@ body .docs-comments .tt-desc {
 /* Modify/delete menu */
 body .docs-comments .tt-box-modify {
   position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
+  top: var(--cmt-card-padding) !important;
+  right: var(--cmt-card-padding) !important;
   z-index: 20 !important;
   width: 28px !important;
   height: 28px !important;
@@ -783,7 +825,7 @@ html[data-ui-theme="dark"] body .docs-comments input[type="submit"] {
   body .docs-comments .tt_desc,
   body .docs-comments .tt-wrap-desc,
   body .docs-comments .tt-wrap-desc p {
-    font-size: 14px !important;
+    font-size: 13px !important;
     line-height: 1.55 !important;
     letter-spacing: -0.2px !important;
   }
@@ -1118,7 +1160,8 @@ body .docs-comments .tt-link-comment .tt_txt_g {
 body .docs-comments .tt_desc,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc,
 body .docs-comments .tt-wrap-desc,
-body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc {
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc,
+body .docs-comments .docs-comment-markdown {
   grid-area: desc !important;
   grid-column: 1 / -1 !important;
 }
@@ -1424,5 +1467,638 @@ body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc 
 body .docs-comments .tt_desc,
 body .docs-comments .tt-wrap-desc,
 body .docs-comments .tt-wrap-desc p {
-  line-height: 1.5 !important;
+  line-height: 1.6 !important;
 }
+
+/* Custom reply mention style like premium code badges */
+body .docs-comments .docs-comment-mention,
+body .docs-comments .tt-txt-mention,
+body .docs-comments .tt_txt_mention {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: var(--accent-soft) !important;
+  color: var(--accent) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 1.5px 6px !important;
+  border-radius: 6px !important;
+  margin-right: 4px !important;
+  margin-left: 2px !important;
+  text-decoration: none !important;
+  border: 1px solid var(--accent-soft) !important;
+  vertical-align: middle !important;
+  transition: opacity 0.15s ease !important;
+  font-family: var(--font-sans) !important;
+}
+
+body .docs-comments .docs-comment-mention:hover,
+body .docs-comments .tt-txt-mention:hover,
+body .docs-comments .tt_txt_mention:hover {
+  opacity: 0.8 !important;
+}
+
+/* ==========================================================================
+   Comment Markdown Elements and Syntax Highlighting
+   ========================================================================== */
+
+/* Markdown Content Elements styling inside comments */
+body .docs-comments .tt_desc p,
+body .docs-comments .tt-wrap-desc p,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc p,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc p {
+  margin: 0 0 10px 0 !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+body .docs-comments .tt_desc p:last-child,
+body .docs-comments .tt-wrap-desc p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Headings inside comments (GitHub-like hierarchy) */
+body .docs-comments .tt_desc h1,
+body .docs-comments .tt-wrap-desc h1 {
+  margin: 16px 0 8px 0 !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--line-soft) !important;
+  padding-bottom: 4px !important;
+}
+
+body .docs-comments .tt_desc h2,
+body .docs-comments .tt-wrap-desc h2 {
+  margin: 14px 0 6px 0 !important;
+  font-weight: 700 !important;
+  font-size: 15.5px !important;
+  color: var(--text) !important;
+}
+
+body .docs-comments .tt_desc h3,
+body .docs-comments .tt-wrap-desc h3 {
+  margin: 12px 0 6px 0 !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: var(--text-soft) !important;
+}
+
+/* Lists */
+body .docs-comments .tt_desc ul,
+body .docs-comments .tt_desc ol,
+body .docs-comments .tt-wrap-desc ul,
+body .docs-comments .tt-wrap-desc ol {
+  margin: 10px 0 !important;
+  padding-left: 20px !important;
+  font-size: 14px !important;
+}
+body .docs-comments .tt_desc li,
+body .docs-comments .tt-wrap-desc li {
+  margin: 4px 0 !important;
+  list-style: inherit !important;
+  font-size: 14px !important;
+}
+
+/* Blockquotes */
+body .docs-comments .tt_desc blockquote,
+body .docs-comments .tt-wrap-desc blockquote {
+  margin: 12px 0 !important;
+  padding: 6px 14px !important;
+  border: 0 !important;
+  border-left: 3px solid var(--line) !important;
+  background: var(--bg-soft) !important;
+  color: var(--text-muted) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+}
+body .docs-comments .tt_desc blockquote p,
+body .docs-comments .tt-wrap-desc blockquote p {
+  margin: 0 !important;
+  font-size: 13.5px !important;
+}
+
+/* Inline Code */
+body .docs-comments .tt_desc :not(pre) > code,
+body .docs-comments .tt-wrap-desc :not(pre) > code {
+  padding: 2px 5px !important;
+  margin: 0 2px !important;
+  border-radius: 4px !important;
+  background: var(--bg-soft) !important;
+  border: 1px solid var(--line-soft) !important;
+  color: var(--text) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  letter-spacing: -0.01em !important;
+  word-break: break-word !important;
+}
+
+/* Code Blocks */
+body .docs-comments .tt_desc pre,
+body .docs-comments .tt-wrap-desc pre {
+  margin: 12px 0 !important;
+  padding: 14px 16px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: #161618 !important;
+  overflow-x: auto !important;
+}
+
+body .docs-comments .tt_desc pre code,
+body .docs-comments .tt-wrap-desc pre code {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #dfdfd6 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  white-space: pre !important;
+}
+
+/* Syntax Highlighting inside comments (Scoped Highlight.js classes) */
+body .docs-comments .tt_desc pre .hljs,
+body .docs-comments .tt-wrap-desc pre .hljs {
+  background: transparent !important;
+  color: #dfdfd6 !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-comment,
+body .docs-comments .tt_desc pre .hljs-quote,
+body .docs-comments .tt-wrap-desc pre .hljs-comment,
+body .docs-comments .tt-wrap-desc pre .hljs-quote {
+  color: #7f8490 !important;
+  font-style: italic !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-keyword,
+body .docs-comments .tt_desc pre .hljs-selector-tag,
+body .docs-comments .tt_desc pre .hljs-subst,
+body .docs-comments .tt-wrap-desc pre .hljs-keyword,
+body .docs-comments .tt-wrap-desc pre .hljs-selector-tag,
+body .docs-comments .tt-wrap-desc pre .hljs-subst {
+  color: #ff7b72 !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-literal,
+body .docs-comments .tt_desc pre .hljs-number,
+body .docs-comments .tt_desc pre .hljs-tag .hljs-attr,
+body .docs-comments .tt_desc pre .hljs-template-variable,
+body .docs-comments .tt_desc pre .hljs-variable,
+body .docs-comments .tt-wrap-desc pre .hljs-literal,
+body .docs-comments .tt-wrap-desc pre .hljs-number,
+body .docs-comments .tt-wrap-desc pre .hljs-tag .hljs-attr,
+body .docs-comments .tt-wrap-desc pre .hljs-template-variable,
+body .docs-comments .tt-wrap-desc pre .hljs-variable {
+  color: #79c0ff !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-string,
+body .docs-comments .tt_desc pre .hljs-doctag,
+body .docs-comments .tt_desc pre .hljs-regexp,
+body .docs-comments .tt-wrap-desc pre .hljs-string,
+body .docs-comments .tt-wrap-desc pre .hljs-doctag,
+body .docs-comments .tt-wrap-desc pre .hljs-regexp {
+  color: #a5d6ff !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-title,
+body .docs-comments .tt_desc pre .hljs-section,
+body .docs-comments .tt_desc pre .hljs-selector-id,
+body .docs-comments .tt-wrap-desc pre .hljs-title,
+body .docs-comments .tt-wrap-desc pre .hljs-section,
+body .docs-comments .tt-wrap-desc pre .hljs-selector-id {
+  color: #d2a8ff !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-type,
+body .docs-comments .tt_desc pre .hljs-class .hljs-title,
+body .docs-comments .tt_desc pre .hljs-built_in,
+body .docs-comments .tt_desc pre .hljs-builtin-name,
+body .docs-comments .tt-wrap-desc pre .hljs-type,
+body .docs-comments .tt-wrap-desc pre .hljs-class .hljs-title,
+body .docs-comments .tt-wrap-desc pre .hljs-built_in,
+body .docs-comments .tt-wrap-desc pre .hljs-builtin-name {
+  color: #ffa657 !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-name,
+body .docs-comments .tt_desc pre .hljs-tag,
+body .docs-comments .tt-wrap-desc pre .hljs-name,
+body .docs-comments .tt-wrap-desc pre .hljs-tag {
+  color: #7ee787 !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-attr,
+body .docs-comments .tt_desc pre .hljs-attribute,
+body .docs-comments .tt_desc pre .hljs-property,
+body .docs-comments .tt-wrap-desc pre .hljs-attr,
+body .docs-comments .tt-wrap-desc pre .hljs-attribute,
+body .docs-comments .tt-wrap-desc pre .hljs-property {
+  color: #d2a8ff !important;
+}
+
+body .docs-comments .tt_desc pre .hljs-symbol,
+body .docs-comments .tt_desc pre .hljs-bullet,
+body .docs-comments .tt_desc pre .hljs-link,
+body .docs-comments .tt-wrap-desc pre .hljs-symbol,
+body .docs-comments .tt-wrap-desc pre .hljs-bullet,
+body .docs-comments .tt-wrap-desc pre .hljs-link {
+  color: #f2cc60 !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  body .docs-comments .tt_desc p,
+  body .docs-comments .tt-wrap-desc p,
+  body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc p,
+  body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc p {
+    font-size: 13px !important;
+  }
+  
+  body .docs-comments .tt_desc h1,
+  body .docs-comments .tt-wrap-desc h1 {
+    font-size: 15.5px !important;
+  }
+  body .docs-comments .tt_desc h2,
+  body .docs-comments .tt-wrap-desc h2 {
+    font-size: 14.5px !important;
+  }
+  body .docs-comments .tt_desc h3,
+  body .docs-comments .tt-wrap-desc h3 {
+    font-size: 13px !important;
+  }
+  
+  body .docs-comments .tt_desc ul,
+  body .docs-comments .tt_desc ol,
+  body .docs-comments .tt-wrap-desc ul,
+  body .docs-comments .tt-wrap-desc ol,
+  body .docs-comments .tt_desc li,
+  body .docs-comments .tt-wrap-desc li {
+    font-size: 13px !important;
+  }
+
+  body .docs-comments .tt_desc blockquote,
+  body .docs-comments .tt-wrap-desc blockquote,
+  body .docs-comments .tt_desc blockquote p,
+  body .docs-comments .tt-wrap-desc blockquote p {
+    font-size: 12.5px !important;
+  }
+
+  body .docs-comments .tt_desc :not(pre) > code,
+  body .docs-comments .tt-wrap-desc :not(pre) > code {
+    font-size: 12px !important;
+  }
+
+  body .docs-comments .tt_desc pre,
+  body .docs-comments .tt-wrap-desc pre {
+    padding: 10px 12px !important;
+  }
+
+  body .docs-comments .tt_desc pre code,
+  body .docs-comments .tt-wrap-desc pre code {
+    font-size: 12px !important;
+  }
+}
+
+/* ==========================================================================
+   Custom Markdown Sibling Styling Mapping (.docs-comment-markdown)
+   ========================================================================== */
+
+body .docs-comments .docs-comment-markdown p {
+  margin: 0 0 10px 0 !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: var(--text-base) !important;
+}
+
+body .docs-comments .docs-comment-markdown p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Headings inside comments */
+body .docs-comments .docs-comment-markdown h1 {
+  margin: 20px 0 10px 0 !important;
+  font-weight: 700 !important;
+  font-size: 19px !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--line-soft) !important;
+  padding-bottom: 6px !important;
+}
+
+body .docs-comments .docs-comment-markdown h2 {
+  margin: 18px 0 8px 0 !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--line-soft) !important;
+  padding-bottom: 4px !important;
+}
+
+body .docs-comments .docs-comment-markdown h3 {
+  margin: 16px 0 6px 0 !important;
+  font-weight: 700 !important;
+  font-size: 15.5px !important;
+  color: var(--text) !important;
+  border-bottom: 1px dashed var(--line-soft) !important;
+  padding-bottom: 3px !important;
+}
+
+body .docs-comments .docs-comment-markdown h4 {
+  margin: 14px 0 4px 0 !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: var(--text-soft) !important;
+}
+
+/* Lists inside comments */
+body .docs-comments .docs-comment-markdown ul,
+body .docs-comments .docs-comment-markdown ol {
+  margin: 10px 0 !important;
+  padding-left: 20px !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+
+body .docs-comments .docs-comment-markdown ul {
+  list-style-type: disc !important;
+}
+
+body .docs-comments .docs-comment-markdown ol {
+  list-style-type: decimal !important;
+}
+
+body .docs-comments .docs-comment-markdown li {
+  margin: 4px 0 !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: var(--text-base) !important;
+}
+
+/* Blockquotes inside comments */
+body .docs-comments .docs-comment-markdown blockquote {
+  margin: 12px 0 !important;
+  padding: 8px 12px !important;
+  border-left: 3px solid var(--line-soft) !important;
+  background: var(--bg-soft) !important;
+  border-radius: 0 6px 6px 0 !important;
+  font-size: 13.5px !important;
+}
+
+body .docs-comments .docs-comment-markdown blockquote p {
+  margin: 0 !important;
+  font-size: 13.5px !important;
+  color: var(--text-soft) !important;
+}
+
+/* Inline Code inside comments */
+body .docs-comments .docs-comment-markdown :not(pre) > code {
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  background: var(--bg-soft) !important;
+  color: #eb5757 !important;
+  padding: 2px 5px !important;
+  border-radius: 4px !important;
+  word-break: break-word !important;
+}
+
+/* Code block container inside comments */
+body .docs-comments .docs-comment-markdown pre {
+  margin: 12px 0 !important;
+  padding: 12px 16px !important;
+  background: #161618 !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 8px !important;
+  overflow-x: auto !important;
+}
+
+body .docs-comments .docs-comment-markdown pre code {
+  display: block !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: #dfdfd6 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  white-space: pre !important;
+}
+
+/* General scoped syntax highlighting for all docs-comments pre blocks */
+body .docs-comments pre .hljs {
+  background: transparent !important;
+  color: #dfdfd6 !important;
+}
+body .docs-comments pre .hljs-comment,
+body .docs-comments pre .hljs-quote {
+  color: #7f8490 !important;
+  font-style: italic !important;
+}
+body .docs-comments pre .hljs-keyword,
+body .docs-comments pre .hljs-selector-tag,
+body .docs-comments pre .hljs-subst {
+  color: #ff7b72 !important;
+}
+body .docs-comments pre .hljs-literal,
+body .docs-comments pre .hljs-number,
+body .docs-comments pre .hljs-tag .hljs-attr,
+body .docs-comments pre .hljs-template-variable,
+body .docs-comments pre .hljs-variable {
+  color: #79c0ff !important;
+}
+body .docs-comments pre .hljs-string,
+body .docs-comments pre .hljs-doctag,
+body .docs-comments pre .hljs-regexp {
+  color: #a5d6ff !important;
+}
+body .docs-comments pre .hljs-title,
+body .docs-comments pre .hljs-section,
+body .docs-comments pre .hljs-selector-id {
+  color: #d2a8ff !important;
+}
+body .docs-comments pre .hljs-type,
+body .docs-comments pre .hljs-class .hljs-title,
+body .docs-comments pre .hljs-built_in,
+body .docs-comments pre .hljs-builtin-name {
+  color: #ffa657 !important;
+}
+body .docs-comments pre .hljs-name,
+body .docs-comments pre .hljs-tag {
+  color: #7ee787 !important;
+}
+body .docs-comments pre .hljs-attr,
+body .docs-comments pre .hljs-attribute,
+body .docs-comments pre .hljs-property {
+  color: #d2a8ff !important;
+}
+body .docs-comments pre .hljs-symbol,
+body .docs-comments pre .hljs-bullet,
+body .docs-comments pre .hljs-link {
+  color: #f2cc60 !important;
+}
+
+/* Mobile responsive markdown scaling inside comments */
+@media (max-width: 768px) {
+  body .docs-comments .docs-comment-markdown p {
+    font-size: 13px !important;
+  }
+  body .docs-comments .docs-comment-markdown h1 {
+    font-size: 15.5px !important;
+  }
+  body .docs-comments .docs-comment-markdown h2 {
+    font-size: 14.5px !important;
+  }
+  body .docs-comments .docs-comment-markdown h3 {
+    font-size: 13px !important;
+  }
+  body .docs-comments .docs-comment-markdown h4 {
+    font-size: 12px !important;
+  }
+  body .docs-comments .docs-comment-markdown ul,
+  body .docs-comments .docs-comment-markdown ol,
+  body .docs-comments .docs-comment-markdown li {
+    font-size: 13px !important;
+  }
+  body .docs-comments .docs-comment-markdown blockquote,
+  body .docs-comments .docs-comment-markdown blockquote p {
+    font-size: 12.5px !important;
+  }
+  body .docs-comments .docs-comment-markdown :not(pre) > code {
+    font-size: 12px !important;
+  }
+  body .docs-comments .docs-comment-markdown pre {
+    padding: 10px 12px !important;
+  }
+  body .docs-comments .docs-comment-markdown pre code {
+    font-size: 12px !important;
+  }
+}
+
+/* Guest (logged-out) form cleanups to remove Tistory native icons, borders, labels and connection lines */
+body .docs-comments .tt-area-write .tt-box-account label,
+body .docs-comments .tt-area-write .tt-wrap-account label,
+body .docs-comments .tt-area-write .tt-box-account .tt-label-account,
+body .docs-comments .tt-area-write .tt-wrap-account .tt-label-account,
+body .docs-comments .tt-area-write .tt_ico_reply,
+body .docs-comments .tt-area-write .ico_reply,
+body .docs-comments .tt-area-write .tt_ico_write,
+body .docs-comments .tt-area-write .ico_write,
+body .docs-comments .tt-area-write .tt_img_area_reply,
+body .docs-comments .tt-area-write .tt_ico_check {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  background: none !important;
+  display: none !important;
+}
+
+/* Guarantee that the logged-out inputs container and forms have no native Tistory background images/lines/pseudo-elements */
+body .docs-comments .tt-area-write,
+body .docs-comments .tt-box-account,
+body .docs-comments .tt-wrap-account {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+body .docs-comments .tt-area-write::before,
+body .docs-comments .tt-area-write::after,
+body .docs-comments .tt-box-account::before,
+body .docs-comments .tt-box-account::after,
+body .docs-comments .tt-wrap-account::before,
+body .docs-comments .tt-wrap-account::after {
+  display: none !important;
+  content: "" !important;
+  background: none !important;
+}
+
+/* Global list style reset for all comment layout containers to prevent browser-native bullet dots */
+body .docs-comments ul:not(.docs-comment-markdown, .docs-comment-markdown *),
+body .docs-comments ol:not(.docs-comment-markdown, .docs-comment-markdown *),
+body .docs-comments li:not(.docs-comment-markdown, .docs-comment-markdown *) {
+  list-style: none !important;
+  list-style-type: none !important;
+}
+
+/* Strip Tistory's default reply icon and styles that cause unwanted elements between avatar and nickname */
+body .docs-comments .tt-list-reply > li,
+body .docs-comments .tt-list-reply-comment > li,
+body .docs-comments .tt-list-reply-sub > li,
+body .docs-comments .tt-item-reply {
+  background: none !important;
+  background-image: none !important;
+  border: none !important;
+}
+
+body .docs-comments .tt-item-reply::before,
+body .docs-comments .tt-item-reply::after,
+body .docs-comments .tt-wrap-cmt::before,
+body .docs-comments .tt-wrap-cmt::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+}
+
+/* ==========================================================================
+   Premium Custom Spacing & Profile Picture Size Refinements
+   ========================================================================== */
+
+/* 1. Scale down the comment form profile photo to a premium, subtle 32px */
+body .docs-comments {
+  --cmt-form-avatar: 32px !important;
+}
+
+/* 2. Force grid layout on comment cards, overriding any flex layout overrides */
+body .docs-comments .tt-wrap-cmt,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-list-reply > .tt-item-reply:not(:has(.tt-wrap-cmt)) {
+  display: grid !important;
+  grid-template-columns: var(--cmt-card-avatar) auto minmax(0, 1fr) 28px !important;
+  grid-template-areas:
+    "avatar meta info menu"
+    "desc desc desc desc" !important;
+  align-items: center !important;
+  column-gap: var(--cmt-card-gap) !important;
+  row-gap: 12px !important; /* Visual breathing room between metadata row and comment text */
+}
+
+/* 3. Strip box boundaries of tt-box-content so its children are aligned directly by the parent grid */
+body .docs-comments .tt-wrap-cmt > .tt-box-content,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply:not(:has(.tt-wrap-cmt)) > .tt-box-content {
+  display: contents !important;
+}
+
+/* 4. Ensure metadata items have correct heights aligned to their grid area */
+body .docs-comments .tt-box-meta,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-meta {
+  grid-area: meta !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: var(--cmt-card-avatar) !important;
+}
+
+body .docs-comments .tt-wrap-info {
+  grid-area: info !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: var(--cmt-card-avatar) !important;
+}
+
+body .docs-comments .tt-box-modify,
+body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-box-modify {
+  grid-area: menu !important;
+}
+
+/* 5. Force the comment text (and custom markdown) to span full card width starting from under the profile picture */
+body .docs-comments .docs-comment-markdown {
+  grid-area: desc !important;
+  grid-column: 1 / -1 !important; /* Spans across all columns including Column 1 (under the avatar) */
+  margin-top: 4px !important;
+}
+
+
+

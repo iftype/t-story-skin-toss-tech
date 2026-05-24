@@ -1,4 +1,5 @@
 import hljs from 'highlight.js/lib/core'
+import { marked } from 'marked'
 import bash from 'highlight.js/lib/languages/bash'
 import css from 'highlight.js/lib/languages/css'
 import javascript from 'highlight.js/lib/languages/javascript'
@@ -1007,21 +1008,28 @@ function syncCommentComposerAvatar() {
     const sourceThumb = Array.from(document.querySelectorAll('.docs-comments .tt-wrap-cmt .tt-thumbnail'))
       .find((thumb) => {
         const bg = getComputedStyle(thumb).backgroundImage
-        return bg && bg !== 'none'
+        return bg && bg !== 'none' && !bg.includes('default_S.png')
       })
 
     const sourceImg = sourceThumb?.querySelector('img') || document.querySelector('.docs-comments .tt-wrap-cmt .tt-box-thumb img')
     const bg = sourceThumb ? getComputedStyle(sourceThumb).backgroundImage : ''
     const src = sourceImg?.currentSrc || sourceImg?.src || ''
 
-    if ((!bg || bg === 'none') && !src) return false
-
     let allSynced = true
     composerThumbs.forEach((thumb) => {
       if (thumb.dataset.composerSynced === 'true') return
 
+      const areaWrite = thumb.closest('.tt-area-write')
+      const isGuest = areaWrite && (areaWrite.querySelector('.tt-box-account') || areaWrite.querySelector('.tt-wrap-account'))
+
+      if (isGuest) {
+        thumb.style.backgroundImage = 'url("https://t1.daumcdn.net/tistory_admin/static/manage/images/r3/default_S.png")'
+        thumb.dataset.composerSynced = 'true'
+        return
+      }
+
       const currentBg = getComputedStyle(thumb).backgroundImage
-      if (currentBg && currentBg !== 'none') {
+      if (currentBg && currentBg !== 'none' && !currentBg.includes('default_S.png')) {
         thumb.dataset.composerSynced = 'true'
         return
       }
@@ -1113,7 +1121,9 @@ function normalizeLegacyComments() {
         touched = true
       })
       root.querySelectorAll('form .tt-area-write').forEach((form) => {
-        ensureThumb(form, bg)
+        const isGuest = form.querySelector('.tt-box-account') || form.querySelector('.tt-wrap-account')
+        const formBg = isGuest ? 'url("https://t1.daumcdn.net/tistory_admin/static/manage/images/r3/default_S.png")' : bg
+        ensureThumb(form, formBg)
         touched = true
       })
     })
@@ -1266,6 +1276,105 @@ function setupThumbnailFallbacks() {
   })
 }
 
+function renderCommentMarkdown() {
+  const allComments = Array.from(document.querySelectorAll('.tt_desc, .tt-wrap-desc'))
+  const comments = allComments.filter(el => {
+    // Keep only the outermost comment elements to prevent double parsing/rendering in nested trees
+    return !allComments.some(ancestor => ancestor !== el && ancestor.contains(el))
+  })
+  comments.forEach(comment => {
+    let html = comment.innerHTML
+    
+    // Tistory auto-prepends the reply mention tag (<em class="tt-txt-mention">@nickname</em>) without spaces.
+    // This breaks markdown blocks like headings that must be at the start of a line.
+    // We add \n\n after it to ensure the user's content starts on a fresh line.
+    html = html.replace(/(<em[^>]*class="[^"]*tt[_-]txt[_-]mention[^"]*"[^>]*>.*?<\/em>)\s*/gi, '$1\n\n')
+    
+    let textWithNewlines = html.replace(/<br\s*\/?>/gi, '\n')
+    
+    const temp = document.createElement('div')
+    temp.innerHTML = textWithNewlines
+    
+    // Safety check: remove any nested docs-comment-markdown elements from previous runs
+    temp.querySelectorAll('.docs-comment-markdown').forEach(el => el.remove())
+    
+    const rawText = temp.textContent || temp.innerText || ""
+    
+    if (comment.dataset.lastParsedText === rawText) return
+    
+    const mdHtml = marked.parse(rawText)
+    
+    const div = document.createElement('div')
+    div.innerHTML = mdHtml
+    
+    // Basic sanitization
+    div.querySelectorAll('script').forEach(s => s.remove())
+    div.querySelectorAll('*').forEach(el => {
+      for (const attr of Array.from(el.attributes)) {
+        if (attr.name.startsWith('on')) {
+          el.removeAttribute(attr.name)
+        }
+      }
+    })
+    div.querySelectorAll('a').forEach(a => {
+      if (a.getAttribute('href')?.trim().toLowerCase().startsWith('javascript:')) {
+        a.removeAttribute('href')
+      }
+    })
+    
+    // Wrap reply mentions like @nickname in premium badge spans
+    function processTextNodes(element) {
+      if (element.tagName === 'PRE' || element.tagName === 'CODE' || (element.classList && element.classList.contains('docs-comment-mention'))) {
+        return
+      }
+      const childNodes = Array.from(element.childNodes)
+      childNodes.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.nodeValue
+          const mentionRegex = /(^|[^a-zA-Z0-9_\-가-힣])@([a-zA-Z0-9_\-가-힣]+)/g
+          if (mentionRegex.test(text)) {
+            const tempSpan = document.createElement('span')
+            tempSpan.innerHTML = text.replace(mentionRegex, '$1<span class="docs-comment-mention">@$2</span>')
+            
+            const parent = node.parentNode
+            if (parent) {
+              while (tempSpan.firstChild) {
+                parent.insertBefore(tempSpan.firstChild, node)
+              }
+              parent.removeChild(node)
+            }
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          processTextNodes(node)
+        }
+      })
+    }
+    processTextNodes(div)
+    
+    if (!comment.parentNode) return
+    
+    // Find or create sibling
+    let mdDiv = comment.nextSibling
+    while (mdDiv && (!mdDiv.classList || !mdDiv.classList.contains('docs-comment-markdown'))) {
+      mdDiv = mdDiv.nextSibling
+    }
+    
+    if (!mdDiv) {
+      mdDiv = document.createElement('div')
+      mdDiv.className = 'docs-comment-markdown'
+      comment.parentNode.insertBefore(mdDiv, comment.nextSibling)
+    }
+    
+    mdDiv.innerHTML = div.innerHTML
+    
+    mdDiv.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block)
+    })
+    
+    comment.dataset.lastParsedText = rawText
+  })
+}
+
 function init() {
   applyTheme(getSavedTheme())
   decorateWriteLinks()
@@ -1280,12 +1389,15 @@ function init() {
   showEmptyStateWhenNeeded()
   normalizeListMeta()
   normalizeListCards()
+  assignHeadingIds()
   generateTOC()
+  setupHeadingAnchors()
   syncCommentComposerAvatar()
   normalizeLegacyComments()
   trackOpenCommentMenus()
   setupCommentAvatarLogin()
   setupCommentReplyClick()
+  renderCommentMarkdown()
   
   cleanInlineStyles()
   preserveWordCombination()
@@ -1299,11 +1411,25 @@ function init() {
         
         cleanInlineStyles()
         preserveWordCombination()
+        setupHeadingAnchors()
         
         obs.observe(article, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] })
       }, 150)
     })
     observer.observe(article, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] })
+  }
+  
+  const commentsArea = document.querySelector('.docs-comments')
+  if (commentsArea && 'MutationObserver' in window) {
+    let cmtTimer = null
+    const cmtObserver = new MutationObserver(() => {
+      clearTimeout(cmtTimer)
+      cmtTimer = setTimeout(() => {
+        renderCommentMarkdown()
+        setupCommentReplyClick()
+      }, 100)
+    })
+    cmtObserver.observe(commentsArea, { childList: true, subtree: true })
   }
 }
 
@@ -1367,6 +1493,46 @@ function setupCommentAvatarLogin() {
   setTimeout(() => observer.disconnect(), 10000)
 }
 
+function assignHeadingIds() {
+  const article = document.querySelector('[data-docs-article]')
+  if (!article) return
+  
+  const headings = article.querySelectorAll('h1, h2, h3, h4, h5, h6')
+  const usedIds = new Set()
+  
+  // First pass: remember manually set IDs
+  headings.forEach(heading => {
+    const existingId = heading.getAttribute('id')
+    if (existingId && !existingId.startsWith('heading-')) {
+      usedIds.add(existingId)
+    }
+  })
+  
+  // Second pass: generate readable IDs
+  headings.forEach(heading => {
+    let id = heading.getAttribute('id')
+    if (!id || id.startsWith('heading-')) {
+      let baseId = heading.textContent
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\p{L}\p{N}\-_]/gu, '')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+      
+      if (!baseId) baseId = 'heading'
+      
+      id = baseId
+      let counter = 1
+      while (usedIds.has(id)) {
+        id = `${baseId}-${counter++}`
+      }
+      heading.setAttribute('id', id)
+      usedIds.add(id)
+    }
+  })
+}
+
 function generateTOC() {
   const article = document.querySelector('[data-docs-article]')
   const tocNav = document.getElementById('toc-content')
@@ -1389,9 +1555,8 @@ function generateTOC() {
   document.body.classList.remove('no-toc')
 
   const ul = document.createElement('ul')
-  headings.forEach((heading, index) => {
-    const id = `heading-${index}`
-    heading.setAttribute('id', id)
+  headings.forEach((heading) => {
+    const id = heading.getAttribute('id')
 
     const li = document.createElement('li')
     li.className = `toc-item toc-item--${heading.tagName.toLowerCase()}`
@@ -1407,6 +1572,53 @@ function generateTOC() {
 
   tocNav.appendChild(ul)
   setupTocActiveState()
+}
+
+function setupHeadingAnchors() {
+  const article = document.querySelector('[data-docs-article]')
+  if (!article) return
+  
+  const headings = article.querySelectorAll('h1, h2, h3, h4')
+  headings.forEach((heading) => {
+    // 1. Ensure unique ID exists
+    const id = heading.getAttribute('id')
+    
+    // 2. Avoid duplicate anchor injection
+    if (heading.querySelector('.heading-anchor') || heading.querySelector('.heading-text-link')) return
+    
+    // 3. Create elegant heading text link
+    const textLink = document.createElement('a')
+    textLink.className = 'heading-text-link'
+    textLink.setAttribute('href', `#${id}`)
+    
+    // Move all existing children of heading to the textLink
+    while (heading.firstChild) {
+      textLink.appendChild(heading.firstChild)
+    }
+    heading.appendChild(textLink)
+    
+    // 4. Create elegant '#' anchor element
+    const anchor = document.createElement('a')
+    anchor.className = 'heading-anchor'
+    anchor.setAttribute('href', `#${id}`)
+    anchor.setAttribute('aria-hidden', 'true')
+    anchor.textContent = '#'
+    
+    // 5. Clipboard copy click handler
+    anchor.addEventListener('click', (e) => {
+      const url = new URL(window.location.href)
+      url.hash = id
+      
+      navigator.clipboard.writeText(url.toString())
+        .then(() => {
+          anchor.classList.add('copied')
+          setTimeout(() => anchor.classList.remove('copied'), 1000)
+        })
+        .catch(err => console.error('Failed to copy direct section link: ', err))
+    })
+    
+    heading.appendChild(anchor)
+  })
 }
 
 if (document.readyState === 'loading') {

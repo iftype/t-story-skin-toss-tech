@@ -7,10 +7,15 @@
   --article-font-size: 17px;
   --article-line-height: 1.6;
   --article-letter-spacing: 0em; /* Zero negative tracking */
-  --article-h2-size: 30px;
-  --article-h2-line-height: 1.55;
+  --p-margin: 32px 0 0 0;
+  --article-h1-size: 36px;
+  --article-h1-line-height: 1.25;
+  --article-h2-size: 32px;
+  --article-h2-line-height: 1.14;
   --article-h3-size: 24px;
-  --article-h3-line-height: 1.6;
+  --article-h3-line-height: 1.2;
+  --article-h4-size: 20px;
+  --article-h4-line-height: 1.25;
   overflow: visible !important;
 }
 
@@ -53,12 +58,12 @@ body.has-article-page .docs-article {
 
 .docs-article__body,
 .article-body {
-  color: var(--article-text) !important;
+  color: var(--text-muted) !important;
   font-size: var(--article-font-size) !important;
   font-weight: 400 !important;
   line-height: var(--article-line-height) !important;
   letter-spacing: var(--article-letter-spacing) !important;
-  word-break: keep-all !important;
+  word-break: break-all !important;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
   -webkit-hyphens: none !important;
@@ -77,16 +82,10 @@ body.has-article-page .docs-article {
 .article-body font,
 .article-body u,
 .article-body s {
-  font-family: var(--font-sans) !important;
+  font-family: inherit !important;
   font-size: inherit !important;
-  font-weight: inherit !important;
   line-height: inherit !important;
   letter-spacing: inherit !important;
-  word-break: keep-all !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
-  -webkit-hyphens: none !important;
-  hyphens: none !important;
 }
 
 /* Apply color override globally except when the elements have explicit inline style colors/backgrounds */
@@ -108,33 +107,72 @@ body.has-article-page .docs-article {
 /* Universal child fallback to catch all nested structures robustly */
 .docs-article__body :not(pre):not(pre *):not(code):not(code *):not(.code-frame):not(.code-frame *),
 .article-body :not(pre):not(pre *):not(code):not(code *):not(.code-frame):not(.code-frame *) {
-  word-break: keep-all !important;
+  word-break: break-all !important;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
 }
 
 .article-body p {
-  margin: var(--p-margin, 24px 0 8px) !important;
+  margin: var(--p-margin, 32px 0 0 0) !important;
+}
+
+.article-body p:first-child {
+  margin-top: 0 !important;
 }
 
 .article-body p:last-child {
   margin-bottom: 0 !important;
 }
 
+.article-body h1 {
+  margin: 64px 0 0 0 !important;
+  font-size: var(--article-h1-size) !important;
+  font-weight: 800 !important;
+  line-height: var(--article-h1-line-height) !important;
+  letter-spacing: 0em !important;
+  color: var(--text-heading) !important;
+}
+
 .article-body h2 {
-  margin: 56px 0 16px !important;
+  margin: 48px 0 0 0 !important;
   font-size: var(--article-h2-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h2-line-height) !important;
-  letter-spacing: 0em !important; /* Zero negative tracking */
+  letter-spacing: 0em !important;
+  color: var(--text-heading) !important;
 }
 
 .article-body h3 {
-  margin: 36px 0 12px !important;
+  margin: 64px 0 16px !important;
   font-size: var(--article-h3-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h3-line-height) !important;
-  letter-spacing: 0em !important; /* Zero negative tracking */
+  letter-spacing: 0em !important;
+  color: var(--text-heading) !important;
+}
+
+.article-body h4 {
+  margin: 24px 0 0 0 !important;
+  font-size: var(--article-h4-size) !important;
+  font-weight: 700 !important;
+  line-height: var(--article-h4-line-height) !important;
+  letter-spacing: 0em !important;
+  color: var(--text-heading) !important;
+}
+
+
+/* Adjust gap after headings */
+.article-body h1 + p { margin-top: 36px !important; }
+.article-body h2 + p { margin-top: 28px !important; }
+.article-body h3 + p { margin-top: 28px !important; }
+.article-body h4 + p { margin-top: 28px !important; }
+
+/* Remove top margin for first elements */
+.article-body > h1:first-child,
+.article-body > h2:first-child,
+.article-body > h3:first-child,
+.article-body > h4:first-child {
+  margin-top: 0 !important;
 }
 
 .article-body ul,
@@ -223,10 +261,14 @@ body.has-article-page .docs-article {
     --article-font-size: 17px; /* Keep premium 17px font size on mobile */
     --article-line-height: 1.6;
     --article-letter-spacing: 0em; /* Zero negative tracking */
-    --article-h2-size: 26px; /* Elegant scale-down for smaller mobile viewports */
-    --article-h2-line-height: 1.4;
-    --article-h3-size: 22px;
-    --article-h3-line-height: 1.45;
+    --article-h1-size: 30px;
+    --article-h1-line-height: 1.4;
+    --article-h2-size: 24px;
+    --article-h2-line-height: 1.45;
+    --article-h3-size: 20px;
+    --article-h3-line-height: 1.5;
+    --article-h4-size: 17px;
+    --article-h4-line-height: 1.55;
     width: 100% !important;
     max-width: none !important;
   }
@@ -265,12 +307,20 @@ body.has-article-page .docs-article {
     margin-bottom: 0 !important;
   }
 
+  .article-body h1 {
+    margin: 44px 0 16px !important;
+  }
+
   .article-body h2 {
-    margin: 38px 0 12px !important;
+    margin: 36px 0 12px !important;
   }
 
   .article-body h3 {
     margin: 28px 0 8px !important;
+  }
+
+  .article-body h4 {
+    margin: 22px 0 6px !important;
   }
 
   .article-body ul,
@@ -337,6 +387,13 @@ body.has-article-page .docs-article {
   letter-spacing: var(--article-letter-spacing) !important;
 }
 
+#tt-body-page .article-body h1[data-ke-size],
+.docs-article__body h1[data-ke-size],
+.article-body h1[data-ke-size] {
+  font-size: var(--article-h1-size) !important;
+  line-height: var(--article-h1-line-height) !important;
+}
+
 #tt-body-page .article-body h2[data-ke-size],
 .docs-article__body h2[data-ke-size],
 .article-body h2[data-ke-size] {
@@ -349,4 +406,82 @@ body.has-article-page .docs-article {
 .article-body h3[data-ke-size] {
   font-size: var(--article-h3-size) !important;
   line-height: var(--article-h3-line-height) !important;
+}
+
+#tt-body-page .article-body h4[data-ke-size],
+.docs-article__body h4[data-ke-size],
+.article-body h4[data-ke-size] {
+  font-size: var(--article-h4-size) !important;
+  line-height: var(--article-h4-line-height) !important;
+}
+
+/* ==========================================================================
+   Heading Anchor Links (#)
+   ========================================================================== */
+.article-body h1,
+.article-body h2,
+.article-body h3,
+.article-body h4 {
+  position: relative;
+  scroll-margin-top: 96px !important;
+}
+
+.article-body .heading-text-link {
+  color: inherit !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+.article-body .heading-text-link:hover {
+  text-decoration: none !important;
+}
+
+.article-body .heading-anchor {
+  margin-left: 8px;
+  color: var(--accent, #3182f6) !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+  transform: translateY(-1px);
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.article-body h1:hover .heading-anchor,
+.article-body h2:hover .heading-anchor,
+.article-body h3:hover .heading-anchor,
+.article-body h4:hover .heading-anchor {
+  opacity: 0.6;
+}
+
+.article-body .heading-anchor:hover {
+  opacity: 1 !important;
+}
+
+/* Premium copy toast tooltip */
+.article-body .heading-anchor.copied::after {
+  content: '복사됨';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: var(--card-bg, #1e1e24);
+  color: var(--text-primary, #ffffff);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+  white-space: nowrap;
+  pointer-events: none;
+  animation: anchorFadeInOut 1.0s ease forwards;
+}
+
+@keyframes anchorFadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(0px); }
+  10% { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+  90% { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
 }
