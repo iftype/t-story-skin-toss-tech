@@ -9,7 +9,10 @@ import 'prismjs/components/prism-json'
 import 'prismjs/components/prism-python'
 import 'prismjs/components/prism-css'
 import 'prismjs/components/prism-markdown'
+import 'prismjs/plugins/autoloader/prism-autoloader'
 import './styles.css'
+
+Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/'
 
 const STORAGE_KEY = 'docs-theme'
 
@@ -591,12 +594,8 @@ async function enhanceCodeBlocks() {
     stripCodeMetaDirective(block)
     block.classList.add(`language-${meta.lang}`)
     try {
-      if (Prism.languages[meta.lang]) {
-        Prism.highlightElement(block)
-      } else {
-        block.textContent = block.textContent || ''
-      }
-    } catch {
+      Prism.highlightElement(block)
+    } catch (e) {
       block.textContent = block.textContent || ''
     }
 
