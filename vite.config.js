@@ -21,12 +21,12 @@ export default defineConfig({
 
           // Clone to style-markdown.css (Markdown mode with large paragraph margins)
           const markdownComment = `/* ==========================================================================\n   [Tistory 스킨용 - 선택 사항: 마크다운 본문 모드]\n   문단 간의 여백이 살아있어 마크다운이나 일반 서식 작성 시 가독성이 높습니다.\n   아래 내용을 복사하여 기본 style.css에 덮어쓰거나 적용하세요.\n   ========================================================================== */\n`
-          const markdownCssContent = markdownComment + cssContent + '\n:root { --p-margin: 32px 0 0 0 !important; }\n'
+          const markdownCssContent = markdownComment + cssContent.replace(/var\(--p-margin[^)]+\)/g, '32px 0 0 0');
           fs.writeFileSync(path.resolve(__dirname, 'dist/style-markdown.css'), markdownCssContent)
 
           // Make default style.css the Tight mode (Zero paragraph margins)
           const tightComment = `/* ==========================================================================\n   [Tistory 스킨용 - 기본: 일반/타이트 본문 모드]\n   문단 간의 위아래 여백을 0으로 꽉 줄여 조밀한 간격의 포스트 작성을 지원합니다.\n   ========================================================================== */\n`
-          const tightCssContent = tightComment + cssContent + '\n:root { --p-margin: 0 !important; }\n'
+          const tightCssContent = tightComment + cssContent.replace(/var\(--p-margin[^)]+\)/g, '0');
           fs.writeFileSync(cssPath, tightCssContent)
 
           // Auto-package into a Tistory-compliant ZIP bundle
