@@ -29,33 +29,29 @@ export default defineConfig({
           const tightCssContent = tightComment + cssContent.replace(/var\(--p-margin[^)]+\)/g, '0');
           fs.writeFileSync(cssPath, tightCssContent)
 
-          // Auto-package into a Tistory-compliant ZIP bundle
+          // Auto-package into a Tistory-compliant flat ZIP bundle
           try {
             const zipTempDir = path.resolve(__dirname, 'dist-zip')
-            const zipImagesDir = path.resolve(zipTempDir, 'images')
 
             if (fs.existsSync(zipTempDir)) {
               fs.rmSync(zipTempDir, { recursive: true, force: true })
             }
-            fs.mkdirSync(zipImagesDir, { recursive: true })
+            fs.mkdirSync(zipTempDir, { recursive: true })
 
-            // Copy files required at root of Tistory skin zip
+            // Copy ALL files flatly into the ZIP temp directory
             fs.copyFileSync(path.resolve(__dirname, 'dist/skin.html'), path.resolve(zipTempDir, 'skin.html'))
             fs.copyFileSync(path.resolve(__dirname, 'dist/style.css'), path.resolve(zipTempDir, 'style.css'))
             fs.copyFileSync(path.resolve(__dirname, 'dist/index.xml'), path.resolve(zipTempDir, 'index.xml'))
+            fs.copyFileSync(path.resolve(__dirname, 'dist/script.js'), path.resolve(zipTempDir, 'script.js'))
+            fs.copyFileSync(path.resolve(__dirname, 'dist/style-markdown.css'), path.resolve(zipTempDir, 'style-markdown.css'))
 
-            // Copy previews to root
+            // Copy previews flatly
             const distFiles = fs.readdirSync(path.resolve(__dirname, 'dist'))
             for (const file of distFiles) {
               if (file.startsWith('preview')) {
                 fs.copyFileSync(path.resolve(__dirname, 'dist', file), path.resolve(zipTempDir, file))
               }
             }
-
-            // Copy assets to images/ inside the ZIP
-            fs.copyFileSync(path.resolve(__dirname, 'dist/script.js'), path.resolve(zipImagesDir, 'script.js'))
-            fs.copyFileSync(path.resolve(__dirname, 'dist/style.css'), path.resolve(zipImagesDir, 'style.css'))
-            fs.copyFileSync(path.resolve(__dirname, 'dist/style-markdown.css'), path.resolve(zipImagesDir, 'style-markdown.css'))
 
             // Run native OS zip command to bundle the skin
             const zipOutputFile = path.resolve(__dirname, 'dist/tistory-skin-toss-tech.zip')
@@ -64,7 +60,7 @@ export default defineConfig({
             }
 
             execSync(`cd "${zipTempDir}" && zip -r "${zipOutputFile}" ./* > /dev/null`)
-            console.log('Successfully generated dist/tistory-skin-toss-tech.zip!')
+            console.log('Successfully generated flat dist/tistory-skin-toss-tech.zip!')
 
             // Cleanup temp dir
             fs.rmSync(zipTempDir, { recursive: true, force: true })

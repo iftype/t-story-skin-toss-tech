@@ -465,27 +465,11 @@ body.has-article-page .docs-article {
   opacity: 1 !important;
 }
 
-/* Premium copy toast tooltip */
-.article-body .heading-anchor.copied::after {
-  content: '복사됨';
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-4px);
-  background: var(--card-bg, #1e1e24);
-  color: var(--text-primary, #ffffff);
-  font-size: 11px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid var(--border-color, rgba(255,255,255,0.1));
-  white-space: nowrap;
-  pointer-events: none;
-  animation: anchorFadeInOut 1.0s ease forwards;
-}
-
-@keyframes anchorFadeInOut {
-  0% { opacity: 0; transform: translateX(-50%) translateY(0px); }
-  10% { opacity: 1; transform: translateX(-50%) translateY(-4px); }
-  90% { opacity: 1; transform: translateX(-50%) translateY(-4px); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+/* Ensure horizontal lines, dividers, and Tistory separators do not incorrectly show pointer cursor on hover */
+.article-body hr,
+.article-body hr[data-ke-style],
+.article-body .tx-entry-separator,
+.article-body p[data-ke-style^="more"],
+.article-body [data-ke-style^="more"] {
+  cursor: default !important;
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="no-transitions">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -205,6 +205,11 @@
                         <div class="docs-article__meta">
                           <a class="docs-article__category" href="[##_article_rep_category_link_##]">[##_article_rep_category_##]</a>
                           <span>[##_article_rep_simple_date_##]</span>
+                          <s_ad_div>
+                            <span class="docs-article__meta-admin-group">
+                              <a class="docs-article__meta-admin-link" href="[##_s_ad_m_link_##]">수정</a><span class="docs-article__meta-admin-slash">/</span><a class="docs-article__meta-admin-link" href="#" onclick="[##_s_ad_d_onclick_##]">삭제</a>
+                            </span>
+                          </s_ad_div>
                         </div>
                         <h1 class="docs-article__title">[##_article_rep_title_##]</h1>
                       </header>
@@ -213,13 +218,36 @@
                         [##_article_rep_desc_##]
                       </div>
   
-                      <s_ad_div>
-                        <div class="docs-admin-actions">
-                          <a class="docs-admin-actions__link" href="[##_s_ad_m_link_##]">수정</a>
-                          <a class="docs-admin-actions__link" href="#" onclick="[##_s_ad_s2_onclick_##]">[##_s_ad_s2_label_##]</a>
-                          <a class="docs-admin-actions__link" href="#" onclick="[##_s_ad_d_onclick_##]">삭제</a>
+                      <!-- Tistory native buttons (공감/공유 - auto-injected by platform) -->
+                      [##_article_rep_rate_##]
+
+                      <div class="docs-article-actions-wrap">
+
+                        <!-- Floating Left Like/Heart (Desktop only: bare icon, no border, no count) -->
+                        <div class="docs-article__like-sidebar">
+                          <button class="docs-like-btn docs-like-btn--floating" type="button" aria-label="공감하기">
+                            <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                          </button>
                         </div>
-                      </s_ad_div>
+  
+                        <!-- Static Inline Like Button (with count, togglable) -->
+                        <button class="docs-like-btn docs-like-btn--action docs-like-btn--inline" type="button" aria-label="공감하기">
+                          <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                          </svg>
+                          <span class="like-count"></span>
+                        </button>
+  
+                        <s_ad_div>
+                          <div class="docs-admin-actions">
+                            <a class="docs-admin-actions__link" href="[##_s_ad_m_link_##]">수정</a>
+                            <a class="docs-admin-actions__link" href="#" onclick="[##_s_ad_s2_onclick_##]">[##_s_ad_s2_label_##]</a>
+                            <a class="docs-admin-actions__link" href="#" onclick="[##_s_ad_d_onclick_##]">삭제</a>
+                          </div>
+                        </s_ad_div>
+                      </div>
   
                       <s_tag_label>
                         <div class="docs-tags">

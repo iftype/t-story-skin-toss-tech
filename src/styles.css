@@ -67,7 +67,6 @@ body,
 .code-frame,
 .code-header,
 .code-title,
-.code-copy,
 .expressive-code-host,
 .expressive-code-host .frame {
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease !important;
@@ -88,3 +87,8 @@ body.has-list-page .docs-list-item__thumb {
   transition: color 0.25s ease !important;
 }
 
+/* 6. Prevent load transition flicker */
+.no-transitions,
+.no-transitions * {
+  transition: none !important;
+}

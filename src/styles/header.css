@@ -72,7 +72,7 @@ body:has(#tistory-admin-bar) .docs-topbar__left-admin {
   font-size: 13px;
   font-weight: 600;
   padding: 6px 14px;
-  border-radius: 999px;
+  border-radius: 6px !important;
   transition: all 0.18s ease;
   line-height: 1;
   border: 1px solid transparent !important;
