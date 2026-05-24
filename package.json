@@ -1,6 +1,7 @@
 {
   "name": "tistory-dev-docs-skin",
-  "version": "0.1.9",
+  "version": "0.1.14",
+  "description": "A Toss Tech blog style Tistory skin",
   "private": true,
   "type": "module",
   "scripts": {

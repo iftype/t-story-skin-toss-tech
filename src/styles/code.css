@@ -94,23 +94,20 @@ body.no-toc .code-frame {
   color: #fff !important;
 }
 
-.code-frame pre,
-.code-frame pre code {
-  max-width: 100% !important;
+.code-frame pre {
+  display: block !important;
+  padding: 24px !important; /* Premium spacious padding! */
   margin: 0 !important;
   border: 0 !important;
   background: transparent !important;
-}
-
-.code-frame pre {
-  padding: 20px !important;
   overflow-x: auto !important;
 }
 
 .code-frame code {
   display: block !important;
   padding: 0 !important;
-  color: #dfdfd6 !important;
+  margin: 0 !important;
+  color: #a9b1d6 !important;
   font-family: var(--font-mono) !important;
   font-size: 14px !important;
   line-height: 1.7 !important;
@@ -125,12 +122,12 @@ body.no-toc .code-frame {
 .code-frame .token.prolog,
 .code-frame .token.doctype,
 .code-frame .token.cdata {
-  color: #7f8490 !important;
+  color: #565f89 !important;
   font-style: italic !important;
 }
 
 .code-frame .token.keyword {
-  color: #ff7b72 !important;
+  color: #bb9af3 !important;
 }
 
 .code-frame .token.number,
@@ -138,7 +135,7 @@ body.no-toc .code-frame {
 .code-frame .token.constant,
 .code-frame .token.symbol,
 .code-frame .token.deleted {
-  color: #79c0ff !important;
+  color: #ff9e64 !important;
 }
 
 .code-frame .token.string,
@@ -146,35 +143,56 @@ body.no-toc .code-frame {
 .code-frame .token.attr-value,
 .code-frame .token.builtin,
 .code-frame .token.inserted {
-  color: #a5d6ff !important;
+  color: #9ece6a !important;
 }
 
 .code-frame .token.operator,
 .code-frame .token.entity,
 .code-frame .token.url {
-  color: #d2a8ff !important;
+  color: #89ddff !important;
 }
 
 .code-frame .token.class-name,
 .code-frame .token.function {
-  color: #ffa657 !important;
+  color: #7aa2f7 !important;
 }
 
 .code-frame .token.tag,
 .code-frame .token.selector {
-  color: #7ee787 !important;
+  color: #f7768e !important;
 }
 
 .code-frame .token.property,
 .code-frame .token.attr-name {
-  color: #79c0ff !important;
+  color: #7dcfff !important;
 }
 
 .code-frame .token.regex,
 .code-frame .token.important,
 .code-frame .token.variable {
-  color: #f2cc60 !important;
+  color: #e0af68 !important;
 }
+
+/* Light mode overrides */
+html[data-ui-theme="light"] .code-frame code {
+  color: #343b58 !important;
+}
+html[data-ui-theme="light"] .code-frame .token.comment { color: #9699a3 !important; }
+html[data-ui-theme="light"] .code-frame .token.keyword { color: #8c4351 !important; }
+html[data-ui-theme="light"] .code-frame .token.number,
+html[data-ui-theme="light"] .code-frame .token.boolean { color: #b15c00 !important; }
+html[data-ui-theme="light"] .code-frame .token.string,
+html[data-ui-theme="light"] .code-frame .token.attr-value { color: #485e30 !important; }
+html[data-ui-theme="light"] .code-frame .token.operator { color: #007197 !important; }
+html[data-ui-theme="light"] .code-frame .token.class-name,
+html[data-ui-theme="light"] .code-frame .token.function { color: #165ba7 !important; }
+html[data-ui-theme="light"] .code-frame .token.tag,
+html[data-ui-theme="light"] .code-frame .token.selector { color: #f7768e !important; }
+html[data-ui-theme="light"] .code-frame .token.property,
+html[data-ui-theme="light"] .code-frame .token.attr-name { color: #007197 !important; }
+html[data-ui-theme="light"] .code-frame .token.variable { color: #8f5e15 !important; }
+html[data-ui-theme="light"] .code-frame .token.punctuation { color: #343b58 !important; }
+html[data-ui-theme="light"] .code-frame .token.string-property { color: #485e30 !important; }
 
 .article-body :not(pre) > code {
   padding: 2px 5px !important;

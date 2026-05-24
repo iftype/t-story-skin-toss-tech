@@ -1,20 +1,118 @@
-import Prism from 'prismjs'
 import { marked } from 'marked'
-import 'prismjs/components/prism-javascript'
-import 'prismjs/components/prism-jsx'
-import 'prismjs/components/prism-typescript'
-import 'prismjs/components/prism-tsx'
-import 'prismjs/components/prism-bash'
-import 'prismjs/components/prism-json'
-import 'prismjs/components/prism-python'
-import 'prismjs/components/prism-css'
-import 'prismjs/components/prism-markdown'
-import 'prismjs/plugins/autoloader/prism-autoloader'
+// Prism은 skin.html 헤드에서 CDN으로 로드됨 (window.Prism)
 import './styles.css'
 
-Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/'
+// CDN Prism이 로드되지 않았을 경우 대비 폴백을 제공하는 동적 게터
+function getPrism() {
+  return window.Prism || { highlightElement: () => {}, languages: {} }
+}
 
 const STORAGE_KEY = 'docs-theme'
+
+// token 색상 CSS를 JS에서 직접 inject → CSS 탭 상태와 무관하게 항상 동작 (Tokyo Night 테마 적용)
+function injectCodeCSS() {
+  if (document.getElementById('docs-prism-colors')) return
+  const style = document.createElement('style')
+  style.id = 'docs-prism-colors'
+  style.textContent = `
+    /* Tokyo Night Dark Theme (Default) */
+    .code-frame {
+      background: #1a1b26 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    .code-header {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+    .code-title {
+      color: #7982a9 !important;
+    }
+    .code-copy {
+      background: rgba(255, 255, 255, 0.04) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: #a9b1d6 !important;
+    }
+    .code-copy:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: #fff !important;
+    }
+    .code-frame code {
+      color: #a9b1d6 !important;
+    }
+    .code-frame .token { background: transparent !important; }
+    .code-frame .token.comment,
+    .code-frame .token.prolog,
+    .code-frame .token.doctype,
+    .code-frame .token.cdata { color: #565f89 !important; font-style: italic !important; }
+    .code-frame .token.keyword,
+    .code-frame .token.important { color: #bb9af3 !important; }
+    .code-frame .token.number,
+    .code-frame .token.boolean,
+    .code-frame .token.constant,
+    .code-frame .token.symbol,
+    .code-frame .token.deleted { color: #ff9e64 !important; }
+    .code-frame .token.string,
+    .code-frame .token.char,
+    .code-frame .token.attr-value,
+    .code-frame .token.builtin,
+    .code-frame .token.inserted { color: #9ece6a !important; }
+    .code-frame .token.operator,
+    .code-frame .token.entity,
+    .code-frame .token.url { color: #89ddff !important; }
+    .code-frame .token.class-name,
+    .code-frame .token.function { color: #7aa2f7 !important; }
+    .code-frame .token.tag,
+    .code-frame .token.selector { color: #f7768e !important; }
+    .code-frame .token.property,
+    .code-frame .token.attr-name { color: #7dcfff !important; }
+    .code-frame .token.regex,
+    .code-frame .token.variable { color: #e0af68 !important; }
+    .code-frame .token.punctuation { color: #a9b1d6 !important; }
+    .code-frame .token.string-property { color: #9ece6a !important; }
+
+    /* Tokyo Night Light Theme Override */
+    html[data-ui-theme="light"] .code-frame {
+      background: #f5f6f9 !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    }
+    html[data-ui-theme="light"] .code-header {
+      background: rgba(0, 0, 0, 0.02) !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    }
+    html[data-ui-theme="light"] .code-title {
+      color: #565f89 !important;
+    }
+    html[data-ui-theme="light"] .code-copy {
+      background: rgba(0, 0, 0, 0.04) !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      color: #565f89 !important;
+    }
+    html[data-ui-theme="light"] .code-copy:hover {
+      background: rgba(0, 0, 0, 0.08) !important;
+      color: #343b58 !important;
+    }
+    html[data-ui-theme="light"] .code-frame code {
+      color: #343b58 !important;
+    }
+    html[data-ui-theme="light"] .code-frame .token.comment { color: #9699a3 !important; }
+    html[data-ui-theme="light"] .code-frame .token.keyword { color: #8c4351 !important; }
+    html[data-ui-theme="light"] .code-frame .token.number,
+    html[data-ui-theme="light"] .code-frame .token.boolean { color: #b15c00 !important; }
+    html[data-ui-theme="light"] .code-frame .token.string,
+    html[data-ui-theme="light"] .code-frame .token.attr-value { color: #485e30 !important; }
+    html[data-ui-theme="light"] .code-frame .token.operator { color: #007197 !important; }
+    html[data-ui-theme="light"] .code-frame .token.class-name,
+    html[data-ui-theme="light"] .code-frame .token.function { color: #165ba7 !important; }
+    html[data-ui-theme="light"] .code-frame .token.tag,
+    html[data-ui-theme="light"] .code-frame .token.selector { color: #f7768e !important; }
+    html[data-ui-theme="light"] .code-frame .token.property,
+    html[data-ui-theme="light"] .code-frame .token.attr-name { color: #007197 !important; }
+    html[data-ui-theme="light"] .code-frame .token.variable { color: #8f5e15 !important; }
+    html[data-ui-theme="light"] .code-frame .token.punctuation { color: #343b58 !important; }
+    html[data-ui-theme="light"] .code-frame .token.string-property { color: #485e30 !important; }
+  `
+  document.head.appendChild(style)
+}
 
 function buildWriteUrl() {
   const blogLink = document.querySelector('.docs-brand__title')?.getAttribute('href') || '/'
@@ -542,34 +640,76 @@ function bindGlobalActions() {
   })
 }
 
-function normalizeCodeLanguage(value) {
-  if (!value) return ''
-  return String(value)
+function resolveCodeLanguage(value) {
+  if (!value) return { display: 'text', prism: null }
+  const raw = String(value)
     .trim()
     .replace(/^language-/, '')
     .split(/\s+/)[0]
     .replace(/[{}"'`]/g, '')
-    .toLowerCase()
+    
+  const normalized = raw.toLowerCase()
+    
+  // 화면에 보여주는 이름 -> Prism 엔진 이름 매핑
+  const map = {
+    'js': 'jsx',
+    'javascript': 'jsx',
+    'ts': 'tsx',
+    'typescript': 'tsx',
+    'sh': 'bash',
+    'shell': 'bash',
+    'zsh': 'bash',
+    'py': 'python',
+    'yml': 'yaml',
+    'md': 'markdown',
+    'html': 'markup',
+    'xml': 'markup',
+    'svg': 'markup',
+    'c++': 'cpp',
+    'c#': 'csharp',
+    'angelscript': 'cpp',
+    '1c': null,
+    'text': null,
+    'plaintext': null,
+    'plain': null,
+  }
+
+  let prismLang
+  if (normalized in map) {
+    prismLang = map[normalized]  // null이면 하이라이팅 안 함
+  } else if (getPrism().languages[normalized]) {
+    prismLang = normalized
+  } else if (/^[a-z0-9-]+$/.test(normalized)) {
+    prismLang = normalized  // Prism Autoloader가 필요할 때 동적으로 로드할 수 있도록 허용
+  } else {
+    prismLang = null  // 모르는 언어면 그냥 plain text
+  }
+
+  return {
+    display: raw || 'text',
+    prism: prismLang
+  }
 }
 
 function getCodeBlockMeta(pre, block) {
-  const langFromCodeClass = Array.from(block.classList)
-    .find(c => c.startsWith('language-') || Prism.languages[c]) || block.className.split(' ')[0]
+  const langFromCodeClass = (Array.from(block.classList)
+    .find(c => c.startsWith('language-') || getPrism().languages[c]) || block.className.split(' ')[0])?.replace(/^language-/, '')
 
   const langFromPreClass = Array.from(pre.classList)
-    .find(c => /^[a-z0-9_+-]+$/i.test(c) && c !== 'line-numbers')
+    .find(c => /^[a-z0-9_+-]+$/i.test(c) && c !== 'line-numbers')?.replace(/^language-/, '')
 
-  const lang = normalizeCodeLanguage(
+  const resolved = resolveCodeLanguage(
     langFromCodeClass ||
     pre.getAttribute('data-ke-language') ||
     pre.getAttribute('data-language') ||
     pre.getAttribute('data-lang') ||
     langFromPreClass ||
     'text'
-  ) || 'text'
+  )
 
   return {
-    lang,
+    displayLang: resolved.display,
+    prismLang: resolved.prism
   }
 }
 
@@ -591,12 +731,17 @@ async function enhanceCodeBlocks() {
     if (pre.dataset.enhanced) return
     
     const meta = getCodeBlockMeta(pre, block)
+    block.className = block.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
+    pre.className = pre.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
+    
     stripCodeMetaDirective(block)
-    block.classList.add(`language-${meta.lang}`)
-    try {
-      Prism.highlightElement(block)
-    } catch (e) {
-      block.textContent = block.textContent || ''
+    if (meta.prismLang) {
+      block.classList.add(`language-${meta.prismLang}`)
+      try {
+        getPrism().highlightElement(block)
+      } catch (e) {
+        // 하이라이팅 실패해도 텍스트는 보임
+      }
     }
 
     const wrapper = document.createElement('div')
@@ -606,7 +751,7 @@ async function enhanceCodeBlocks() {
     header.className = 'code-header'
     header.innerHTML = `
       <div class="code-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-      <div class="code-title">${meta.lang}</div>
+      <div class="code-title">${meta.displayLang}</div>
       <button class="code-copy" type="button">Copy</button>
     `
 
@@ -1343,7 +1488,13 @@ function renderCommentMarkdown() {
     mdDiv.innerHTML = div.innerHTML
     
     mdDiv.querySelectorAll('pre code').forEach((block) => {
-      Prism.highlightElement(block)
+      block.className = block.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
+      const pre = block.parentElement
+      const resolved = resolveCodeLanguage(pre.getAttribute('data-ke-language') || 'html')
+      if (resolved.prism) {
+        block.classList.add(`language-${resolved.prism}`)
+        getPrism().highlightElement(block)
+      }
     })
     
     comment.dataset.lastParsedText = rawText
@@ -1351,6 +1502,7 @@ function renderCommentMarkdown() {
 }
 
 function init() {
+  injectCodeCSS()
   applyTheme(getSavedTheme())
   decorateWriteLinks()
   showAdminElements()

@@ -72,7 +72,7 @@ body.has-article-page .docs-article {
 
 .article-body p,
 .article-body li,
-.article-body span:not(.tt-thumbnail):not(.code-dots span):not(.hljs *),
+.article-body span:not(.tt-thumbnail):not(.code-dots span):not(.hljs *):not(.token):not(.token *),
 .article-body div:not(.code-frame):not(.code-frame *),
 .article-body a,
 .article-body strong,
@@ -91,7 +91,7 @@ body.has-article-page .docs-article {
 /* Apply color override globally except when the elements have explicit inline style colors/backgrounds */
 .article-body p,
 .article-body li,
-.article-body span:not([style*="color"]):not([style*="background"]):not(.tt-thumbnail):not(.code-dots span):not(.hljs *),
+.article-body span:not([style*="color"]):not([style*="background"]):not(.tt-thumbnail):not(.code-dots span):not(.hljs *):not(.token):not(.token *),
 .article-body div:not([style*="color"]):not([style*="background"]):not(.code-frame):not(.code-frame *),
 .article-body a,
 .article-body strong,
