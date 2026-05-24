@@ -117,64 +117,62 @@ body.no-toc .code-frame {
   white-space: pre !important;
 }
 
-.code-frame .hljs {
+.code-frame .token {
   background: transparent !important;
-  color: #dfdfd6 !important;
 }
 
-.code-frame .hljs-comment,
-.code-frame .hljs-quote {
+.code-frame .token.comment,
+.code-frame .token.prolog,
+.code-frame .token.doctype,
+.code-frame .token.cdata {
   color: #7f8490 !important;
   font-style: italic !important;
 }
 
-.code-frame .hljs-keyword,
-.code-frame .hljs-selector-tag,
-.code-frame .hljs-subst {
+.code-frame .token.keyword {
   color: #ff7b72 !important;
 }
 
-.code-frame .hljs-literal,
-.code-frame .hljs-number,
-.code-frame .hljs-tag .hljs-attr,
-.code-frame .hljs-template-variable,
-.code-frame .hljs-variable {
+.code-frame .token.number,
+.code-frame .token.boolean,
+.code-frame .token.constant,
+.code-frame .token.symbol,
+.code-frame .token.deleted {
   color: #79c0ff !important;
 }
 
-.code-frame .hljs-string,
-.code-frame .hljs-doctag,
-.code-frame .hljs-regexp {
+.code-frame .token.string,
+.code-frame .token.char,
+.code-frame .token.attr-value,
+.code-frame .token.builtin,
+.code-frame .token.inserted {
   color: #a5d6ff !important;
 }
 
-.code-frame .hljs-title,
-.code-frame .hljs-section,
-.code-frame .hljs-selector-id {
+.code-frame .token.operator,
+.code-frame .token.entity,
+.code-frame .token.url {
   color: #d2a8ff !important;
 }
 
-.code-frame .hljs-type,
-.code-frame .hljs-class .hljs-title,
-.code-frame .hljs-built_in,
-.code-frame .hljs-builtin-name {
+.code-frame .token.class-name,
+.code-frame .token.function {
   color: #ffa657 !important;
 }
 
-.code-frame .hljs-name,
-.code-frame .hljs-tag {
+.code-frame .token.tag,
+.code-frame .token.selector {
   color: #7ee787 !important;
 }
 
-.code-frame .hljs-attr,
-.code-frame .hljs-attribute,
-.code-frame .hljs-property {
-  color: #d2a8ff !important;
+.code-frame .token.property,
+.code-frame .token.attr-name {
+  color: #79c0ff !important;
 }
 
-.code-frame .hljs-symbol,
-.code-frame .hljs-bullet,
-.code-frame .hljs-link {
+.code-frame .token.regex,
+.code-frame .token.important,
+.code-frame .token.variable {
   color: #f2cc60 !important;
 }
 

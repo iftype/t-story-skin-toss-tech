@@ -128,7 +128,8 @@ body.has-article-page .docs-article {
 }
 
 .article-body h1 {
-  margin: 64px 0 0 0 !important;
+  margin-top: 64px !important;
+  margin-bottom: 24px !important;
   font-size: var(--article-h1-size) !important;
   font-weight: 800 !important;
   line-height: var(--article-h1-line-height) !important;
@@ -137,7 +138,8 @@ body.has-article-page .docs-article {
 }
 
 .article-body h2 {
-  margin: 48px 0 0 0 !important;
+  margin-top: 48px !important;
+  margin-bottom: 24px !important;
   font-size: var(--article-h2-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h2-line-height) !important;
@@ -146,7 +148,8 @@ body.has-article-page .docs-article {
 }
 
 .article-body h3 {
-  margin: 64px 0 16px !important;
+  margin-top: 48px !important;
+  margin-bottom: 20px !important;
   font-size: var(--article-h3-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h3-line-height) !important;
@@ -155,7 +158,8 @@ body.has-article-page .docs-article {
 }
 
 .article-body h4 {
-  margin: 24px 0 0 0 !important;
+  margin-top: 32px !important;
+  margin-bottom: 16px !important;
   font-size: var(--article-h4-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h4-line-height) !important;
@@ -164,11 +168,7 @@ body.has-article-page .docs-article {
 }
 
 
-/* Adjust gap after headings */
-.article-body h1 + p { margin-top: 36px !important; }
-.article-body h2 + p { margin-top: 28px !important; }
-.article-body h3 + p { margin-top: 28px !important; }
-.article-body h4 + p { margin-top: 28px !important; }
+/* Removed hX + p margin logic */
 
 /* Remove top margin for first elements */
 .article-body > h1:first-child,

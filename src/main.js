@@ -1,39 +1,15 @@
-import hljs from 'highlight.js/lib/core'
+import Prism from 'prismjs'
 import { marked } from 'marked'
-import bash from 'highlight.js/lib/languages/bash'
-import css from 'highlight.js/lib/languages/css'
-import javascript from 'highlight.js/lib/languages/javascript'
-import json from 'highlight.js/lib/languages/json'
-import markdown from 'highlight.js/lib/languages/markdown'
-import plaintext from 'highlight.js/lib/languages/plaintext'
-import python from 'highlight.js/lib/languages/python'
-import typescript from 'highlight.js/lib/languages/typescript'
-import xml from 'highlight.js/lib/languages/xml'
-import yaml from 'highlight.js/lib/languages/yaml'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-tsx'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-json'
+import 'prismjs/components/prism-python'
+import 'prismjs/components/prism-css'
+import 'prismjs/components/prism-markdown'
 import './styles.css'
-
-hljs.registerLanguage('bash', bash)
-hljs.registerLanguage('sh', bash)
-hljs.registerLanguage('shell', bash)
-hljs.registerLanguage('zsh', bash)
-hljs.registerLanguage('css', css)
-hljs.registerLanguage('javascript', javascript)
-hljs.registerLanguage('js', javascript)
-hljs.registerLanguage('jsx', javascript)
-hljs.registerLanguage('json', json)
-hljs.registerLanguage('markdown', markdown)
-hljs.registerLanguage('md', markdown)
-hljs.registerLanguage('plaintext', plaintext)
-hljs.registerLanguage('text', plaintext)
-hljs.registerLanguage('python', python)
-hljs.registerLanguage('py', python)
-hljs.registerLanguage('typescript', typescript)
-hljs.registerLanguage('ts', typescript)
-hljs.registerLanguage('tsx', typescript)
-hljs.registerLanguage('html', xml)
-hljs.registerLanguage('xml', xml)
-hljs.registerLanguage('yaml', yaml)
-hljs.registerLanguage('yml', yaml)
 
 const STORAGE_KEY = 'docs-theme'
 
@@ -575,7 +551,7 @@ function normalizeCodeLanguage(value) {
 
 function getCodeBlockMeta(pre, block) {
   const langFromCodeClass = Array.from(block.classList)
-    .find(c => c.startsWith('language-') || hljs.getLanguage(c)) || block.className.split(' ')[0]
+    .find(c => c.startsWith('language-') || Prism.languages[c]) || block.className.split(' ')[0]
 
   const langFromPreClass = Array.from(pre.classList)
     .find(c => /^[a-z0-9_+-]+$/i.test(c) && c !== 'line-numbers')
@@ -615,8 +591,8 @@ async function enhanceCodeBlocks() {
     stripCodeMetaDirective(block)
     block.classList.add(`language-${meta.lang}`)
     try {
-      if (hljs.getLanguage(meta.lang)) {
-        hljs.highlightElement(block)
+      if (Prism.languages[meta.lang]) {
+        Prism.highlightElement(block)
       } else {
         block.textContent = block.textContent || ''
       }
@@ -1368,7 +1344,7 @@ function renderCommentMarkdown() {
     mdDiv.innerHTML = div.innerHTML
     
     mdDiv.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightElement(block)
+      Prism.highlightElement(block)
     })
     
     comment.dataset.lastParsedText = rawText
