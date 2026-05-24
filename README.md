@@ -30,16 +30,10 @@
 
 기본값은 마크다운 스타일(넓은 여백)입니다. 좁은 여백이 필요하면 아래 방법으로 변경할 수 있습니다.
 
-### 방법 A. CSS 교체하기 (권장)
+### 방법 : HTML 주석 수정하기
 
-티스토리 **스킨 편집 > Html 편집 > CSS 탭**에 원하는 파일의 내용을 붙여넣고 **적용**을 누릅니다.
+<img width="600" height="780" alt="image" src="https://github.com/user-attachments/assets/5e8b2267-22c6-4734-8e3c-5ccdd501550e" />
 
-| 스타일 | 사용할 파일 |
-|---|---|
-| 마크다운 (기본, 넓은 여백) | `style.css` |
-| 타이트 (좁은 여백) | `images/style-tight.css` |
-
-### 방법 B. HTML 주석 수정하기
 
 **스킨 편집 > Html 편집 > HTML 탭**의 22~37번 줄에서 사용할 스타일 파일의 주석을 제거합니다.
 
@@ -54,6 +48,7 @@
 <!-- <link rel="stylesheet" href="./images/style.css"> -->
 <link rel="stylesheet" href="./images/style-tight.css">
 ```
+
 
 ---
 
