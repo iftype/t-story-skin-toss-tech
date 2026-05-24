@@ -575,7 +575,7 @@ function normalizeCodeLanguage(value) {
 
 function getCodeBlockMeta(pre, block) {
   const langFromCodeClass = Array.from(block.classList)
-    .find(c => c.startsWith('language-'))
+    .find(c => c.startsWith('language-') || hljs.getLanguage(c)) || block.className.split(' ')[0]
 
   const langFromPreClass = Array.from(pre.classList)
     .find(c => /^[a-z0-9_+-]+$/i.test(c) && c !== 'line-numbers')
