@@ -4,23 +4,23 @@
    ========================================================================== */
 
 .docs-layout {
-  --article-body-1-size: 1.75rem;
-  --article-body-2-size: 1.6rem;
-  --article-body-3-size: 1.45rem;
+  --article-body-1-size: 1.12rem;
+  --article-body-2-size: 1.02rem;
+  --article-body-3-size: 0.94rem;
   --article-font-size: var(--article-body-2-size);
-  --article-line-height: 1.75;
+  --article-line-height: 1.72;
   --article-letter-spacing: 0em; /* Zero negative tracking */
-  --p-margin: 24px 0 0 0;
-  --article-h1-size: 3.2rem;
+  --p-margin: 20px 0 0 0;
+  --article-h1-size: 2rem;
   --article-h1-line-height: 1.32;
-  --article-h2-size: 2.55rem;
+  --article-h2-size: 1.55rem;
   --article-h2-line-height: 1.36;
-  --article-h3-size: 2.15rem;
+  --article-h3-size: 1.32rem;
   --article-h3-line-height: 1.42;
-  --article-h4-size: 1.85rem;
+  --article-h4-size: 1.12rem;
   --article-h4-line-height: 1.5;
-  --article-quote-size: 1.6rem;
-  --article-quote-emphasis-size: 1.75rem;
+  --article-quote-size: 1.02rem;
+  --article-quote-emphasis-size: 1.1rem;
   overflow: visible !important;
 }
 
@@ -452,15 +452,15 @@ html[data-ui-theme="light"] .article-body {
 @media (max-width: 768px) {
   .docs-layout {
     --article-font-size: var(--article-body-2-size);
-    --article-line-height: 1.75;
+    --article-line-height: 1.72;
     --article-letter-spacing: 0em; /* Zero negative tracking */
-    --article-h1-size: 3rem;
+    --article-h1-size: 1.78rem;
     --article-h1-line-height: 1.36;
-    --article-h2-size: 2.35rem;
+    --article-h2-size: 1.38rem;
     --article-h2-line-height: 1.45;
-    --article-h3-size: 2rem;
+    --article-h3-size: 1.18rem;
     --article-h3-line-height: 1.5;
-    --article-h4-size: 1.75rem;
+    --article-h4-size: 1.06rem;
     --article-h4-line-height: 1.55;
     width: 100% !important;
     max-width: none !important;

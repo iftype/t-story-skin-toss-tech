@@ -2,7 +2,7 @@
 <skin>
   <information>
     <name>Dev Docs Tistory</name>
-    <version>0.1.16</version>
+    <version>0.1.17</version>
     <description><![CDATA[개발 문서 사이트 레이아웃을 참고한 티스토리 문서형 스킨입니다. 긴 튜토리얼 글과 코드 블록 가독성에 초점을 맞췄습니다.]]></description>
     <license><![CDATA[Personal and commercial use allowed with attribution.]]></license>
   </information>
