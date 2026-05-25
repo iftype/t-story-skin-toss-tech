@@ -24,15 +24,6 @@
     
     <!-- Highlight.js Syntax Highlighting (CDN) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-    <script>
-      (function () {
-        var jq = window.tjQuery || window.jQuery;
-        if (jq) {
-          window.jQuery = jq;
-          window.$ = jq;
-        }
-      })();
-    </script>
   </head>
   <body id="[##_body_id_##]">
     <script>
@@ -122,8 +113,9 @@
                 <span></span>
                 <span></span>
               </button>
-              <a class="docs-topbar-profile-avatar" href="[##_blog_link_##]" aria-label="프로필 홈">
-                <img src="[##_image_##]" alt="프로필" loading="lazy" decoding="async">
+              <a class="docs-topbar-profile-avatar docs-profile-avatar" href="[##_blog_link_##]" aria-label="프로필 홈">
+                <img class="docs-profile-avatar__image" src="[##_image_##]" alt="프로필" loading="lazy" decoding="async">
+                <span class="docs-profile-avatar__fallback">[##_title_##]</span>
               </a>
               <a class="docs-topbar__brand" href="[##_blog_link_##]">[##_title_##]</a>
               <div class="docs-profile-actions admin-only" style="display:none; margin: 0 0 0 12px !important;">
@@ -410,109 +402,6 @@
                       <section class="docs-comments" id="comments">
                         <s_rp>
                           [##_comment_group_##]
-
-                          <div class="docs-comments-legacy" data-comment-legacy hidden>
-                            <div class="tt-comment-cont">
-                              <div class="tt-box-total">
-                                <span class="tt_txt_g">댓글</span>
-                              </div>
-
-                              <div class="tt-area-reply">
-                                <s_rp_container>
-                                  <ul class="tt-list-reply">
-                                    <s_rp_rep>
-                                      <li id="[##_rp_rep_id_##]" class="tt-item-reply [##_rp_rep_class_##]">
-                                        <div class="tt-wrap-cmt">
-                                          <div class="tt-box-thumb">
-                                            <span class="tt-thumbnail">[##_rp_rep_logo_##]</span>
-                                          </div>
-                                          <div class="tt-box-content">
-                                            <div class="tt-box-meta">
-                                              <span class="tt-link-user">[##_rp_rep_name_##]</span>
-                                            </div>
-                                            <div class="tt-wrap-desc">
-                                              <p class="tt_desc">[##_rp_rep_desc_##]</p>
-                                            </div>
-                                            <div class="tt-wrap-info">
-                                              <span class="tt_date">[##_rp_rep_date_##]</span>
-                                              <span class="tt-wrap-link-comment">
-                                                <a href="#" class="tt-link-comment" onclick="[##_rp_rep_onclick_reply_##]">
-                                                  <span class="tt_txt_g">답글</span>
-                                                </a>
-                                              </span>
-                                            </div>
-                                            <div class="tt-box-modify">
-                                              <a href="#" class="tt-button-modify" onclick="[##_rp_rep_onclick_delete_##]">수정/삭제</a>
-                                            </div>
-                                          </div>
-                                        </div>
-
-                                        <s_rp2_container>
-                                          <ul class="tt-list-reply-sub">
-                                            <s_rp2_rep>
-                                              <li id="[##_rp_rep_id_##]" class="tt-item-reply [##_rp_rep_class_##]">
-                                                <div class="tt-wrap-cmt">
-                                                  <div class="tt-box-thumb">
-                                                    <span class="tt-thumbnail">[##_rp_rep_logo_##]</span>
-                                                  </div>
-                                                  <div class="tt-box-content">
-                                                    <div class="tt-box-meta">
-                                                      <span class="tt-link-user">[##_rp_rep_name_##]</span>
-                                                    </div>
-                                                    <div class="tt-wrap-desc">
-                                                      <p class="tt_desc">[##_rp_rep_desc_##]</p>
-                                                    </div>
-                                                    <div class="tt-wrap-info">
-                                                      <span class="tt_date">[##_rp_rep_date_##]</span>
-                                                    </div>
-                                                    <div class="tt-box-modify">
-                                                      <a href="#" class="tt-button-modify" onclick="[##_rp_rep_onclick_delete_##]">수정/삭제</a>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </li>
-                                            </s_rp2_rep>
-                                          </ul>
-                                        </s_rp2_container>
-                                      </li>
-                                    </s_rp_rep>
-                                  </ul>
-                                </s_rp_container>
-                              </div>
-
-                              <s_rp_input_form>
-                                <div class="tt-area-write">
-                                  <div class="tt-box-thumb">
-                                    <span class="tt-thumbnail"></span>
-                                  </div>
-                                  <div class="tt_wrap_write">
-                                    <s_rp_member>
-                                      <s_rp_guest>
-                                        <div class="tt-box-account">
-                                          <input type="text" name="[##_rp_input_name_##]" value="[##_guest_name_##]" placeholder="이름">
-                                          <input type="password" maxlength="12" name="[##_rp_input_password_##]" value="[##_rp_admin_check_##]" placeholder="비밀번호">
-                                        </div>
-                                      </s_rp_guest>
-                                    </s_rp_member>
-                                    <div class="tt-box-textarea">
-                                      <div class="tt-inner-g">
-                                        <textarea class="tt-cmt" name="[##_rp_input_comment_##]" rows="4" placeholder="내용을 입력하세요."></textarea>
-                                      </div>
-                                    </div>
-                                    <div class="tt-box-write">
-                                      <s_rp_member>
-                                        <label class="tt-xe-label">
-                                          <input type="checkbox" name="[##_rp_input_is_secret_##]">
-                                          <span class="tt-xe-label-text">비밀글</span>
-                                        </label>
-                                      </s_rp_member>
-                                      <button type="button" class="tt-btn_register" onclick="[##_rp_onclick_submit_##]">등록</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </s_rp_input_form>
-                            </div>
-                          </div>
                         </s_rp>
                       </section>
 
@@ -615,7 +504,7 @@
         </div>
       </div>
 
-      <script src="./script.js"></script>
+      <script src="./images/script.js"></script>
     </s_t3>
   </body>
 </html>

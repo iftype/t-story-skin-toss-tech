@@ -175,7 +175,7 @@ body:has(#tistory-admin-bar) .docs-profile-actions {
   color: var(--text-muted) !important;
   font-size: 12px !important;
   font-weight: 600 !important;
-  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease !important;
+  transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease !important;
 }
 
 .docs-profile-actions__link:hover {

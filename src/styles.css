@@ -33,7 +33,9 @@ body,
 .category-toggle,
 .docs-toplink,
 .docs-searchbar,
-.docs-list-item__ghost {
+.docs-list-item__ghost,
+.docs-profile-actions__link,
+.admin-only {
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
@@ -429,7 +431,7 @@ html[data-ui-theme="dark"] body.is-home-page .docs-list-item__title {
   body.is-home-page .docs-home-featured__link {
     display: flex !important;
     flex-direction: column-reverse !important; /* Image on top, copy below */
-    gap: 14px !important;
+    gap: 18px !important;
     height: auto !important; /* Reset locked height on mobile */
   }
 
@@ -439,8 +441,13 @@ html[data-ui-theme="dark"] body.is-home-page .docs-list-item__title {
   }
 
   body.is-home-page .docs-home-featured__copy {
-    height: auto !important;
-    min-height: auto !important;
+    display: grid !important;
+    grid-template-rows: minmax(0, 1fr) 44px !important;
+    gap: 12px !important;
+    height: 154px !important;
+    min-height: 154px !important;
+    max-height: 154px !important;
+    overflow: hidden !important;
   }
 
   body.is-home-page .featured-nav-controls {
@@ -1349,7 +1356,8 @@ body.has-list-page .docs-empty-state {
 
 /* Current polish pass: page-head visibility, stable summaries, article image links, and mobile slider sizing. */
 body.is-home-page .docs-page-head,
-body.is-category-index .docs-page-head {
+body.is-category-index .docs-page-head,
+body.is-category-page .docs-page-head {
   display: none !important;
 }
 
@@ -1395,7 +1403,10 @@ body.has-list-page .docs-list-item__summary[data-list-summary]:not([data-preview
     display: grid !important;
     grid-template-rows: minmax(0, 1fr) 44px !important;
     gap: 12px !important;
-    min-height: 142px !important;
+    height: 154px !important;
+    min-height: 154px !important;
+    max-height: 154px !important;
+    overflow: hidden !important;
   }
 
   body.is-home-page .docs-home-featured__info {
@@ -1450,4 +1461,46 @@ body.has-list-page .docs-list-item__summary[data-list-summary]:not([data-preview
     transform-origin: left center !important;
     width: 114.285% !important;
   }
+}
+
+/* Smooth dark mode theme transition for topbar background and border */
+.docs-topbar {
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* 1. Absolute override to ensure the list page head title (h1) is strictly hidden on home and category views */
+body.is-home-page .docs-page-head,
+body[class*="is-home-page"] .docs-page-head,
+body.is-category-index .docs-page-head,
+body.is-category-page .docs-page-head,
+body[class*="is-category-"] .docs-page-head,
+#tt-body-index .docs-page-head,
+#tt-body-category .docs-page-head,
+.docs-content:has(.docs-list-item).is-category-index .docs-page-head,
+.docs-content:has(.docs-list-item).is-category-page .docs-page-head,
+.docs-content:has(.docs-list-item).is-home-page .docs-page-head,
+.docs-content:has(.docs-list-item)#tt-body-index .docs-page-head,
+.docs-content:has(.docs-list-item)#tt-body-category .docs-page-head {
+  display: none !important;
+}
+
+/* 2. Prevent empty search result section from collapsing and make it occupy full column width */
+.docs-empty-state {
+  display: block !important;
+  width: 100% !important;
+  max-width: 760px !important;
+  margin: 40px auto !important;
+  min-height: 280px !important;
+  grid-column: 1 / -1 !important;
+}
+
+/* 3. Ensure that when the search title section (.docs-page-head showing SEARCH and keyword) is active, it occupies full 760px width and aligns perfectly */
+body.has-list-page:not(.is-home-page):not(.is-category-page) .docs-page-head {
+  grid-column: 1 / -1 !important;
+  display: flex !important;
+  width: 100% !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 0 0 32px !important;
 }

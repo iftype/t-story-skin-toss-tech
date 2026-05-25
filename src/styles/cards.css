@@ -77,6 +77,7 @@ body.has-list-page .docs-list-item__thumb-link {
   line-height: 0 !important;
 }
 
+
 body.has-list-page .docs-list-item__thumb {
   display: grid !important;
   place-items: center !important;
@@ -429,9 +430,11 @@ body.has-list-page .docs-content,
 }
 
 body.is-category-index .docs-page-head,
+body.is-category-page .docs-page-head,
 body.is-home-page .docs-page-head,
 #tt-body-index .docs-page-head,
 .docs-content:has(.docs-list-item).is-category-index .docs-page-head,
+.docs-content:has(.docs-list-item).is-category-page .docs-page-head,
 .docs-content:has(.docs-list-item).is-home-page .docs-page-head,
 .docs-content:has(.docs-list-item)#tt-body-index .docs-page-head {
   display: none !important;

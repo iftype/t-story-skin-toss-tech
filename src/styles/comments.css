@@ -577,6 +577,7 @@ body .docs-comments .tt-wrap-info * {
 /* Keep original comment DOM nodes present in layout but visually hidden for React's virtual DOM */
 body .docs-comments .tt-wrap-desc,
 body .docs-comments .tt_desc,
+body .docs-comments .tt-desc,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc {
   position: absolute !important;
@@ -605,6 +606,7 @@ body .docs-comments .docs-comment-markdown {
   letter-spacing: -0.3px !important;
   color: var(--text-base) !important;
   align-self: start !important;
+  word-break: break-word !important;
 }
 
 /* Sync visibility of custom markdown with the original elements' display state */
@@ -613,16 +615,6 @@ body .docs-comments .tt_desc[style*="display:none"] ~ .docs-comment-markdown,
 body .docs-comments .tt-wrap-desc[style*="display: none"] ~ .docs-comment-markdown,
 body .docs-comments .tt-wrap-desc[style*="display:none"] ~ .docs-comment-markdown {
   display: none !important;
-}
-
-body .docs-comments .tt_desc,
-body .docs-comments .tt-desc {
-  margin: 0 !important;
-  font-size: 14px !important;
-  line-height: 1.6 !important;
-  letter-spacing: -0.3px !important;
-  color: var(--text-base) !important;
-  word-break: break-word !important;
 }
 
 /* Modify/delete menu */
@@ -2196,37 +2188,6 @@ body .docs-comments .tt-comment-cont iframe {
   width: 100% !important;
   max-width: 100% !important;
   border: 0 !important;
-}
-
-body .docs-comments-legacy[hidden] {
-  display: none !important;
-}
-
-body .docs-comments-legacy[data-active="true"] {
-  display: block !important;
-}
-
-body .docs-comments-legacy .tt-thumbnail img,
-body .docs-comments-legacy .tt-box-thumb img {
-  display: block !important;
-  width: var(--cmt-card-avatar) !important;
-  height: var(--cmt-card-avatar) !important;
-  border-radius: 999px !important;
-  object-fit: cover !important;
-}
-
-body .docs-comments-legacy .tt-button-modify {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: var(--comment-muted) !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-}
-
-body .docs-comments-legacy .tt-area-write textarea.tt-cmt {
-  height: auto !important;
 }
 
 /* Mobile Safari zoom guard for every Tistory comment/password control. */

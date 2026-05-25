@@ -889,23 +889,33 @@ function markPageState() {
     'is-category-index'
   )
 
-  const hasListItems = Boolean(document.querySelector('.docs-list-item'))
-  const hasPageHead = Boolean(document.querySelector('.docs-page-head'))
+  const bodyId = document.body.id || ''
   const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/'
+  const listBodyIds = new Set([
+    'tt-body-index',
+    'tt-body-category',
+    'tt-body-search',
+    'tt-body-tag',
+    'tt-body-archive'
+  ])
+  const hasResolvedBodyId = bodyId && !bodyId.includes('[##_')
+  const isListPage = hasResolvedBodyId
+    ? listBodyIds.has(bodyId)
+    : Boolean(document.querySelector('.docs-list-item, .docs-page-head, .docs-empty-state'))
+  const isArticlePage = hasResolvedBodyId
+    ? bodyId === 'tt-body-page'
+    : Boolean(document.querySelector('.docs-article-layout, .docs-article, .docs-guestbook'))
 
   if (normalizedPath === '/' || normalizedPath.endsWith('/skin.html')) {
     document.body.classList.add('is-home-page')
   }
 
-  if (hasPageHead) {
+  if (isListPage) {
     document.body.classList.add('is-list-context')
-  }
-
-  if (hasListItems || hasPageHead) {
     document.body.classList.add('has-list-page')
   }
 
-  if (document.querySelector('.docs-article-layout, .docs-article, .docs-guestbook')) {
+  if (isArticlePage) {
     document.body.classList.add('has-article-page')
   }
 
@@ -1363,6 +1373,9 @@ function isDefaultThumbnailUrl(src) {
 }
 
 async function hydrateListSummaries() {
+  if (!document.body.classList.contains('has-list-page')) return
+  if (document.body.classList.contains('has-article-page')) return
+
   const items = Array.from(document.querySelectorAll('.docs-list-item[data-card-href]'))
   if (items.length === 0) return
 
@@ -2287,6 +2300,7 @@ function renderCommentMarkdown() {
     // Keep only the outermost comment elements to prevent double parsing/rendering in nested trees
     return !allComments.some(ancestor => ancestor !== el && ancestor.contains(el))
   })
+  
   comments.forEach(comment => {
     let html = comment.innerHTML
     
@@ -2769,36 +2783,59 @@ function normalizeFooterGithubLink() {
 }
 
 function setupCommentFallback() {
+  document.querySelectorAll('.docs-comments-legacy').forEach((node) => node.remove())
+}
+
+function isReactCmtLoaded() {
   const root = document.querySelector('.docs-comments')
-  const legacy = root?.querySelector('[data-comment-legacy]')
-  if (!root || !legacy) return
+  if (!root) return false
+  return Boolean(root.querySelector('.tt-comment-cont, .tt-area-write, .tt-list-reply, .tt-item-reply'))
+}
 
-  const hasNativeCommentContent = () => {
-    const app = root.querySelector('[data-tistory-react-app="Comment"]')
-    if (!app) return false
-    if (app.querySelector('.tt-comment-cont, .tt-area-write, .tt-list-reply, .tt-item-reply')) return true
-    return cleanTextContent(app.textContent || '').length > 0
+function runCommentFeaturesSafely() {
+  const root = document.querySelector('.docs-comments')
+  if (!root) return
+
+  const run = () => {
+    if (!isReactCmtLoaded()) return false
+    setTimeout(() => {
+      syncCommentComposerAvatar()
+      normalizeLegacyComments()
+      trackOpenCommentMenus()
+      setupCommentAvatarLogin()
+      setupCommentReplyClick()
+      renderCommentMarkdown()
+      setupCommentFallback()
+    }, 150)
+
+    // Set up a persistent MutationObserver on the comments area to re-run markdown rendering on dynamic updates
+    if ('MutationObserver' in window && !root.dataset.hasPersistentObserver) {
+      root.dataset.hasPersistentObserver = 'true'
+      let cmtTimer = null
+      const cmtObserver = new MutationObserver(() => {
+        clearTimeout(cmtTimer)
+        cmtTimer = setTimeout(() => {
+          renderCommentMarkdown()
+          setupCommentReplyClick()
+        }, 100)
+      })
+      cmtObserver.observe(root, { childList: true, subtree: true })
+    }
+
+    return true
   }
 
-  const hasLegacyContent = () => {
-    return Boolean(legacy.querySelector('.tt-area-write, .tt-item-reply, textarea, input, button'))
-  }
-
-  const sync = () => {
-    const shouldUseLegacy = !hasNativeCommentContent() && hasLegacyContent()
-    legacy.hidden = !shouldUseLegacy
-    legacy.dataset.active = shouldUseLegacy ? 'true' : 'false'
-    root.classList.toggle('is-legacy-comments', shouldUseLegacy)
-  }
-
-  window.setTimeout(sync, 800)
-  window.setTimeout(sync, 1800)
-  window.setTimeout(sync, 3600)
+  if (run()) return
 
   if ('MutationObserver' in window) {
-    const observer = new MutationObserver(sync)
+    const observer = new MutationObserver((mutations, obs) => {
+      if (isReactCmtLoaded()) {
+        obs.disconnect()
+        run()
+      }
+    })
     observer.observe(root, { childList: true, subtree: true })
-    window.setTimeout(() => observer.disconnect(), 6000)
+    setTimeout(() => observer.disconnect(), 10000)
   }
 }
 
@@ -2830,13 +2867,9 @@ function init() {
   generateTOC()
   updateTocStickyBoundary()
   setupHeadingAnchors()
-  syncCommentComposerAvatar()
-  normalizeLegacyComments()
-  trackOpenCommentMenus()
-  setupCommentAvatarLogin()
-  setupCommentReplyClick()
-  renderCommentMarkdown()
-  setupCommentFallback()
+  
+  // Safe asynchronous wrapper for React comments to prevent race condition crashes
+  runCommentFeaturesSafely()
   
   cleanInlineStyles()
   preserveWordCombination()
@@ -2861,19 +2894,6 @@ function init() {
     observer.observe(article, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] })
   }
   
-  const commentsArea = document.querySelector('.docs-comments')
-  if (commentsArea && 'MutationObserver' in window) {
-    let cmtTimer = null
-    const cmtObserver = new MutationObserver(() => {
-      clearTimeout(cmtTimer)
-      cmtTimer = setTimeout(() => {
-        renderCommentMarkdown()
-        setupCommentReplyClick()
-      }, 100)
-    })
-    cmtObserver.observe(commentsArea, { childList: true, subtree: true })
-  }
-
   // Arrange like button position based on viewport width
   arrangeLikeButton()
   window.addEventListener('resize', arrangeLikeButton)

@@ -23,23 +23,32 @@ export default defineConfig({
           const tightCssContent = tightComment + cssContent.replace(/var\(--p-margin[^)]+\)/g, '0');
           fs.writeFileSync(cssPath, tightCssContent)
 
-          // Auto-package into a Tistory-compliant flat ZIP bundle
+          // Auto-package into a Tistory-compliant ZIP bundle
           try {
             const zipTempDir = path.resolve(__dirname, 'dist-zip')
+            const zipImagesDir = path.resolve(zipTempDir, 'images')
 
             if (fs.existsSync(zipTempDir)) {
               fs.rmSync(zipTempDir, { recursive: true, force: true })
             }
             fs.mkdirSync(zipTempDir, { recursive: true })
+            fs.mkdirSync(zipImagesDir, { recursive: true })
 
-            // Copy all emitted assets flatly into the ZIP temp directory.
+            // Copy emitted assets according to Tistory skin structure.
             const distFiles = fs.readdirSync(path.resolve(__dirname, 'dist'))
             for (const file of distFiles) {
               if (file === 'tistory-skin-toss-tech.zip') continue
               const source = path.resolve(__dirname, 'dist', file)
               const stat = fs.statSync(source)
               if (!stat.isFile()) continue
-              fs.copyFileSync(source, path.resolve(zipTempDir, file))
+
+              // Root level files: skin.html, style.css, index.xml
+              if (['skin.html', 'style.css', 'index.xml'].includes(file)) {
+                fs.copyFileSync(source, path.resolve(zipTempDir, file))
+              } else {
+                // Asset level files go to images/ directory
+                fs.copyFileSync(source, path.resolve(zipImagesDir, file))
+              }
             }
 
             // Run native OS zip command to bundle the skin
@@ -49,7 +58,7 @@ export default defineConfig({
             }
 
             execSync(`cd "${zipTempDir}" && zip -r "${zipOutputFile}" ./* > /dev/null`)
-            console.log('Successfully generated flat dist/tistory-skin-toss-tech.zip!')
+            console.log('Successfully generated Tistory-compliant dist/tistory-skin-toss-tech.zip!')
 
             // Cleanup temp dir
             fs.rmSync(zipTempDir, { recursive: true, force: true })
