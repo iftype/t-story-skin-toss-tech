@@ -971,6 +971,7 @@ function showEmptyStateWhenNeeded() {
   if (isListPage && (isSearchPage || count === 0) && !hasListItems) {
     emptyState.hidden = false
     emptyState.classList.toggle('is-search-empty', isSearchPage)
+    document.body.classList.toggle('is-search-empty-body', isSearchPage)
     if (!isSearchPage) {
       emptyState.querySelector('h2').textContent = '아직 글이 없습니다'
       emptyState.querySelector('p:last-child').textContent = '이 카테고리에 등록된 글이 생기면 여기에 표시됩니다.'
@@ -2792,52 +2793,7 @@ function isReactCmtLoaded() {
   return Boolean(root.querySelector('.tt-comment-cont, .tt-area-write, .tt-list-reply, .tt-item-reply'))
 }
 
-function runCommentFeaturesSafely() {
-  const root = document.querySelector('.docs-comments')
-  if (!root) return
 
-  const run = () => {
-    if (!isReactCmtLoaded()) return false
-    setTimeout(() => {
-      syncCommentComposerAvatar()
-      normalizeLegacyComments()
-      trackOpenCommentMenus()
-      setupCommentAvatarLogin()
-      setupCommentReplyClick()
-      renderCommentMarkdown()
-      setupCommentFallback()
-    }, 150)
-
-    // Set up a persistent MutationObserver on the comments area to re-run markdown rendering on dynamic updates
-    if ('MutationObserver' in window && !root.dataset.hasPersistentObserver) {
-      root.dataset.hasPersistentObserver = 'true'
-      let cmtTimer = null
-      const cmtObserver = new MutationObserver(() => {
-        clearTimeout(cmtTimer)
-        cmtTimer = setTimeout(() => {
-          renderCommentMarkdown()
-          setupCommentReplyClick()
-        }, 100)
-      })
-      cmtObserver.observe(root, { childList: true, subtree: true })
-    }
-
-    return true
-  }
-
-  if (run()) return
-
-  if ('MutationObserver' in window) {
-    const observer = new MutationObserver((mutations, obs) => {
-      if (isReactCmtLoaded()) {
-        obs.disconnect()
-        run()
-      }
-    })
-    observer.observe(root, { childList: true, subtree: true })
-    setTimeout(() => observer.disconnect(), 10000)
-  }
-}
 
 function init() {
   injectCodeCSS()
@@ -2868,8 +2824,28 @@ function init() {
   updateTocStickyBoundary()
   setupHeadingAnchors()
   
-  // Safe asynchronous wrapper for React comments to prevent race condition crashes
-  runCommentFeaturesSafely()
+  // Initialize comments features synchronously
+  syncCommentComposerAvatar()
+  normalizeLegacyComments()
+  trackOpenCommentMenus()
+  setupCommentAvatarLogin()
+  setupCommentReplyClick()
+  renderCommentMarkdown()
+  setupCommentFallback()
+
+  // Set up a persistent MutationObserver to parse markdown when comments dynamically update/render
+  const commentsArea = document.querySelector('.docs-comments')
+  if (commentsArea && 'MutationObserver' in window) {
+    let cmtTimer = null
+    const cmtObserver = new MutationObserver(() => {
+      clearTimeout(cmtTimer)
+      cmtTimer = setTimeout(() => {
+        renderCommentMarkdown()
+        setupCommentReplyClick()
+      }, 100)
+    })
+    cmtObserver.observe(commentsArea, { childList: true, subtree: true })
+  }
   
   cleanInlineStyles()
   preserveWordCombination()

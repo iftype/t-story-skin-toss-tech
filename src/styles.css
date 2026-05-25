@@ -1354,10 +1354,8 @@ body.has-list-page .docs-empty-state {
   }
 }
 
-/* Current polish pass: page-head visibility, stable summaries, article image links, and mobile slider sizing. */
 body.is-home-page .docs-page-head,
-body.is-category-index .docs-page-head,
-body.is-category-page .docs-page-head {
+body.is-category-index .docs-page-head {
   display: none !important;
 }
 
@@ -1472,15 +1470,10 @@ body.has-list-page .docs-list-item__summary[data-list-summary]:not([data-preview
 body.is-home-page .docs-page-head,
 body[class*="is-home-page"] .docs-page-head,
 body.is-category-index .docs-page-head,
-body.is-category-page .docs-page-head,
-body[class*="is-category-"] .docs-page-head,
 #tt-body-index .docs-page-head,
-#tt-body-category .docs-page-head,
 .docs-content:has(.docs-list-item).is-category-index .docs-page-head,
-.docs-content:has(.docs-list-item).is-category-page .docs-page-head,
 .docs-content:has(.docs-list-item).is-home-page .docs-page-head,
-.docs-content:has(.docs-list-item)#tt-body-index .docs-page-head,
-.docs-content:has(.docs-list-item)#tt-body-category .docs-page-head {
+.docs-content:has(.docs-list-item)#tt-body-index .docs-page-head {
   display: none !important;
 }
 
@@ -1503,4 +1496,19 @@ body.has-list-page:not(.is-home-page):not(.is-category-page) .docs-page-head {
   margin-left: auto !important;
   margin-right: auto !important;
   padding: 0 0 32px !important;
+}
+
+/* 4. Support narrow centering (760px) for empty search results to match docs-category-map */
+body.is-search-empty-body .docs-layout {
+  width: min(760px, calc(100% - 80px)) !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.is-search-empty-body .docs-content {
+  width: 100% !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
