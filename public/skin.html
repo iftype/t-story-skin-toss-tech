@@ -19,36 +19,40 @@
 	        document.documentElement.setAttribute('data-route', path === '/category' ? 'category-index' : path.indexOf('/category') === 0 ? 'category-list' : 'default');
 	      })();
     </script>
-    <!--
-      [본문 여백 스타일 모드 선택 안내]
-      이 스킨은 두 가지 스타일시트를 제공하며, 원하시는 모드에 맞춰 주석을 해제하거나 Tistory CSS 탭에 적용하세요.
-
-      1. 타이트/일반 본문 모드 (기본 / 추천):
-         - 문단 <p> 간 위아래 여백을 0으로 꽉 줄여, 기본 에디터 작성이나 일상적인 포스팅에 최적화된 조밀한 간격을 제공합니다.
-         - 아래의 './images/style.css' 링크를 유지하십시오.
-         
-      2. 마크다운 본문 모드 (선택 사항):
-         - 마크다운 문서 등에서 문단 <p> 간의 넓은 상하 여백(24px)이 필요할 때 사용합니다.
-         - 'style-markdown.css' 내용을 복사해 Tistory CSS 탭에 덮어쓰거나, 'style-markdown.css'를 파일 업로드 탭에 올린 후 아래 './images/style-markdown.css'의 주석을 해제해 사용하세요.
-    -->
-    <!-- 기본 모드: 타이트/일반 본문 모드 -->
+    <!-- 기본 style.css 하나로 일반 포스트 본문, 제목, 인용문 스타일을 적용합니다. -->
     <link rel="stylesheet" href="./style.css">
-    <!-- 선택 모드: 마크다운 본문 모드 (넓은 문단 여백) -->
-    <!-- <link rel="stylesheet" href="./images/style-markdown.css"> -->
     
-    <!-- Prism.js Syntax Highlighting (CDN) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <!-- Highlight.js Syntax Highlighting (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script>
+      (function () {
+        var jq = window.tjQuery || window.jQuery;
+        if (jq) {
+          window.jQuery = jq;
+          window.$ = jq;
+        }
+      })();
+    </script>
   </head>
   <body id="[##_body_id_##]">
     <script>
       (function() {
         var bodyId = document.body.id;
+        var path = window.location.pathname.replace(/\/+$/, '') || '/';
         if (bodyId === 'tt-body-index' || bodyId === 'tt-body-category' || bodyId === 'tt-body-search' || bodyId === 'tt-body-tag' || bodyId === 'tt-body-archive') {
           document.body.classList.add('has-list-page', 'is-list-context');
         }
         if (bodyId === 'tt-body-page') {
           document.body.classList.add('has-article-page');
+        }
+        if (path === '/' || path.endsWith('/skin.html')) {
+          document.body.classList.add('is-home-page');
+        }
+        if (path.startsWith('/category')) {
+          document.body.classList.add('is-category-page');
+          if (path === '/category') {
+            document.body.classList.add('is-category-index');
+          }
         }
         if (localStorage.getItem('docs-is-admin') === 'true') {
           document.body.classList.add('is-admin');
@@ -62,11 +66,16 @@
         <aside class="docs-sidebar" id="docs-sidebar">
           <div class="docs-sidebar__inner">
             <div class="docs-brand">
-              <a class="docs-brand__logo" href="[##_blog_link_##]" aria-label="[##_title_##] 홈">
-                <span class="docs-brand__gem"></span>
+              <a class="docs-brand__logo docs-profile-avatar" href="[##_blog_link_##]" aria-label="[##_title_##] 홈">
+                <img class="docs-profile-avatar__image" src="[##_image_##]" alt="[##_title_##] 프로필" loading="lazy" decoding="async">
+                <span class="docs-profile-avatar__fallback">[##_title_##]</span>
               </a>
               <div class="docs-brand__copy">
                 <a class="docs-brand__title" href="[##_blog_link_##]">[##_title_##]</a>
+                <div class="docs-profile-actions admin-only" style="display:none;">
+                  <a class="docs-profile-actions__link" href="[##_owner_url_##]">관리</a>
+                  <a class="docs-profile-actions__link" href="[##_blog_link_##]manage/newpost/?type=post&amp;returnURL=%2Fmanage%2Fposts%2F">글쓰기</a>
+                </div>
               </div>
               <button class="docs-sidebar__close docs-icon-button" type="button" data-action="toggle-nav" aria-label="메뉴 닫기" title="닫기">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -113,10 +122,13 @@
                 <span></span>
                 <span></span>
               </button>
+              <a class="docs-topbar-profile-avatar" href="[##_blog_link_##]" aria-label="프로필 홈">
+                <img src="[##_image_##]" alt="프로필" loading="lazy" decoding="async">
+              </a>
               <a class="docs-topbar__brand" href="[##_blog_link_##]">[##_title_##]</a>
-              <div class="docs-topbar__left-admin admin-only" style="display:none;">
-                <a class="docs-toplink" href="[##_owner_url_##]">관리</a>
-                <a class="docs-toplink docs-toplink--write" href="[##_blog_link_##]manage/newpost/?type=post&amp;returnURL=%2Fmanage%2Fposts%2F">글쓰기</a>
+              <div class="docs-profile-actions admin-only" style="display:none; margin: 0 0 0 12px !important;">
+                <a class="docs-profile-actions__link" href="[##_owner_url_##]">관리</a>
+                <a class="docs-profile-actions__link" href="[##_blog_link_##]manage/newpost/?type=post&amp;returnURL=%2Fmanage%2Fposts%2F">글쓰기</a>
               </div>
             </div>
 
@@ -149,17 +161,58 @@
           <div class="docs-layout">
             <main class="docs-content" id="main-content">
               [##_revenue_list_upper_##]
-
-
-
               <s_list>
+                <section class="docs-home-overview" data-home-overview>
+                  <div class="docs-home-featured" data-home-featured>
+                    <a class="docs-home-featured__link" href="#">
+                       <div class="docs-home-featured__copy">
+                         <div class="docs-home-featured__info">
+                           <h2 class="docs-home-featured__title"></h2>
+                           <p class="docs-home-featured__summary"></p>
+                         </div>
+                       </div>
+                      <div class="docs-home-featured__media">
+                        <img alt="" loading="lazy" decoding="async">
+                      </div>
+                    </a>
+                  </div>
+                </section>
                 <section class="docs-page-head">
+                  <div class="docs-page-head__eyebrow" data-page-head-eyebrow style="display: none;"></div>
                   <div class="docs-page-head__title-group">
                     <h1 class="docs-page-head__title">[##_list_conform_##]</h1>
-                    <div class="docs-page-head__meta">글 [##_list_count_##]개</div>
+                    <script>
+                      (function() {
+                        var path = window.location.pathname.replace(/\/+$/, '') || '/';
+                        var isCategory = path.indexOf('/category') === 0;
+                        var isSearch = path.indexOf('/search') === 0 || window.location.search.indexOf('search=') >= 0;
+                        var isTag = path.indexOf('/tag') === 0;
+                        var isArchive = path.indexOf('/archive') === 0;
+
+                        var eyebrowEl = document.querySelector('[data-page-head-eyebrow]');
+                        var titleEl = document.querySelector('.docs-page-head__title');
+
+                        if (path === '/category' && titleEl && (titleEl.textContent.trim() === '분류 전체보기' || titleEl.textContent.trim() === '[##_list_conform_##]')) {
+                          titleEl.textContent = '전체보기';
+                        }
+
+                        if (eyebrowEl) {
+                          var eyebrowText = '';
+                          if (isCategory) eyebrowText = 'Category';
+                          else if (isSearch) eyebrowText = 'Search';
+                          else if (isTag) eyebrowText = 'Tag';
+                          else if (isArchive) eyebrowText = 'Archive';
+
+                          if (eyebrowText) {
+                            eyebrowEl.textContent = eyebrowText;
+                            eyebrowEl.style.display = 'block';
+                          }
+                        }
+                      })();
+                    </script>
                   </div>
-                  <div class="docs-category-map" data-category-map hidden></div>
                 </section>
+                <div class="docs-category-map" data-category-map hidden></div>
 	                <section class="docs-empty-state" data-empty-state hidden>
 	                  <div class="docs-empty-state__ghost" aria-hidden="true">
 	                    <span></span>
@@ -179,18 +232,97 @@
                         <div class="docs-list-item__thumb">
                           <s_article_rep_thumbnail>
                             <img src="[##_article_rep_thumbnail_url_##]" alt="[##_article_rep_title_##]" width="640" height="480" loading="eager" decoding="async" fetchpriority="high">
+                            <script>
+                              (function() {
+                                var img = document.currentScript.previousElementSibling;
+                                if (img && img.tagName === 'IMG') {
+                                  var src = img.getAttribute('src') || '';
+                                  var normalized = src.toLowerCase();
+                                  var isDefault = !src || src.indexOf('[##_') === 0 ||
+                                    normalized.indexOf('opengraph-default.png') >= 0 ||
+                                    normalized.indexOf('tistory_admin') >= 0 ||
+                                    normalized.indexOf('default_thumb') >= 0 ||
+                                    normalized.indexOf('default-thumbnail') >= 0 ||
+                                    normalized.indexOf('img_blank') >= 0 ||
+                                    normalized.indexOf('noimage') >= 0 ||
+                                    normalized.indexOf('no-image') >= 0 ||
+                                    normalized.indexOf('placeholder') >= 0 ||
+                                    normalized.indexOf('preview.gif') >= 0 ||
+                                    normalized.indexOf('preview256.jpg') >= 0 ||
+                                    normalized.indexOf('preview560.jpg') >= 0 ||
+                                    normalized.indexOf('cfile10.uf.tistory.com/image') >= 0 ||
+                                    normalized.indexOf('t1.daumcdn.net/tistory_admin') >= 0;
+                                  if (isDefault) {
+                                    img.style.display = 'none';
+                                    img.classList.add('is-default-placeholder');
+                                  }
+                                }
+                              })();
+                            </script>
                           </s_article_rep_thumbnail>
-                          <div class="docs-list-item__ghost-container" aria-hidden="true">
-                            <div class="docs-list-item__ghost"><span></span><span></span></div>
-                          </div>
+                          <script>
+                            (function() {
+                              var thumbContainer = document.currentScript.parentElement;
+                              var img = thumbContainer.querySelector('img');
+                              var hasNoImage = !img || img.style.display === 'none' || img.classList.contains('is-default-placeholder');
+                              if (hasNoImage) {
+                                var card = thumbContainer.closest('.docs-list-item');
+                                if (card) {
+                                  card.classList.add('is-empty');
+                                  
+                                  // Hash function to generate the EXACT stable blue brand gradient synchronously!
+                                  var href = card.getAttribute('data-card-href') || '';
+                                  var titleEl = card.querySelector('.docs-list-item__title');
+                                  var title = titleEl ? titleEl.textContent.trim() : '';
+                                  
+                                  var pathname = '';
+                                  try {
+                                    pathname = href ? new URL(href, window.location.origin).pathname : '';
+                                  } catch (e) {
+                                    pathname = href || '';
+                                  }
+                                  var seed = pathname.replace(/\/$/, '') + '|' + title.replace(/\s+/g, ' ').trim();
+                                  
+                                  var hash = 0;
+                                  if (seed) {
+                                    for (var i = 0; i < seed.length; i++) {
+                                      hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+                                    }
+                                  }
+                                  hash = Math.abs(hash);
+                                  
+                                  var baseHue = 190 + (hash % 28);
+                                  var targetHue = 206 + ((hash >> 4) % 24);
+                                  var sat = 68 + ((hash >> 2) % 10);
+                                  var light = 48 + ((hash >> 6) % 8);
+                                  
+                                  var gradient = 'linear-gradient(135deg, hsl(' + baseHue + ', ' + sat + '%, ' + light + '%) 0%, hsl(' + targetHue + ', ' + sat + '%, ' + light + '%) 100%)';
+                                  var label = (title.match(/[A-Za-z0-9가-힣]/g) || ['#']).slice(0, 2).join('').toUpperCase();
+                                  
+                                  thumbContainer.style.setProperty('background', gradient, 'important');
+                                  thumbContainer.style.position = 'relative';
+                                  
+                                  var placeholderEmoji = document.createElement('div');
+                                  placeholderEmoji.className = 'docs-list-item__placeholder-emoji';
+                                  placeholderEmoji.textContent = label;
+                                  thumbContainer.appendChild(placeholderEmoji);
+                                }
+                              }
+                            })();
+                          </script>
                         </div>
                       </a>
                       <div class="docs-list-item__content">
                         <a class="docs-list-item__main-link" href="[##_article_rep_link_##]">
                           <h2 class="docs-list-item__title">[##_article_rep_title_##]</h2>
                         </a>
+                        <div class="docs-list-item__source" data-list-source hidden>
+                          [##_article_rep_desc_##]
+                        </div>
+                        <p class="docs-list-item__summary" data-list-summary hidden>[##_article_rep_summary_##]</p>
                         <div class="docs-list-item__meta">
-                          <span>[##_article_rep_simple_date_##]</span>
+                          <span class="docs-list-item__date">[##_article_rep_simple_date_##]</span>
+                          <span class="docs-list-item__meta-dot" aria-hidden="true">·</span>
                           <a href="[##_article_rep_category_link_##]" class="docs-list-item__category">[##_article_rep_category_##]</a>
                         </div>
                       </div>
@@ -239,14 +371,14 @@
                           </svg>
                           <span class="like-count"></span>
                         </button>
-  
+
                         <s_ad_div>
                           <div class="docs-admin-actions">
                             <a class="docs-admin-actions__link" href="[##_s_ad_m_link_##]">수정</a>
-                            <a class="docs-admin-actions__link" href="#" onclick="[##_s_ad_s2_onclick_##]">[##_s_ad_s2_label_##]</a>
                             <a class="docs-admin-actions__link" href="#" onclick="[##_s_ad_d_onclick_##]">삭제</a>
                           </div>
                         </s_ad_div>
+  
                       </div>
   
                       <s_tag_label>
@@ -255,7 +387,7 @@
                           <div class="docs-tags__items">[##_tag_label_rep_##]</div>
                         </div>
                       </s_tag_label>
-  
+
                       <nav class="docs-article-nav">
                         <div class="docs-article-nav__slot docs-article-nav__slot--prev">
                           <s_article_prev>
@@ -279,6 +411,14 @@
                         <s_rp>
                           [##_comment_group_##]
                         </s_rp>
+                      </section>
+
+                      <section class="docs-article-recommend" data-article-recommend hidden>
+                        <div class="docs-article-recommend__header">
+                          <h2 class="docs-article-recommend__title">최신글 보러가기</h2>
+                          <a class="docs-article-recommend__more" href="#">전체 보기</a>
+                        </div>
+                        <div class="docs-article-recommend__list"></div>
                       </section>
                     </article>
   
@@ -359,12 +499,20 @@
                 </nav>
               </s_paging>
             </main>
-
+            <footer class="docs-footer">
+              <div class="docs-footer__inner">
+                <a class="docs-footer__github" href="[##_var_profileGithub_##]" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                  </svg>
+                </a>
+              </div>
+            </footer>
           </div>
         </div>
       </div>
 
-      <script src="./images/script.js"></script>
+      <script src="./script.js"></script>
     </s_t3>
   </body>
 </html>

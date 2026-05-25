@@ -2100,5 +2100,158 @@ body .docs-comments .docs-comment-markdown {
   margin-top: 4px !important;
 }
 
+/* Mobile Safari zoom guard: keep editable controls at 16px while layout remains compact. */
+@media (max-width: 768px) {
+  body .docs-comments {
+    --cmt-input-font: 16px !important;
+    --cmt-textarea-font: 16px !important;
+  }
 
+  body .docs-comments .tt-area-write .tt-box-account input,
+  body .docs-comments .tt-area-write .tt-wrap-account input,
+  body .docs-comments .tt-area-write input.tt_txt_user,
+  body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]),
+  body .docs-comments .tt-area-write .tt-cmt,
+  body .docs-comments .tt-area-write textarea.tt_inp_g,
+  body .docs-comments .tt-area-write textarea.tt-cmt,
+  body .docs-comments .tt-area-write [contenteditable="true"],
+  body .docs-comments .tt-box-pwd input,
+  body .docs-comments .tt_box_pwd input {
+    font-size: 16px !important;
+  }
 
+  body .docs-comments .tt-area-write .tt-box-account input,
+  body .docs-comments .tt-area-write .tt-wrap-account input,
+  body .docs-comments .tt-area-write input.tt_txt_user,
+  body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]) {
+    height: 40px !important;
+    min-height: 40px !important;
+    line-height: 40px !important;
+    padding-inline: 12px !important;
+  }
+
+  body .docs-comments .tt-area-write .tt-cmt,
+  body .docs-comments .tt-area-write textarea.tt_inp_g,
+  body .docs-comments .tt-area-write textarea.tt-cmt,
+  body .docs-comments .tt-area-write [contenteditable="true"] {
+    min-height: 42px !important;
+    line-height: 1.5 !important;
+  }
+
+  body .docs-comments .tt-box-pwd:not([style*="display: none"]),
+  body .docs-comments .tt_box_pwd:not([style*="display: none"]) {
+    grid-template-columns: minmax(0, 1fr) 40px !important;
+    width: min(260px, calc(100vw - 40px)) !important;
+    max-width: min(260px, calc(100vw - 40px)) !important;
+  }
+
+  body .docs-comments .tt-box-pwd input,
+  body .docs-comments .tt_box_pwd input,
+  body .docs-comments .tt-box-pwd button,
+  body .docs-comments .tt_box_pwd button,
+  body .docs-comments .tt-box-pwd input[type="button"],
+  body .docs-comments .tt_box_pwd input[type="button"],
+  body .docs-comments .tt-box-pwd input[type="submit"],
+  body .docs-comments .tt_box_pwd input[type="submit"] {
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+
+  body .docs-comments .tt-box-pwd button,
+  body .docs-comments .tt_box_pwd button,
+  body .docs-comments .tt-box-pwd input[type="button"],
+  body .docs-comments .tt_box_pwd input[type="button"],
+  body .docs-comments .tt-box-pwd input[type="submit"],
+  body .docs-comments .tt_box_pwd input[type="submit"] {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+  }
+}
+
+/* Restore and harden the native Tistory comment widget rendering. */
+body.has-article-page .docs-comments,
+body .docs-comments {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+body .docs-comments [data-tistory-react-app="Comment"],
+body .docs-comments [data-tistory-react-app="Guestbook"],
+body .docs-comments [id^="entry"][id$="Comment"],
+body .docs-comments .tt-comment-cont,
+body .docs-comments .tt-area-reply {
+  display: flex !important;
+  flex-direction: column !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+body .docs-comments iframe,
+body .docs-comments .tt-comment-cont iframe {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border: 0 !important;
+}
+
+body .docs-comments-legacy[hidden] {
+  display: none !important;
+}
+
+body .docs-comments-legacy[data-active="true"] {
+  display: block !important;
+}
+
+body .docs-comments-legacy .tt-thumbnail img,
+body .docs-comments-legacy .tt-box-thumb img {
+  display: block !important;
+  width: var(--cmt-card-avatar) !important;
+  height: var(--cmt-card-avatar) !important;
+  border-radius: 999px !important;
+  object-fit: cover !important;
+}
+
+body .docs-comments-legacy .tt-button-modify {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--comment-muted) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+body .docs-comments-legacy .tt-area-write textarea.tt-cmt {
+  height: auto !important;
+}
+
+/* Mobile Safari zoom guard for every Tistory comment/password control. */
+@media (max-width: 768px) {
+  body .docs-comments input,
+  body .docs-comments textarea,
+  body .docs-comments select,
+  body .docs-comments [contenteditable="true"] {
+    font-size: 16px !important;
+  }
+
+  body .docs-comments .tt-area-write .tt-box-account input,
+  body .docs-comments .tt-area-write .tt-wrap-account input,
+  body .docs-comments .tt-area-write input.tt_txt_user,
+  body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]) {
+    transform: scale(0.875) !important;
+    transform-origin: left center !important;
+    width: 114.285% !important;
+  }
+
+  body .docs-comments .tt-area-write .tt-cmt,
+  body .docs-comments .tt-area-write textarea.tt_inp_g,
+  body .docs-comments .tt-area-write textarea.tt-cmt,
+  body .docs-comments .tt-area-write [contenteditable="true"] {
+    font-size: 16px !important;
+    line-height: 1.42 !important;
+  }
+}

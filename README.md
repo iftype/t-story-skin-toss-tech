@@ -16,39 +16,17 @@
 
 1. `tistory-skin-toss-tech.zip` 압축을 풉니다.
 2. 티스토리 관리자 → **꾸미기 > 스킨 변경 > 스킨 등록**으로 이동합니다.
-3. **추가** 버튼을 눌러 루트 폴더의 파일을 업로드합니다.
+3. **추가** 버튼을 눌러 압축 해제한 폴더의 파일을 업로드합니다.
    - `skin.html`, `style.css`, `index.xml`, `preview.gif`, `preview256.jpg`, `preview560.jpg`
-4. 다시 **추가** 버튼을 눌러 `images/` 폴더 안의 파일을 업로드합니다.
-   - `images/script.js`, `images/style.css`, `images/style-tight.css`
-   - 티스토리가 자동으로 `./images/` 경로에 매핑합니다.
+4. `script.js`도 같은 위치에 업로드합니다.
 5. **저장** 버튼을 누르고 스킨 이름을 입력합니다.
 6. **스킨 변경 > 스킨 보관함**에서 등록한 스킨을 선택하고 **적용**을 누릅니다.
 
 ---
 
-## 본문 여백 스타일 바꾸기
+## 본문 스타일
 
-기본값은 마크다운 스타일(넓은 여백)입니다. 좁은 여백이 필요하면 아래 방법으로 변경할 수 있습니다.
-
-### 방법 : HTML 주석 수정하기
-
-<img width="600" height="780" alt="image" src="https://github.com/user-attachments/assets/5e8b2267-22c6-4734-8e3c-5ccdd501550e" />
-
-
-**스킨 편집 > Html 편집 > HTML 탭**의 22~37번 줄에서 사용할 스타일 파일의 주석을 제거합니다.
-
-마크다운 스타일 적용:
-```html
-<link rel="stylesheet" href="./images/style.css">
-<!-- <link rel="stylesheet" href="./images/style-tight.css"> -->
-```
-
-타이트 스타일 적용:
-```html
-<!-- <link rel="stylesheet" href="./images/style.css"> -->
-<link rel="stylesheet" href="./images/style-tight.css">
-```
-
+마크다운 본문 모드는 더 이상 제공하지 않습니다. `style.css` 하나에 일반 포스트 본문, 제목, 인용문, 댓글 스타일이 모두 포함되어 있습니다.
 
 ---
 

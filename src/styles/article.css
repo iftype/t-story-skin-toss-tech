@@ -4,18 +4,23 @@
    ========================================================================== */
 
 .docs-layout {
-  --article-font-size: 17px;
-  --article-line-height: 1.6;
+  --article-body-1-size: 1.75rem;
+  --article-body-2-size: 1.6rem;
+  --article-body-3-size: 1.45rem;
+  --article-font-size: var(--article-body-2-size);
+  --article-line-height: 1.75;
   --article-letter-spacing: 0em; /* Zero negative tracking */
-  --p-margin: 32px 0 0 0;
-  --article-h1-size: 36px;
-  --article-h1-line-height: 1.25;
-  --article-h2-size: 32px;
-  --article-h2-line-height: 1.14;
-  --article-h3-size: 24px;
-  --article-h3-line-height: 1.2;
-  --article-h4-size: 20px;
-  --article-h4-line-height: 1.25;
+  --p-margin: 24px 0 0 0;
+  --article-h1-size: 3.2rem;
+  --article-h1-line-height: 1.32;
+  --article-h2-size: 2.55rem;
+  --article-h2-line-height: 1.36;
+  --article-h3-size: 2.15rem;
+  --article-h3-line-height: 1.42;
+  --article-h4-size: 1.85rem;
+  --article-h4-line-height: 1.5;
+  --article-quote-size: 1.6rem;
+  --article-quote-emphasis-size: 1.75rem;
   overflow: visible !important;
 }
 
@@ -24,21 +29,50 @@ body.has-article-page .docs-layout {
   max-width: 100% !important;
   width: 100% !important;
   margin: 0 auto !important;
-  padding: 40px 0 32px !important;
+  padding: 20px 0 32px !important;
 }
 
 body.has-article-page .docs-article-layout {
+  position: relative !important;
   display: block !important;
-  max-width: 740px !important;
+  max-width: 760px !important;
   margin: 0 auto !important;
   width: 100% !important;
   padding: 0 !important;
 }
 
+body.has-article-page .docs-article-layout .docs-toc {
+  position: absolute !important;
+  top: 0 !important;
+  left: calc(100% + 44px) !important;
+  display: block !important;
+  width: 220px !important;
+  min-width: 0 !important;
+  height: var(--toc-sticky-boundary, auto) !important;
+}
+
+body.has-article-page .docs-toc__inner {
+  position: sticky !important;
+  top: 92px !important;
+  max-height: calc(100vh - 120px) !important;
+  padding-left: 18px !important;
+}
+
+body.no-toc .docs-article-layout {
+  display: block !important;
+  max-width: 760px !important;
+}
+
+body.no-toc .docs-article-layout .docs-toc,
+body.no-toc .docs-toc {
+  display: none !important;
+}
+
 body.has-article-page .docs-article {
-  max-width: 740px !important;
+  width: 100% !important;
+  max-width: 760px !important;
   margin: 0 auto !important;
-  padding: 40px 20px 24px !important; /* Elegant 24px bottom padding */
+  padding: 32px 24px 24px !important;
 }
 
 /* Premium article meta styles */
@@ -58,16 +92,21 @@ body.has-article-page .docs-article {
 
 .docs-article__body,
 .article-body {
-  color: var(--text-muted) !important;
+  color: var(--article-text, #191f28) !important;
   font-size: var(--article-font-size) !important;
   font-weight: 400 !important;
   line-height: var(--article-line-height) !important;
   letter-spacing: var(--article-letter-spacing) !important;
-  word-break: break-all !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
+  word-break: keep-all !important;
+  word-wrap: normal !important;
+  overflow-wrap: anywhere !important;
   -webkit-hyphens: none !important;
   hyphens: none !important;
+}
+
+html[data-ui-theme="light"] .docs-article__body,
+html[data-ui-theme="light"] .article-body {
+  color: #242a33 !important;
 }
 
 .article-body p,
@@ -107,9 +146,9 @@ body.has-article-page .docs-article {
 /* Universal child fallback to catch all nested structures robustly */
 .docs-article__body :not(pre):not(pre *):not(code):not(code *):not(.code-frame):not(.code-frame *),
 .article-body :not(pre):not(pre *):not(code):not(code *):not(.code-frame):not(.code-frame *) {
-  word-break: break-all !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
+  word-break: keep-all !important;
+  word-wrap: normal !important;
+  overflow-wrap: anywhere !important;
 }
 
 .docs-article .article-body p,
@@ -138,8 +177,8 @@ body.has-article-page .docs-article {
 }
 
 .article-body h2 {
-  margin-top: 48px !important;
-  margin-bottom: 24px !important;
+  margin-top: 56px !important;
+  margin-bottom: 18px !important;
   font-size: var(--article-h2-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h2-line-height) !important;
@@ -148,8 +187,8 @@ body.has-article-page .docs-article {
 }
 
 .article-body h3 {
-  margin-top: 48px !important;
-  margin-bottom: 20px !important;
+  margin-top: 40px !important;
+  margin-bottom: 14px !important;
   font-size: var(--article-h3-size) !important;
   font-weight: 700 !important;
   line-height: var(--article-h3-line-height) !important;
@@ -180,13 +219,15 @@ body.has-article-page .docs-article {
 
 .article-body ul,
 .article-body ol {
-  margin: 24px 0 8px !important;
-  padding-left: 20px !important;
+  margin: 20px 0 10px !important;
+  padding-left: 0 !important;
+  list-style-position: inside !important;
 }
 
 .article-body li {
-  margin-bottom: 12px !important;
+  margin-bottom: 10px !important;
   line-height: inherit !important;
+  padding-left: 0 !important;
 }
 
 .article-body li:last-child {
@@ -195,6 +236,7 @@ body.has-article-page .docs-article {
 
 .article-body blockquote {
   margin: 40px 0 !important;
+  font-size: var(--article-quote-size) !important;
   line-height: inherit !important;
   letter-spacing: inherit !important;
   text-align: left !important;
@@ -209,8 +251,13 @@ body.has-article-page .docs-article {
   border-radius: 0 !important;
   background: transparent !important;
   color: var(--text) !important;
-  font-size: 1.15rem !important;
+  font-size: var(--article-quote-emphasis-size) !important;
   font-weight: 600 !important;
+}
+
+.article-body blockquote[data-ke-style="style1"] > span:first-child,
+.article-body blockquote[data-ke-style="style1"] > div:first-child:empty {
+  display: none !important;
 }
 
 /* Style 2 & default fallback: Box quote with left line (Photo 4 style) */
@@ -223,18 +270,18 @@ body.has-article-page .docs-article {
   border-radius: 0 6px 6px 0 !important;
   background: var(--accent-soft) !important;
   color: var(--text) !important;
-  font-size: inherit !important;
+  font-size: var(--article-quote-size) !important;
   font-weight: 400 !important;
 }
 
 /* Style 3: Rounded Card (Photo 3 style) */
 .article-body blockquote[data-ke-style="style3"] {
-  padding: 32px 36px !important;
+  padding: 28px 30px !important;
   border: 0 !important;
   border-radius: 16px !important;
   background: var(--bg-soft) !important;
   color: var(--text) !important;
-  font-size: inherit !important;
+  font-size: var(--article-quote-size) !important;
   font-weight: 400 !important;
 }
 
@@ -259,18 +306,161 @@ body.has-article-page .docs-article {
   font-weight: 700 !important;
 }
 
+.docs-article-recommend {
+  margin-top: 36px !important;
+  padding-top: 28px !important;
+  border-top: 1px solid var(--line-soft) !important;
+}
+
+.docs-article-recommend__header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  margin-bottom: 20px !important;
+}
+
+.docs-article-recommend__title {
+  margin: 0 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: var(--text-heading) !important;
+}
+
+.docs-article-recommend__more {
+  color: var(--accent) !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+}
+
+.docs-article-recommend__list {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 12px !important;
+}
+
+.docs-article-recommend__item {
+  display: grid !important;
+  grid-template-columns: 168px minmax(0, 1fr) !important;
+  grid-template-rows: auto !important;
+  align-items: start !important;
+  gap: 16px !important;
+}
+
+.docs-article-recommend__thumb {
+  display: block !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: var(--bg-soft) !important;
+}
+
+.docs-article-recommend__thumb.is-empty {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.docs-article-recommend__thumb img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.docs-article-recommend__item:hover .docs-article-recommend__thumb img {
+  transform: scale(1.12) !important;
+}
+
+.docs-article-recommend__placeholder {
+  display: grid !important;
+  place-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  color: rgba(255, 255, 255, 0.86) !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.docs-article-recommend__item:hover .docs-article-recommend__placeholder {
+  transform: scale(1.12) !important;
+}
+
+.docs-article-recommend__body {
+  display: grid !important;
+  gap: 8px !important;
+}
+
+.docs-article-recommend__body strong {
+  display: -webkit-box !important;
+  overflow: hidden !important;
+  color: var(--text-heading) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  line-height: 1.42 !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+.docs-article-recommend__body span {
+  display: -webkit-box !important;
+  overflow: hidden !important;
+  color: var(--text-muted) !important;
+  font-size: 0.86rem !important;
+  line-height: 1.55 !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+.docs-toc__title {
+  font-size: 14px !important;
+}
+
+.docs-toc__nav a {
+  transform-origin: left center !important;
+  font-size: 13px !important;
+  line-height: 1.56 !important;
+  transition:
+    color 0.18s ease,
+    font-size 0.18s ease,
+    font-weight 0.18s ease,
+    transform 0.18s ease !important;
+}
+
+.docs-toc__nav a.is-active,
+.docs-toc__nav a[aria-current="true"] {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  font-weight: 700 !important;
+  transform: matrix(1, 0, 0, 1, 2, 0) !important;
+}
+
+.toc-item--h3 a {
+  padding-left: 16px !important;
+}
+
+.code-frame pre {
+  padding: 1.5rem 1.5rem 1.9rem !important;
+}
+
 @media (max-width: 768px) {
   .docs-layout {
-    --article-font-size: 17px; /* Keep premium 17px font size on mobile */
-    --article-line-height: 1.6;
+    --article-font-size: var(--article-body-2-size);
+    --article-line-height: 1.75;
     --article-letter-spacing: 0em; /* Zero negative tracking */
-    --article-h1-size: 30px;
-    --article-h1-line-height: 1.4;
-    --article-h2-size: 24px;
+    --article-h1-size: 3rem;
+    --article-h1-line-height: 1.36;
+    --article-h2-size: 2.35rem;
     --article-h2-line-height: 1.45;
-    --article-h3-size: 20px;
+    --article-h3-size: 2rem;
     --article-h3-line-height: 1.5;
-    --article-h4-size: 17px;
+    --article-h4-size: 1.75rem;
     --article-h4-line-height: 1.55;
     width: 100% !important;
     max-width: none !important;
@@ -282,13 +472,14 @@ body.has-article-page .docs-article {
 
   body.has-article-page .docs-article-layout,
   body.has-article-page .docs-article-layout .docs-article {
+    display: block !important;
     width: 100% !important;
     max-width: none !important;
     margin: 0 !important;
   }
 
   body.has-article-page .docs-article {
-    padding: 24px 16px 20px !important; /* Elegant 20px padding on mobile */
+    padding: 16px 16px 20px !important; /* Tighter top padding on mobile */
   }
 
   .docs-article__header {
@@ -328,7 +519,13 @@ body.has-article-page .docs-article {
 
   .article-body ul,
   .article-body ol {
-    margin: 24px 0 8px !important;
+    margin: 18px 0 6px !important;
+    padding-left: 0 !important;
+    list-style-position: inside !important;
+  }
+
+  .article-body li {
+    margin-bottom: 6px !important;
   }
 
   .article-body blockquote {
@@ -336,9 +533,9 @@ body.has-article-page .docs-article {
   }
 
   .article-body blockquote[data-ke-style="style1"] {
-    padding: 6px 0 6px 16px !important;
+    padding: 4px 0 4px 14px !important;
     border-left-width: 3px !important;
-    font-size: 1.08rem !important;
+    font-size: var(--article-quote-emphasis-size) !important;
   }
 
   .article-body blockquote:not([data-ke-style]),
@@ -349,7 +546,46 @@ body.has-article-page .docs-article {
   }
 
   .article-body blockquote[data-ke-style="style3"] {
-    padding: 20px 24px !important;
+    padding: 18px 18px !important;
+  }
+
+  .docs-article-recommend {
+    margin-top: 40px !important;
+    padding-top: 20px !important;
+  }
+
+  .docs-article-recommend__header {
+    margin-bottom: 16px !important;
+  }
+
+  .docs-article-recommend__list {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .docs-article-recommend__item {
+    grid-template-columns: 112px minmax(0, 1fr) !important;
+    grid-template-rows: auto !important;
+    align-items: start !important;
+    gap: 14px !important;
+  }
+
+  .docs-article-recommend__thumb {
+    aspect-ratio: 112 / 72 !important;
+    border-radius: 12px !important;
+  }
+
+  .docs-article-recommend__body {
+    gap: 6px !important;
+  }
+
+  .docs-article-recommend__body strong {
+    font-size: 0.98rem !important;
+  }
+
+  .docs-article-recommend__body span {
+    font-size: 0.9rem !important;
+    -webkit-line-clamp: 2 !important;
   }
 }
 
@@ -389,6 +625,24 @@ body.has-article-page .docs-article {
   line-height: var(--article-line-height) !important;
   letter-spacing: var(--article-letter-spacing) !important;
   margin: var(--p-margin, 32px 0 0 0) !important;
+}
+
+#tt-body-page .article-body [data-ke-size="size18"],
+.docs-article__body [data-ke-size="size18"],
+.article-body [data-ke-size="size18"] {
+  font-size: var(--article-body-1-size) !important;
+}
+
+#tt-body-page .article-body [data-ke-size="size16"],
+.docs-article__body [data-ke-size="size16"],
+.article-body [data-ke-size="size16"] {
+  font-size: var(--article-body-2-size) !important;
+}
+
+#tt-body-page .article-body [data-ke-size="size14"],
+.docs-article__body [data-ke-size="size14"],
+.article-body [data-ke-size="size14"] {
+  font-size: var(--article-body-3-size) !important;
 }
 
 #tt-body-page .article-body h1[data-ke-size],
