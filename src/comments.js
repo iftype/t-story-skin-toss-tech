@@ -374,7 +374,13 @@ export function renderCommentMarkdown() {
     
     const rawText = temp.textContent || temp.innerText || ""
     
-    if (comment.dataset.lastParsedText === rawText) {
+    // Find sibling first to ensure it actually exists in DOM before bypassing via cache
+    let mdDiv = comment.nextSibling
+    while (mdDiv && (!mdDiv.classList || !mdDiv.classList.contains('docs-comment-markdown'))) {
+      mdDiv = mdDiv.nextSibling
+    }
+    
+    if (comment.dataset.lastParsedText === rawText && mdDiv && mdDiv.dataset.commentMarkdownReady === 'true') {
       renderedCount++
       return
     }
@@ -429,12 +435,6 @@ export function renderCommentMarkdown() {
     processTextNodes(div)
     
     if (!comment.parentNode) return
-    
-    // Find or create sibling
-    let mdDiv = comment.nextSibling
-    while (mdDiv && (!mdDiv.classList || !mdDiv.classList.contains('docs-comment-markdown'))) {
-      mdDiv = mdDiv.nextSibling
-    }
     
     if (!mdDiv) {
       mdDiv = document.createElement('div')

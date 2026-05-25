@@ -82,29 +82,46 @@ function init() {
     console.warn('[Comments Engine] setupCommentFallback failed', e)
   }
 
-  const commentsArea = document.querySelector('.docs-comments')
-  if (commentsArea && 'MutationObserver' in window) {
-    let cmtTimer = null
-    const cmtObserver = new MutationObserver(() => {
-      clearTimeout(cmtTimer)
-      cmtTimer = setTimeout(() => {
-        try {
-          renderCommentMarkdown()
-        } catch (e) {
-          console.warn('[Comments Observer] renderCommentMarkdown failed', e)
-        }
-        try {
-          setupCommentReplyClick()
-        } catch (e) {
-          console.warn('[Comments Observer] setupCommentReplyClick failed', e)
-        }
-      }, 100)
-    })
-    try {
-      cmtObserver.observe(commentsArea, { childList: true, subtree: true })
-    } catch (e) {
-      console.warn('[Comments Observer] observe failed', e)
+  const setupCommentsObserver = () => {
+    const commentsArea = document.querySelector('.docs-comments')
+    if (!commentsArea) return false
+
+    if (commentsArea.dataset.hasObserverAttached === 'true') return true
+    commentsArea.dataset.hasObserverAttached = 'true'
+
+    if ('MutationObserver' in window) {
+      let cmtTimer = null
+      const cmtObserver = new MutationObserver(() => {
+        clearTimeout(cmtTimer)
+        cmtTimer = setTimeout(() => {
+          try {
+            renderCommentMarkdown()
+          } catch (e) {
+            console.warn('[Comments Observer] renderCommentMarkdown failed', e)
+          }
+          try {
+            setupCommentReplyClick()
+          } catch (e) {
+            console.warn('[Comments Observer] setupCommentReplyClick failed', e)
+          }
+        }, 100)
+      })
+      try {
+        cmtObserver.observe(commentsArea, { childList: true, subtree: true })
+      } catch (e) {
+        console.warn('[Comments Observer] observe failed', e)
+      }
     }
+    return true
+  }
+
+  if (!setupCommentsObserver()) {
+    const cmtInterval = setInterval(() => {
+      if (setupCommentsObserver()) {
+        clearInterval(cmtInterval)
+      }
+    }, 200)
+    setTimeout(() => clearInterval(cmtInterval), 6000)
   }
 
   cleanInlineStyles()
