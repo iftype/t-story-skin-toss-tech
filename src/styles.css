@@ -92,3 +92,66 @@ body.has-list-page .docs-list-item__thumb {
 .no-transitions * {
   transition: none !important;
 }
+
+/* ==========================================================================
+   Premium Overrides for Search Empty State & H1 Page Head Visibility
+   ========================================================================== */
+
+/* 1. Absolute override to ensure the list page head title (h1) is strictly hidden on home and category index views */
+body.is-home-page .docs-page-head,
+body.is-category-index .docs-page-head,
+#tt-body-index .docs-page-head {
+  display: none !important;
+}
+
+/* 2. Prevent empty search result section from collapsing and make it occupy full column width */
+.docs-empty-state {
+  display: block !important;
+  width: 100% !important;
+  max-width: 760px !important;
+  margin: 40px auto !important;
+  min-height: 280px !important;
+  grid-column: 1 / -1 !important;
+}
+
+/* 3. Ensure that when the search title section (.docs-page-head showing SEARCH and keyword) is active, it occupies full 760px width and aligns perfectly */
+body.has-list-page:not(.is-home-page):not(.is-category-page) .docs-page-head {
+  grid-column: 1 / -1 !important;
+  display: flex !important;
+  width: 100% !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 0 0 32px !important;
+}
+
+/* 4. Support narrow centering (760px) for empty search results to match docs-category-map */
+body.is-search-empty-body .docs-layout {
+  width: min(760px, calc(100% - 80px)) !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.is-search-empty-body .docs-content {
+  width: 100% !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 5. Center and scale the empty state container card to match the 760px column width */
+body.has-list-page .docs-empty-state {
+  grid-column: 1 / -1 !important;
+  width: min(760px, 100%) !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (max-width: 760px) {
+  body.has-list-page .docs-empty-state {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}

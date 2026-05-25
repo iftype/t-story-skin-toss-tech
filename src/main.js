@@ -750,12 +750,18 @@ function markPageState() {
     'has-list-page',
     'has-article-page',
     'is-category-page',
-    'is-category-index'
+    'is-category-index',
+    'is-home-page',
+    'is-search-empty-body'
   )
 
   const hasListItems = Boolean(document.querySelector('.docs-list-item'))
   const hasPageHead = Boolean(document.querySelector('.docs-page-head'))
   const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/'
+
+  if (document.body.id === 'tt-body-index' || normalizedPath === '/') {
+    document.body.classList.add('is-home-page')
+  }
 
   if (hasPageHead) {
     document.body.classList.add('is-list-context')
@@ -790,6 +796,7 @@ function showEmptyStateWhenNeeded() {
   if (isListPage && (isSearchPage || count === 0) && !hasListItems) {
     emptyState.hidden = false
     emptyState.classList.toggle('is-search-empty', isSearchPage)
+    document.body.classList.toggle('is-search-empty-body', isSearchPage)
     if (!isSearchPage) {
       emptyState.querySelector('h2').textContent = '아직 글이 없습니다'
       emptyState.querySelector('p:last-child').textContent = '이 카테고리에 등록된 글이 생기면 여기에 표시됩니다.'
