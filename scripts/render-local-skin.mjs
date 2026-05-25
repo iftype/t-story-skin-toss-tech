@@ -93,7 +93,7 @@ function renderPage(mode) {
   ].forEach(tag => { html = keepBlock(html, tag, true) })
   const scriptContent = fs.readFileSync(path.join(rootDir, 'dist/script.js'), 'utf8')
   const cssContent = fs.readFileSync(path.join(rootDir, 'dist/style.css'), 'utf8')
-  html = html.replace(/<script src="\.\/images\/script\.js"><\/script>|<script src="\.\/script\.js"><\/script>/, () => `<script>${scriptContent}</script>`)
+  html = html.replace(/<script\s+src="\.\/images\/script\.js"[^>]*><\/script>|<script\s+src="\.\/script\.js"[^>]*><\/script>/, () => `<script>${scriptContent}</script>`)
   html = html.replace('<link rel="stylesheet" href="./style.css">', () => `<style>${cssContent}</style>`)
   html = html.replace(/<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/highlight\.js\/11\.11\.1\/highlight\.min\.js"><\/script>/, '<script>window.hljs={highlightElement:function(){},getLanguage:function(){return true}}</script>')
   for (const [token, value] of Object.entries(replacements)) {
