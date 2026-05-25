@@ -348,7 +348,8 @@ export function setupCommentReplyClick() {
 
 export function renderCommentMarkdown() {
   const root = document.querySelector('.docs-comments')
-  const allComments = Array.from(document.querySelectorAll('.tt_desc, .tt-wrap-desc'))
+  if (!root) return
+  const allComments = Array.from(root.querySelectorAll('.tt_desc, .tt-wrap-desc'))
   const comments = allComments.filter(el => {
     // Keep only the outermost comment elements to prevent double parsing/rendering in nested trees
     return !allComments.some(ancestor => ancestor !== el && ancestor.contains(el))
