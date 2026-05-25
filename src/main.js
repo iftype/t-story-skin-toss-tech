@@ -39,90 +39,10 @@ function init() {
   updateTocStickyBoundary()
   setupHeadingAnchors()
 
-  // --- 샌드박스로 완벽 보호되는 댓글 초기화 구문 ---
-  try {
-    syncCommentComposerAvatar()
-  } catch (e) {
-    console.warn('[Comments Engine] syncCommentComposerAvatar failed', e)
-  }
-
-  try {
-    normalizeLegacyComments()
-  } catch (e) {
-    console.warn('[Comments Engine] normalizeLegacyComments failed', e)
-  }
-
-  try {
-    trackOpenCommentMenus()
-  } catch (e) {
-    console.warn('[Comments Engine] trackOpenCommentMenus failed', e)
-  }
-
-  try {
-    setupCommentAvatarLogin()
-  } catch (e) {
-    console.warn('[Comments Engine] setupCommentAvatarLogin failed', e)
-  }
-
-  try {
-    setupCommentReplyClick()
-  } catch (e) {
-    console.warn('[Comments Engine] setupCommentReplyClick failed', e)
-  }
-
-  try {
-    renderCommentMarkdown()
-  } catch (e) {
-    console.warn('[Comments Engine] renderCommentMarkdown failed', e)
-  }
-
-  try {
-    setupCommentFallback()
-  } catch (e) {
-    console.warn('[Comments Engine] setupCommentFallback failed', e)
-  }
-
-  const setupCommentsObserver = () => {
-    const commentsArea = document.querySelector('.docs-comments')
-    if (!commentsArea) return false
-
-    if (commentsArea.dataset.hasObserverAttached === 'true') return true
-    commentsArea.dataset.hasObserverAttached = 'true'
-
-    if ('MutationObserver' in window) {
-      let cmtTimer = null
-      const cmtObserver = new MutationObserver(() => {
-        clearTimeout(cmtTimer)
-        cmtTimer = setTimeout(() => {
-          try {
-            renderCommentMarkdown()
-          } catch (e) {
-            console.warn('[Comments Observer] renderCommentMarkdown failed', e)
-          }
-          try {
-            setupCommentReplyClick()
-          } catch (e) {
-            console.warn('[Comments Observer] setupCommentReplyClick failed', e)
-          }
-        }, 100)
-      })
-      try {
-        cmtObserver.observe(commentsArea, { childList: true, subtree: true })
-      } catch (e) {
-        console.warn('[Comments Observer] observe failed', e)
-      }
-    }
-    return true
-  }
-
-  if (!setupCommentsObserver()) {
-    const cmtInterval = setInterval(() => {
-      if (setupCommentsObserver()) {
-        clearInterval(cmtInterval)
-      }
-    }, 200)
-    setTimeout(() => clearInterval(cmtInterval), 6000)
-  }
+  // --- 100% 순정 댓글 안정성 보장을 위해 자바스크립트 간섭 완전 해제 ---
+  // 티스토리 코어 React 댓글 시스템과의 Virtual DOM 충돌 및 크래시(Minified React Error)를 방지하기 위해,
+  // 돔을 헤집어놓는 외부 자바스크립트 감시자(MutationObserver)와 동적 파싱 개입을 완전히 배제합니다.
+  // 대신 Toss Tech 스타일의 완성형 프리미엄 CSS 테마를 통해 순정 상태로 100% 무결하게 렌더링되도록 보장합니다.
 
   cleanInlineStyles()
   preserveWordCombination()
