@@ -577,7 +577,6 @@ body .docs-comments .tt-wrap-info * {
 /* Keep original comment DOM nodes present in layout but visually hidden for React's virtual DOM */
 body .docs-comments .tt-wrap-desc,
 body .docs-comments .tt_desc,
-body .docs-comments .tt-desc,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt_desc,
 body .docs-comments [id^="entry"][id$="Comment"] .tt-item-reply > .tt-wrap-desc {
   position: absolute !important;
@@ -606,7 +605,6 @@ body .docs-comments .docs-comment-markdown {
   letter-spacing: -0.3px !important;
   color: var(--text-base) !important;
   align-self: start !important;
-  word-break: break-word !important;
 }
 
 /* Sync visibility of custom markdown with the original elements' display state */
@@ -615,6 +613,16 @@ body .docs-comments .tt_desc[style*="display:none"] ~ .docs-comment-markdown,
 body .docs-comments .tt-wrap-desc[style*="display: none"] ~ .docs-comment-markdown,
 body .docs-comments .tt-wrap-desc[style*="display:none"] ~ .docs-comment-markdown {
   display: none !important;
+}
+
+body .docs-comments .tt_desc,
+body .docs-comments .tt-desc {
+  margin: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  letter-spacing: -0.3px !important;
+  color: var(--text-base) !important;
+  word-break: break-word !important;
 }
 
 /* Modify/delete menu */
@@ -2092,127 +2100,5 @@ body .docs-comments .docs-comment-markdown {
   margin-top: 4px !important;
 }
 
-/* Mobile Safari zoom guard: keep editable controls at 16px while layout remains compact. */
-@media (max-width: 768px) {
-  body .docs-comments {
-    --cmt-input-font: 16px !important;
-    --cmt-textarea-font: 16px !important;
-  }
 
-  body .docs-comments .tt-area-write .tt-box-account input,
-  body .docs-comments .tt-area-write .tt-wrap-account input,
-  body .docs-comments .tt-area-write input.tt_txt_user,
-  body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]),
-  body .docs-comments .tt-area-write .tt-cmt,
-  body .docs-comments .tt-area-write textarea.tt_inp_g,
-  body .docs-comments .tt-area-write textarea.tt-cmt,
-  body .docs-comments .tt-area-write [contenteditable="true"],
-  body .docs-comments .tt-box-pwd input,
-  body .docs-comments .tt_box_pwd input {
-    font-size: 16px !important;
-  }
 
-  body .docs-comments .tt-area-write .tt-box-account input,
-  body .docs-comments .tt-area-write .tt-wrap-account input,
-  body .docs-comments .tt-area-write input.tt_txt_user,
-  body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]) {
-    height: 40px !important;
-    min-height: 40px !important;
-    line-height: 40px !important;
-    padding-inline: 12px !important;
-  }
-
-  body .docs-comments .tt-area-write .tt-cmt,
-  body .docs-comments .tt-area-write textarea.tt_inp_g,
-  body .docs-comments .tt-area-write textarea.tt-cmt,
-  body .docs-comments .tt-area-write [contenteditable="true"] {
-    min-height: 42px !important;
-    line-height: 1.5 !important;
-  }
-
-  body .docs-comments .tt-box-pwd:not([style*="display: none"]),
-  body .docs-comments .tt_box_pwd:not([style*="display: none"]) {
-    grid-template-columns: minmax(0, 1fr) 40px !important;
-    width: min(260px, calc(100vw - 40px)) !important;
-    max-width: min(260px, calc(100vw - 40px)) !important;
-  }
-
-  body .docs-comments .tt-box-pwd input,
-  body .docs-comments .tt_box_pwd input,
-  body .docs-comments .tt-box-pwd button,
-  body .docs-comments .tt_box_pwd button,
-  body .docs-comments .tt-box-pwd input[type="button"],
-  body .docs-comments .tt_box_pwd input[type="button"],
-  body .docs-comments .tt-box-pwd input[type="submit"],
-  body .docs-comments .tt_box_pwd input[type="submit"] {
-    height: 40px !important;
-    min-height: 40px !important;
-  }
-
-  body .docs-comments .tt-box-pwd button,
-  body .docs-comments .tt_box_pwd button,
-  body .docs-comments .tt-box-pwd input[type="button"],
-  body .docs-comments .tt_box_pwd input[type="button"],
-  body .docs-comments .tt-box-pwd input[type="submit"],
-  body .docs-comments .tt_box_pwd input[type="submit"] {
-    width: 40px !important;
-    min-width: 40px !important;
-    max-width: 40px !important;
-  }
-}
-
-/* Restore and harden the native Tistory comment widget rendering. */
-body.has-article-page .docs-comments,
-body .docs-comments {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-body .docs-comments [data-tistory-react-app="Comment"],
-body .docs-comments [data-tistory-react-app="Guestbook"],
-body .docs-comments [id^="entry"][id$="Comment"],
-body .docs-comments .tt-comment-cont,
-body .docs-comments .tt-area-reply {
-  display: flex !important;
-  flex-direction: column !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-body .docs-comments iframe,
-body .docs-comments .tt-comment-cont iframe {
-  display: block !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  border: 0 !important;
-}
-
-/* Mobile Safari zoom guard for every Tistory comment/password control. */
-@media (max-width: 768px) {
-  body .docs-comments input,
-  body .docs-comments textarea,
-  body .docs-comments select,
-  body .docs-comments [contenteditable="true"] {
-    font-size: 16px !important;
-  }
-
-  body .docs-comments .tt-area-write .tt-box-account input,
-  body .docs-comments .tt-area-write .tt-wrap-account input,
-  body .docs-comments .tt-area-write input.tt_txt_user,
-  body .docs-comments .tt-area-write input.tt_inp_g:not([type="checkbox"]) {
-    transform: scale(0.875) !important;
-    transform-origin: left center !important;
-    width: 114.285% !important;
-  }
-
-  body .docs-comments .tt-area-write .tt-cmt,
-  body .docs-comments .tt-area-write textarea.tt_inp_g,
-  body .docs-comments .tt-area-write textarea.tt-cmt,
-  body .docs-comments .tt-area-write [contenteditable="true"] {
-    font-size: 16px !important;
-    line-height: 1.42 !important;
-  }
-}

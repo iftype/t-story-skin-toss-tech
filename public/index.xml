@@ -2,7 +2,7 @@
 <skin>
   <information>
     <name>Dev Docs Tistory</name>
-    <version>0.1.17</version>
+    <version>0.1.0</version>
     <description><![CDATA[개발 문서 사이트 레이아웃을 참고한 티스토리 문서형 스킨입니다. 긴 튜토리얼 글과 코드 블록 가독성에 초점을 맞췄습니다.]]></description>
     <license><![CDATA[Personal and commercial use allowed with attribution.]]></license>
   </information>
@@ -55,24 +55,4 @@
       <value>compact</value>
     </item>
   </liststyle>
-  <variables>
-    <variable>
-      <name>profileEmail</name>
-      <label><![CDATA[프로필 이메일 주소]]></label>
-      <type>STRING</type>
-      <default><![CDATA[]]></default>
-    </variable>
-    <variable>
-      <name>profileGithub</name>
-      <label><![CDATA[프로필 GitHub URL]]></label>
-      <type>STRING</type>
-      <default><![CDATA[]]></default>
-    </variable>
-    <variable>
-      <name>profileLinkedin</name>
-      <label><![CDATA[프로필 LinkedIn URL]]></label>
-      <type>STRING</type>
-      <default><![CDATA[]]></default>
-    </variable>
-  </variables>
 </skin>
