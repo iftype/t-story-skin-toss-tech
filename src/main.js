@@ -39,13 +39,48 @@ function init() {
   updateTocStickyBoundary()
   setupHeadingAnchors()
 
-  syncCommentComposerAvatar()
-  normalizeLegacyComments()
-  trackOpenCommentMenus()
-  setupCommentAvatarLogin()
-  setupCommentReplyClick()
-  renderCommentMarkdown()
-  setupCommentFallback()
+  // --- 샌드박스로 완벽 보호되는 댓글 초기화 구문 ---
+  try {
+    syncCommentComposerAvatar()
+  } catch (e) {
+    console.warn('[Comments Engine] syncCommentComposerAvatar failed', e)
+  }
+
+  try {
+    normalizeLegacyComments()
+  } catch (e) {
+    console.warn('[Comments Engine] normalizeLegacyComments failed', e)
+  }
+
+  try {
+    trackOpenCommentMenus()
+  } catch (e) {
+    console.warn('[Comments Engine] trackOpenCommentMenus failed', e)
+  }
+
+  try {
+    setupCommentAvatarLogin()
+  } catch (e) {
+    console.warn('[Comments Engine] setupCommentAvatarLogin failed', e)
+  }
+
+  try {
+    setupCommentReplyClick()
+  } catch (e) {
+    console.warn('[Comments Engine] setupCommentReplyClick failed', e)
+  }
+
+  try {
+    renderCommentMarkdown()
+  } catch (e) {
+    console.warn('[Comments Engine] renderCommentMarkdown failed', e)
+  }
+
+  try {
+    setupCommentFallback()
+  } catch (e) {
+    console.warn('[Comments Engine] setupCommentFallback failed', e)
+  }
 
   const commentsArea = document.querySelector('.docs-comments')
   if (commentsArea && 'MutationObserver' in window) {
@@ -53,11 +88,23 @@ function init() {
     const cmtObserver = new MutationObserver(() => {
       clearTimeout(cmtTimer)
       cmtTimer = setTimeout(() => {
-        renderCommentMarkdown()
-        setupCommentReplyClick()
+        try {
+          renderCommentMarkdown()
+        } catch (e) {
+          console.warn('[Comments Observer] renderCommentMarkdown failed', e)
+        }
+        try {
+          setupCommentReplyClick()
+        } catch (e) {
+          console.warn('[Comments Observer] setupCommentReplyClick failed', e)
+        }
       }, 100)
     })
-    cmtObserver.observe(commentsArea, { childList: true, subtree: true })
+    try {
+      cmtObserver.observe(commentsArea, { childList: true, subtree: true })
+    } catch (e) {
+      console.warn('[Comments Observer] observe failed', e)
+    }
   }
 
   cleanInlineStyles()

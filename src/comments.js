@@ -1,6 +1,60 @@
 import { marked } from 'marked'
-import { getHljs } from './utils.js'
-import { resolveCodeLanguage } from './code.js'
+
+// CDN Prism이 로드되지 않았을 경우 대비 폴백을 제공하는 동적 게터
+function getPrism() {
+  return window.Prism || { highlightElement: () => {}, languages: {} }
+}
+
+function resolveCodeLanguage(value) {
+  if (!value) return { display: 'text', prism: null }
+  const raw = String(value)
+    .trim()
+    .replace(/^language-/, '')
+    .split(/\s+/)[0]
+    .replace(/[{}"'`]/g, '')
+    
+  const normalized = raw.toLowerCase()
+    
+  // 화면에 보여주는 이름 -> Prism 엔진 이름 매핑
+  const map = {
+    'js': 'jsx',
+    'javascript': 'jsx',
+    'ts': 'tsx',
+    'typescript': 'tsx',
+    'sh': 'bash',
+    'shell': 'bash',
+    'zsh': 'bash',
+    'py': 'python',
+    'yml': 'yaml',
+    'md': 'markdown',
+    'html': 'markup',
+    'xml': 'markup',
+    'svg': 'markup',
+    'c++': 'cpp',
+    'c#': 'csharp',
+    'angelscript': 'cpp',
+    '1c': null,
+    'text': null,
+    'plaintext': null,
+    'plain': null,
+  }
+
+  let prismLang
+  if (normalized in map) {
+    prismLang = map[normalized]
+  } else if (getPrism().languages[normalized]) {
+    prismLang = normalized
+  } else if (/^[a-z0-9-]+$/.test(normalized)) {
+    prismLang = normalized
+  } else {
+    prismLang = null
+  }
+
+  return {
+    display: raw || 'text',
+    prism: prismLang
+  }
+}
 
 export function syncCommentComposerAvatar() {
   const sync = () => {
@@ -232,6 +286,66 @@ export function trackOpenCommentMenus() {
   refresh()
 }
 
+export function setupCommentAvatarLogin() {
+  const attach = () => {
+    const forms = document.querySelectorAll('.docs-comments .tt-area-write')
+    forms.forEach(form => {
+      // Skip if already has tt-inner-g (logged-in user)
+      if (form.querySelector('.tt-inner-g')) return
+
+      const thumb = form.querySelector('.tt-box-thumb')
+      if (!thumb || thumb.dataset.loginAttached) return
+
+      thumb.dataset.loginAttached = 'true'
+      thumb.style.cursor = 'pointer'
+      thumb.title = '로그인하기'
+      thumb.addEventListener('click', (e) => {
+        e.preventDefault()
+        const blogUrl = window.location.origin
+        window.location.href = `https://www.tistory.com/auth/login?redirectUrl=${encodeURIComponent(blogUrl + window.location.pathname)}`
+      })
+    })
+  }
+
+  attach()
+
+  const root = document.querySelector('.docs-comments')
+  if (!root || !('MutationObserver' in window)) return
+
+  const observer = new MutationObserver(attach)
+  observer.observe(root, { childList: true, subtree: true })
+  setTimeout(() => observer.disconnect(), 10000)
+}
+
+export function setupCommentReplyClick() {
+  const attach = () => {
+    document.querySelectorAll('.docs-comments .tt-box-meta').forEach(meta => {
+      if (meta.dataset.replyAttached) return
+      meta.dataset.replyAttached = 'true'
+      
+      const link = meta.querySelector('a') || meta
+      link.style.cursor = 'pointer'
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        const card = meta.closest('.tt-wrap-cmt') || meta.closest('li')
+        const replyBtn = card?.querySelector('.tt-wrap-info .tt-link-comment') || card?.querySelector('.tt-wrap-link-comment a')
+        if (replyBtn) {
+          replyBtn.click()
+        }
+      })
+    })
+  }
+
+  attach()
+
+  const root = document.querySelector('.docs-comments')
+  if (!root || !('MutationObserver' in window)) return
+
+  const observer = new MutationObserver(attach)
+  observer.observe(root, { childList: true, subtree: true })
+  setTimeout(() => observer.disconnect(), 10000)
+}
+
 export function renderCommentMarkdown() {
   const root = document.querySelector('.docs-comments')
   const allComments = Array.from(document.querySelectorAll('.tt_desc, .tt-wrap-desc'))
@@ -239,10 +353,10 @@ export function renderCommentMarkdown() {
     // Keep only the outermost comment elements to prevent double parsing/rendering in nested trees
     return !allComments.some(ancestor => ancestor !== el && ancestor.contains(el))
   })
-  let renderedCount = 0
   
+  let renderedCount = 0
+
   comments.forEach(comment => {
-    try {
     let html = comment.innerHTML
     
     // Tistory auto-prepends the reply mention tag (<em class="tt-txt-mention">@nickname</em>) without spaces.
@@ -260,7 +374,10 @@ export function renderCommentMarkdown() {
     
     const rawText = temp.textContent || temp.innerText || ""
     
-    if (comment.dataset.lastParsedText === rawText) return
+    if (comment.dataset.lastParsedText === rawText) {
+      renderedCount++
+      return
+    }
     
     const mdHtml = marked.parse(rawText)
     
@@ -332,25 +449,19 @@ export function renderCommentMarkdown() {
       block.className = block.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
       const pre = block.parentElement
       const resolved = resolveCodeLanguage(pre.getAttribute('data-ke-language') || 'html')
-      if (resolved.hljs) {
-        block.classList.add(`language-${resolved.hljs}`)
-        block.classList.add(resolved.hljs)
-        getHljs().highlightElement(block)
+      if (resolved.prism) {
+        block.classList.add(`language-${resolved.prism}`)
+        getPrism().highlightElement(block)
       }
     })
     
     comment.dataset.lastParsedText = rawText
-    renderedCount += 1
-    } catch (error) {
-      comment.dataset.commentMarkdownError = 'true'
-      if (window.console && window.console.warn) {
-        window.console.warn('[docs-comments] failed to render comment markdown', error)
-      }
-    }
+    renderedCount++
   })
 
   if (root) {
-    root.classList.toggle('is-comment-markdown-ready', renderedCount > 0 || root.querySelector('.docs-comment-markdown[data-comment-markdown-ready="true"]'))
+    const isReady = renderedCount > 0 || root.querySelector('.docs-comment-markdown[data-comment-markdown-ready="true"]')
+    root.classList.toggle('is-comment-markdown-ready', !!isReady)
     root.dataset.commentNativeCount = String(comments.length)
     root.dataset.commentMarkdownCount = String(root.querySelectorAll('.docs-comment-markdown[data-comment-markdown-ready="true"]').length)
   }
@@ -358,70 +469,4 @@ export function renderCommentMarkdown() {
 
 export function setupCommentFallback() {
   document.querySelectorAll('.docs-comments-legacy').forEach((node) => node.remove())
-}
-
-export function isReactCmtLoaded() {
-  const root = document.querySelector('.docs-comments')
-  if (!root) return false
-  return Boolean(root.querySelector('.tt-comment-cont, .tt-area-write, .tt-list-reply, .tt-item-reply'))
-}
-
-export function setupCommentReplyClick() {
-  const attach = () => {
-    document.querySelectorAll('.docs-comments .tt-box-meta').forEach(meta => {
-      if (meta.dataset.replyAttached) return
-      meta.dataset.replyAttached = 'true'
-      
-      const link = meta.querySelector('a') || meta
-      link.style.cursor = 'pointer'
-      link.addEventListener('click', (e) => {
-        e.preventDefault()
-        const card = meta.closest('.tt-wrap-cmt') || meta.closest('li')
-        const replyBtn = card?.querySelector('.tt-wrap-info .tt-link-comment') || card?.querySelector('.tt-wrap-link-comment a')
-        if (replyBtn) {
-          replyBtn.click()
-        }
-      })
-    })
-  }
-
-  attach()
-
-  const root = document.querySelector('.docs-comments')
-  if (!root || !('MutationObserver' in window)) return
-
-  const observer = new MutationObserver(attach)
-  observer.observe(root, { childList: true, subtree: true })
-  setTimeout(() => observer.disconnect(), 10000)
-}
-
-export function setupCommentAvatarLogin() {
-  const attach = () => {
-    const forms = document.querySelectorAll('.docs-comments .tt-area-write')
-    forms.forEach(form => {
-      // Skip if already has tt-inner-g (logged-in user)
-      if (form.querySelector('.tt-inner-g')) return
-
-      const thumb = form.querySelector('.tt-box-thumb')
-      if (!thumb || thumb.dataset.loginAttached) return
-
-      thumb.dataset.loginAttached = 'true'
-      thumb.style.cursor = 'pointer'
-      thumb.title = '로그인하기'
-      thumb.addEventListener('click', (e) => {
-        e.preventDefault()
-        const blogUrl = window.location.origin
-        window.location.href = `https://www.tistory.com/auth/login?redirectUrl=${encodeURIComponent(blogUrl + window.location.pathname)}`
-      })
-    })
-  }
-
-  attach()
-
-  const root = document.querySelector('.docs-comments')
-  if (!root || !('MutationObserver' in window)) return
-
-  const observer = new MutationObserver(attach)
-  observer.observe(root, { childList: true, subtree: true })
-  setTimeout(() => observer.disconnect(), 10000)
 }
