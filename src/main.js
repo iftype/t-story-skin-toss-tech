@@ -8,6 +8,7 @@ function getPrism() {
 }
 
 const STORAGE_KEY = 'docs-theme'
+let featuredAutoplayTimer = null
 
 // token 색상 CSS를 JS에서 직접 inject → CSS 탭 상태와 무관하게 항상 동작 (Tokyo Night 테마 적용)
 function injectCodeCSS() {
@@ -1867,6 +1868,7 @@ function init() {
   showEmptyStateWhenNeeded()
   normalizeListMeta()
   normalizeListCards()
+  hydrateHomeFeatured()
   assignHeadingIds()
   generateTOC()
   setupHeadingAnchors()
@@ -2099,6 +2101,295 @@ function setupHeadingAnchors() {
     heading.appendChild(anchor)
   })
 }
+
+function cleanTextContent(text) {
+  return (text || '').replace(/\s+/g, ' ').trim()
+}
+
+function placeholderSeed(href = '', title = '') {
+  let pathname = ''
+  try {
+    pathname = href ? new URL(href, window.location.origin).pathname : ''
+  } catch {
+    pathname = href || ''
+  }
+
+  return `${pathname.replace(/\/$/, '')}|${cleanTextContent(title)}`
+}
+
+function generateStablePlaceholder(str, labelSource = str) {
+  let hash = 0
+  if (str) {
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash)
+    }
+  }
+  hash = Math.abs(hash)
+
+  // Keep generated placeholders in a restrained cyan-blue range.
+  const baseHue = 190 + (hash % 28)
+  const targetHue = 206 + ((hash >> 4) % 24)
+  const sat = 68 + ((hash >> 2) % 10)
+  const light = 48 + ((hash >> 6) % 8)
+  
+  const gradient = `linear-gradient(135deg, hsl(${baseHue}, ${sat}%, ${light}%) 0%, hsl(${targetHue}, ${sat}%, ${light}%) 100%)`
+
+  const source = cleanTextContent(labelSource || str || '')
+  const label = (source.match(/[A-Za-z0-9가-힣]/g) || ['#']).slice(0, 2).join('').toUpperCase()
+
+  return { gradient, label }
+}
+
+function extractListPreviewInfo(articleRoot) {
+  if (!articleRoot) return { summary: '' }
+
+  const textFromNode = (node) => cleanTextContent(node?.textContent || '')
+  
+  // Query all heading and body content elements in strict pre-order document tree order
+  const nodes = Array.from(articleRoot.querySelectorAll('h2, h3, p, ul, ol'))
+  const firstH2Index = nodes.findIndex((node) => node.tagName === 'H2')
+
+  const collected = []
+  const appendText = (text) => {
+    const normalized = cleanTextContent(text)
+    if (!normalized) return
+    collected.push(normalized)
+  }
+
+  const takeFromRange = (rangeNodes, stopAtHeading = true) => {
+    for (const node of rangeNodes) {
+      if (stopAtHeading && (node.tagName === 'H2' || node.tagName === 'H3' || node.closest('blockquote, pre, table'))) {
+        break
+      }
+      if (node.closest('blockquote, pre, table')) continue
+      
+      appendText(textFromNode(node))
+      if (cleanTextContent(collected.join(' ')).length >= 220) break
+    }
+  }
+
+  const explicitPreviewNode = articleRoot.querySelector('[data-list-preview-section], [data-preview-section]')
+  if (explicitPreviewNode) {
+    takeFromRange(Array.from(explicitPreviewNode.querySelectorAll('p, ul, ol')), false)
+  }
+
+  if (collected.length === 0) {
+    const previewHeadingIndex = nodes.findIndex((node) => {
+      if (node.tagName !== 'H2' && node.tagName !== 'H3') return false
+      const text = textFromNode(node).replace(/\[preview\]/gi, '').trim()
+      const startsWithIntro = /^(?:들어가며|시작하며|소개|intro)/i.test(text)
+      return startsWithIntro && text.length <= 15
+    })
+    if (previewHeadingIndex >= 0) {
+      takeFromRange(nodes.slice(previewHeadingIndex + 1))
+    }
+  }
+
+  if (collected.length === 0 && firstH2Index > 0) {
+    takeFromRange(nodes.slice(0, firstH2Index))
+  }
+
+  if (collected.length === 0 && firstH2Index >= 0) {
+    takeFromRange(nodes.slice(firstH2Index + 1))
+  }
+
+  if (collected.length === 0) {
+    takeFromRange(nodes)
+  }
+
+  const summary = cleanTextContent(collected.join(' ')).slice(0, 220)
+  return { summary }
+}
+
+async function hydrateHomeFeatured() {
+  const root = document.querySelector('[data-home-featured]')
+  if (!root || !document.body.classList.contains('is-home-page')) return
+
+  if (root.classList.contains('is-hydrated') && root.dataset.source === 'sidebar') return
+
+  const recentLinks = Array.from(document.querySelectorAll('.docs-nav__list--recent a'))
+  let slides = []
+
+  if (recentLinks.length > 0) {
+    root.dataset.source = 'sidebar'
+    root.classList.remove('is-hydrated')
+
+    const slidePromises = recentLinks.map(async (linkEl) => {
+      const href = linkEl.getAttribute('href')
+      const title = cleanTextContent(linkEl.textContent || '')
+      try {
+        const response = await fetch(href)
+        if (!response.ok) throw new Error('Fetch failed')
+        const html = await response.text()
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(html, 'text/html')
+
+        let imageSrc = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || ''
+        if (imageSrc && (imageSrc.includes('tistory.com/static') || imageSrc.includes('img_blank'))) {
+          imageSrc = ''
+        }
+        if (!imageSrc) {
+          const bodyImg = doc.querySelector('.docs-article__body img, .article-body img, [data-docs-article] img')
+          if (bodyImg) {
+            imageSrc = bodyImg.getAttribute('src') || ''
+          }
+        }
+
+        const articleRoot = doc.querySelector('[data-docs-article], .docs-article__body, .article-body')
+        let summary = ''
+        if (articleRoot) {
+          summary = extractListPreviewInfo(articleRoot).summary
+        }
+        if (!summary) {
+          summary = cleanTextContent(doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || '')
+        }
+        if (!summary) {
+          const pTags = Array.from(doc.querySelectorAll('.docs-article__body p, .article-body p, [data-docs-article] p')).slice(0, 3)
+          summary = cleanTextContent(pTags.map(p => p.textContent).join(' ')).slice(0, 220)
+        }
+
+        return { href, title, summary, imageSrc }
+      } catch (e) {
+        console.warn(`[Featured Carousel] Async fetch error for ${href}:`, e)
+        return { href, title, summary: '', imageSrc: '' }
+      }
+    })
+
+    slides = await Promise.all(slidePromises)
+  }
+
+  if (slides.length === 0) {
+    root.dataset.source = 'list'
+    const postElements = Array.from(document.querySelectorAll('.docs-list-item[data-card-href]')).slice(0, 3)
+    if (postElements.length === 0) return
+
+    slides = postElements.map(source => {
+      const href = source.getAttribute('data-card-href') || source.querySelector('.docs-list-item__main-link')?.getAttribute('href') || '#'
+      const title = cleanTextContent(source.querySelector('.docs-list-item__title')?.textContent || '')
+      const summary = cleanTextContent(source.querySelector('[data-list-summary]')?.textContent || '')
+      const image = source.querySelector('.docs-list-item__thumb img')
+      const imageSrc = image?.getAttribute('src') || ''
+      return { href, title, summary, imageSrc }
+    })
+  }
+
+  let currentSlide = 0
+
+  const link = root.querySelector('.docs-home-featured__link')
+  const titleNode = root.querySelector('.docs-home-featured__title')
+  const summaryNode = root.querySelector('.docs-home-featured__summary')
+  const imageNode = root.querySelector('.docs-home-featured__media img')
+  const mediaContainer = root.querySelector('.docs-home-featured__media')
+
+  function startAutoplay() {
+    stopAutoplay()
+    if (slides.length <= 1) return
+    featuredAutoplayTimer = setInterval(() => {
+      showSlide(currentSlide + 1)
+    }, 7000)
+  }
+
+  function stopAutoplay() {
+    if (featuredAutoplayTimer) {
+      clearInterval(featuredAutoplayTimer)
+      featuredAutoplayTimer = null
+    }
+  }
+
+  function showSlide(index) {
+    if (index < 0) index = slides.length - 1
+    if (index >= slides.length) index = 0
+    currentSlide = index
+
+    const data = slides[currentSlide]
+    
+    root.classList.remove('is-hydrated')
+    
+    setTimeout(() => {
+      if (link) link.setAttribute('href', data.href)
+      if (titleNode) titleNode.textContent = data.title
+      if (summaryNode) {
+        summaryNode.textContent = data.summary
+        summaryNode.hidden = !data.summary
+      }
+      
+      const existingEmoji = mediaContainer?.querySelector('.docs-home-featured__emoji')
+      if (existingEmoji) existingEmoji.remove()
+
+      const hasImage = data.imageSrc && !data.imageSrc.includes('[##_')
+      if (imageNode && hasImage) {
+        imageNode.setAttribute('src', data.imageSrc)
+        imageNode.setAttribute('alt', data.title)
+        imageNode.style.display = ''
+        if (mediaContainer) {
+          mediaContainer.classList.remove('is-empty')
+          mediaContainer.classList.remove('is-generated')
+          mediaContainer.style.background = ''
+          mediaContainer.style.display = ''
+        }
+        root.classList.remove('has-no-image')
+      } else {
+        if (imageNode) {
+          imageNode.setAttribute('src', '')
+          imageNode.setAttribute('alt', '')
+          imageNode.style.display = 'none'
+        }
+        if (mediaContainer) {
+          mediaContainer.classList.add('is-empty')
+          mediaContainer.classList.add('is-generated')
+          
+          const { gradient, label } = generateStablePlaceholder(placeholderSeed(data.href, data.title), data.title)
+          mediaContainer.style.setProperty('background', gradient, 'important')
+          mediaContainer.style.display = ''
+          
+          const labelEl = document.createElement('div')
+          labelEl.className = 'docs-home-featured__emoji'
+          labelEl.textContent = label
+          mediaContainer.appendChild(labelEl)
+        }
+        root.classList.remove('has-no-image')
+      }
+
+      root.classList.add('is-hydrated')
+      root.classList.add('is-ready')
+    }, 150)
+  }
+
+  showSlide(0)
+  startAutoplay()
+
+  const copyContainer = root.querySelector('.docs-home-featured__copy')
+  if (copyContainer && slides.length > 1) {
+    let controls = copyContainer.querySelector('.featured-nav-controls')
+    if (!controls) {
+      controls = document.createElement('div')
+      controls.className = 'featured-nav-controls'
+      controls.innerHTML = `
+        <button class="featured-nav-btn prev" aria-label="이전 슬라이드">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="featured-nav-btn next" aria-label="다음 슬라이드">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      `
+      copyContainer.appendChild(controls)
+
+      controls.querySelector('.prev').addEventListener('click', (e) => {
+        e.preventDefault()
+        showSlide(currentSlide - 1)
+        startAutoplay()
+      })
+      controls.querySelector('.next').addEventListener('click', (e) => {
+        e.preventDefault()
+        showSlide(currentSlide + 1)
+        startAutoplay()
+      })
+    }
+  }
+
+  root.hidden = false
+}
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init)
 } else {

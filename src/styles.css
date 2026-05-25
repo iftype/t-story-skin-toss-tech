@@ -155,3 +155,305 @@ body.has-list-page .docs-empty-state {
     max-width: none !important;
   }
 }
+
+/* ==========================================================================
+   Premium Overrides: Dark Mode Header Transition Synchronization (Issue 3)
+   ========================================================================== */
+.docs-searchbar {
+  transition: border-color 0.25s ease, background-color 0.25s ease !important;
+}
+
+.docs-icon-button {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.15s ease !important;
+}
+
+/* ==========================================================================
+   Premium Featured Slider (docs-home-overview & docs-home-featured)
+   ========================================================================== */
+
+/* 1. Base display rules - Hidden by default on non-home pages */
+.docs-home-overview,
+.docs-home-featured,
+.docs-home-profile,
+.docs-home-latest {
+  display: none !important;
+}
+
+/* 2. Desktop featured slider container styling */
+body.is-home-page .docs-home-overview {
+  grid-column: 1 / -1 !important;
+  display: block !important;
+  width: min(1024px, calc(100vw - 80px)) !important;
+  max-width: none !important;
+  margin: 24px auto 36px !important;
+}
+
+body.is-home-page .docs-home-featured {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+body.is-home-page .docs-home-featured[hidden] {
+  display: none !important;
+}
+
+body.is-home-page .docs-home-featured__link {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.25fr) !important;
+  gap: 48px !important;
+  align-items: stretch !important;
+  height: 260px !important;
+}
+
+body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+body.is-home-page .docs-home-featured__media {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  background: var(--bg-soft) !important;
+  transition: background 0.4s ease, opacity 0.4s ease !important;
+}
+
+body.is-home-page .docs-home-featured__media.is-empty {
+  background: linear-gradient(135deg, #3182f6 0%, #60a5fa 100%) !important;
+}
+
+html[data-ui-theme="dark"] body.is-home-page .docs-home-featured__media.is-empty {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
+}
+
+body.is-home-page .docs-home-featured__media img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+body.is-home-page .docs-home-featured__media.is-empty img {
+  display: none !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__media img {
+  transform: scale(1.05) !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__title {
+  color: var(--accent-strong) !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__emoji {
+  transform: scale(1.05) !important;
+}
+
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__media {
+  background: var(--bg-soft) !important;
+  animation: pulse-featured 1.5s infinite ease-in-out !important;
+}
+
+@keyframes pulse-featured {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+body.is-home-page .docs-home-featured__copy {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+}
+
+body.is-home-page .docs-home-featured__title {
+  display: -webkit-box !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  color: var(--text-heading) !important;
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.03em !important;
+  word-break: keep-all !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+body.is-home-page .docs-home-featured__summary {
+  display: -webkit-box !important;
+  max-width: 100% !important;
+  margin: 12px 0 0 !important;
+  overflow: hidden !important;
+  color: var(--text-muted) !important;
+  font-size: 15.5px !important;
+  line-height: 1.65 !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+}
+
+/* Premium Floating Emoji Placeholders */
+.docs-home-featured__emoji {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 72px !important;
+  user-select: none !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 0 12px 34px rgba(0, 0, 0, 0.24) !important;
+  animation: emoji-float 3s ease-in-out infinite !important;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes emoji-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.05); }
+}
+
+/* Premium slider navigation buttons controls */
+.featured-nav-controls {
+  display: flex !important;
+  gap: 16px !important;
+  margin-top: auto !important;
+  padding-top: 16px !important;
+  justify-content: flex-start !important;
+}
+
+.featured-nav-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  background: var(--bg-soft) !important;
+  border: 1px solid var(--line-soft) !important;
+  color: var(--text-muted) !important;
+  cursor: pointer !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.featured-nav-btn:hover {
+  background: var(--line-soft) !important;
+  color: var(--text-heading) !important;
+  transform: scale(1.06) !important;
+}
+
+.featured-nav-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.featured-nav-btn svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__media img,
+body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__emoji {
+  transform: scale(1) !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__title {
+  color: var(--text-heading) !important;
+}
+
+/* ==========================================================================
+   Premium Mobile Layout Locks for Slide Height Shift (Issue 4)
+   ========================================================================== */
+@media (max-width: 760px) {
+  body.is-home-page .docs-home-overview {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 20px auto 16px !important;
+    transform: none !important;
+  }
+
+  body.is-home-page .docs-home-featured {
+    width: 100% !important;
+    max-width: none !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+  }
+
+  body.is-home-page .docs-home-featured__link,
+  body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto minmax(154px, auto) !important;
+    grid-auto-flow: row !important;
+    gap: 18px !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  body.is-home-page .docs-home-featured__media {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  body.is-home-page .docs-home-featured__copy {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    display: grid !important;
+    grid-template-rows: minmax(0, 1fr) 44px !important;
+    gap: 12px !important;
+    min-height: 154px !important;
+    max-height: 154px !important;
+    overflow: hidden !important;
+  }
+
+  body.is-home-page .docs-home-featured__info {
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+  }
+
+  body.is-home-page .docs-home-featured__title {
+    font-size: clamp(24px, 5.8vw, 30px) !important;
+    line-height: 1.2 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    display: -webkit-box !important;
+    max-height: calc(1.52em * 2) !important;
+    margin-top: 0 !important;
+    overflow: hidden !important;
+    font-size: clamp(14px, 3.2vw, 15px) !important;
+    line-height: 1.52 !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.is-home-page .featured-nav-controls {
+    align-self: end !important;
+    justify-content: center !important;
+    gap: 22px !important;
+    height: 44px !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  body.is-home-page .featured-nav-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  body.is-home-page .featured-nav-btn svg {
+    width: 19px !important;
+    height: 19px !important;
+  }
+}
