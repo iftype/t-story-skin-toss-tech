@@ -1,154 +1,221 @@
-html[data-ui-theme="light"] {
-  --header-control-bg: rgba(255, 255, 255, 0.54);
-  --header-control-bg-hover: rgba(242, 244, 246, 0.9);
-  --header-control-border: rgba(51, 61, 75, 0.08);
-  --header-control-border-hover: rgba(51, 61, 75, 0.14);
-}
-
-html[data-ui-theme="dark"] {
-  --header-control-bg: rgba(255, 255, 255, 0.035);
-  --header-control-bg-hover: rgba(255, 255, 255, 0.07);
-  --header-control-border: rgba(255, 255, 255, 0.06);
-  --header-control-border-hover: rgba(156, 196, 255, 0.2);
-}
+/* ==========================================================================
+   Flat top navigation
+   ========================================================================== */
 
 .docs-topbar {
-  background: color-mix(in srgb, var(--bg) 82%, transparent) !important;
-  border-bottom-color: color-mix(in srgb, var(--line-soft) 70%, transparent) !important;
-}
-
-.docs-searchbar {
-  border-color: var(--header-control-border) !important;
-  background: var(--header-control-bg) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 30 !important;
+  width: 100% !important;
+  min-height: 60px !important;
+  margin: 0 !important;
+  padding: 0 max(40px, calc((100vw - 1200px) / 2)) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line-soft) !important;
+  border-radius: 0 !important;
+  background: var(--bg) !important;
   box-shadow: none !important;
-  border-radius: 16px !important;
-  transition:
-    border-color 0.18s ease,
-    background-color 0.18s ease;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  overflow: visible !important;
 }
 
-.docs-icon-button {
-  border: 1px solid transparent !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 50% !important;
-  transition:
-    background-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.15s ease;
-}
-
-.docs-searchbar:hover,
-.docs-searchbar:focus-within {
-  border-color: var(--header-control-border-hover) !important;
-  background: var(--header-control-bg-hover) !important;
-}
-
-.docs-icon-button:hover,
-.docs-icon-button:focus-visible {
-  background: var(--header-control-bg-hover) !important;
-}
-
-/* ==========================================================================
-   Owner/Admin Write & Manage Pill Buttons (Left Logo Side)
-   ========================================================================== */
-.docs-topbar__left-admin {
-  display: none !important;
-  align-items: center;
-  gap: 8px;
-  margin-left: 12px;
-}
-
-/* Instant display via pure CSS :has() checking when admin-bar loads in the DOM */
-body.is-admin .docs-topbar__left-admin,
-body:has(#tistory-admin-bar) .docs-topbar__left-admin {
-  display: inline-flex !important;
-}
-
-.docs-topbar__left-admin .docs-toplink {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 6px !important;
-  transition: all 0.18s ease;
-  line-height: 1;
-  border: 1px solid transparent !important;
-  cursor: pointer;
-}
-
-.docs-topbar__left-admin .docs-toplink:not(.docs-toplink--write) {
-  color: var(--text-muted) !important;
-  background: transparent !important;
-}
-
-.docs-topbar__left-admin .docs-toplink:not(.docs-toplink--write):hover {
-  color: var(--text) !important;
-  background: var(--header-control-bg-hover) !important;
-}
-
-.docs-topbar__left-admin .docs-toplink--write {
-  display: inline-flex !important;
-  color: #ffffff !important;
-  background: #3182f6 !important; /* Toss brand blue */
-  border-color: #3182f6 !important;
-}
-
-.docs-topbar__left-admin .docs-toplink--write:hover {
-  background: #1b64da !important; /* Deeper blue hover for light mode */
-  border-color: #1b64da !important;
-  transform: translateY(-1px);
-}
-
-/* Elegant Dark Theme override for vivid brand presentation */
-html[data-ui-theme="dark"] .docs-topbar__left-admin .docs-toplink--write {
-  background: #3182f6 !important;
-  border-color: #3182f6 !important;
-  color: #ffffff !important;
-}
-
-html[data-ui-theme="dark"] .docs-topbar__left-admin .docs-toplink--write:hover {
-  background: #4f94ff !important; /* Softer, slightly brighter blue on dark hover */
-  border-color: #4f94ff !important;
-}
-
-@media (max-width: 760px) {
-  .docs-topbar__left-admin {
-    gap: 6px;
-    margin-left: 6px;
-  }
-  .docs-topbar__left-admin .docs-toplink {
-    font-size: 11px;
-    padding: 4px 10px;
+@media (min-width: 1180px) {
+  .docs-topbar {
+    padding-right: max(40px, calc((100vw - 1024px) / 2)) !important;
+    padding-left: max(40px, calc((100vw - 1024px) / 2)) !important;
   }
 }
 
-.docs-searchbar__input {
-  color: var(--text) !important;
+.docs-topbar__left,
+.docs-topbar__right {
+  gap: 24px !important;
 }
 
-.docs-searchbar__input::placeholder {
-  color: var(--text-soft) !important;
-  opacity: 0.9 !important;
+.docs-topbar__brand {
+  flex: none !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--text-heading) !important;
+  font-size: 23px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+
+.docs-topbar__nav {
+  display: flex !important;
+  align-items: center !important;
+  gap: 22px !important;
 }
 
 .docs-topbar__nav-link {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
   color: var(--text-muted) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
 }
 
 .docs-topbar__nav-link:hover,
 .docs-topbar__nav-link:focus-visible {
+  background: transparent !important;
+  color: var(--text-heading) !important;
+}
+
+.docs-searchbar {
+  min-height: 36px !important;
+  width: 190px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 999px !important;
+  background: var(--bg-soft) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.docs-searchbar__icon {
+  color: var(--text-soft) !important;
+  font-size: 14px !important;
+}
+
+.docs-searchbar__input {
   color: var(--text) !important;
+  font-size: 14px !important;
+}
+
+.docs-searchbar__input::placeholder {
+  color: var(--text-soft) !important;
+}
+
+.docs-icon-button {
+  min-width: 36px !important;
+  min-height: 36px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: var(--text-muted) !important;
+  box-shadow: none !important;
+}
+
+.docs-icon-button:hover,
+.docs-icon-button:focus-visible {
+  background: var(--accent-soft) !important;
+  color: var(--text-heading) !important;
+}
+
+.docs-icon-button--menu span {
+  width: 14px !important;
+}
+
+.theme-mark {
+  font-size: 14px !important;
+}
+
+.docs-profile-actions {
+  display: none !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin-top: 10px !important;
+}
+
+body.is-admin .docs-profile-actions,
+body:has(#tistory-admin-bar) .docs-profile-actions {
+  display: flex !important;
+}
+
+.docs-profile-avatar {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: none !important;
+  width: 44px !important;
+  height: 44px !important;
+  overflow: hidden !important;
+  border-radius: 999px !important;
+  background: var(--bg-soft) !important;
+  color: var(--text-muted) !important;
+  box-shadow: none !important;
+}
+
+.docs-profile-avatar__image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.docs-profile-avatar__fallback {
+  display: none !important;
+  color: var(--text-muted) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+}
+
+.docs-profile-avatar.is-fallback .docs-profile-avatar__fallback,
+.docs-profile-avatar__image[hidden] + .docs-profile-avatar__fallback {
+  display: grid !important;
+}
+
+.docs-profile-actions__link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 30px !important;
+  padding: 0 10px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  color: var(--text-muted) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease !important;
+}
+
+.docs-profile-actions__link:hover {
+  color: var(--accent-strong) !important;
+  border-color: var(--line) !important;
 }
 
 @media (max-width: 760px) {
+  .docs-topbar-profile-avatar {
+    display: none !important;
+  }
+
   .docs-topbar {
-    padding-inline: 14px !important;
+    min-height: 60px !important;
+    gap: 10px !important;
+    padding: 0 16px !important;
+  }
+
+  .docs-topbar__left {
+    flex: 0 0 auto !important;
+    gap: 12px !important;
+  }
+
+  .docs-topbar__brand {
+    font-size: 23px !important;
+  }
+
+  .docs-topbar__right {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    gap: 10px !important;
+  }
+
+  .docs-topbar__nav {
+    display: none !important;
   }
 
   .docs-searchbar {
-    border-radius: 14px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 10px !important;
   }
 }

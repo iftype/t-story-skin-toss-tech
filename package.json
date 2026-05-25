@@ -1,13 +1,15 @@
 {
   "name": "tistory-dev-docs-skin",
-  "version": "0.1.15",
+  "version": "2.0.0",
   "description": "A Toss Tech blog style Tistory skin",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "render:local": "node scripts/render-local-skin.mjs",
+    "test:local": "npm run build && npm run render:local && node tests/local-smoke.mjs"
   },
   "devDependencies": {
     "playwright": "^1.60.0",

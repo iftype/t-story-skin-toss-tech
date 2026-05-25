@@ -35,6 +35,14 @@ jobs:
             exit 1
           fi
 
+      - name: Verify ZIP Package Is Flat
+        run: |
+          if unzip -Z1 dist/tistory-skin-toss-tech.zip | grep -q '/'; then
+            echo "Error: release zip must not contain nested paths."
+            unzip -Z1 dist/tistory-skin-toss-tech.zip
+            exit 1
+          fi
+
       - name: Create GitHub Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:

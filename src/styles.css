@@ -31,7 +31,11 @@ body,
 .docs-paging__number,
 .docs-icon-button,
 .category-toggle,
-.docs-list-item__ghost {
+.docs-toplink,
+.docs-searchbar,
+.docs-list-item__ghost,
+.docs-profile-actions__link,
+.admin-only {
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
@@ -93,14 +97,1383 @@ body.has-list-page .docs-list-item__thumb {
   transition: none !important;
 }
 
-/* ==========================================================================
-   Premium Overrides for Search Empty State & H1 Page Head Visibility
-   ========================================================================== */
+body.has-list-page .docs-list-item__title {
+  color: #111827 !important;
+}
 
-/* 1. Absolute override to ensure the list page head title (h1) is strictly hidden on home and category index views */
-body.is-home-page .docs-page-head,
+.docs-toc__nav a.is-active,
+.docs-toc__nav a[aria-current="true"] {
+  display: inline-block !important;
+  transform: matrix(1, 0, 0, 1, 2, 0) !important;
+}
+
+/* Home list composition - Premium 2-column grid layout for top overview only */
+.docs-home-overview,
+.docs-home-featured,
+.docs-home-profile,
+.docs-home-latest {
+  display: none !important;
+}
+
+body.is-home-page .docs-home-overview {
+  grid-column: 1 / -1 !important;
+  display: block !important; /* Full width block */
+  width: min(1024px, calc(100vw - 80px)) !important;
+  max-width: none !important;
+  margin: 56px 0 68px 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Header profile avatar circular styling */
+.docs-topbar-profile-avatar {
+  display: block !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  background: var(--bg-soft) !important;
+  margin: 0 -12px 0 8px !important; /* Narrow distance to logo */
+  transition: transform 0.2s ease !important;
+}
+
+.docs-topbar-profile-avatar:hover {
+  transform: scale(1.08) !important;
+}
+
+.docs-topbar-profile-avatar img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Featured Card slide controls */
+.featured-nav-controls {
+  display: flex !important;
+  gap: 16px !important;
+  margin-top: auto !important; /* Stable anchoring at the bottom of the left column */
+  padding-top: 24px !important; /* Spacing fallback if text is long */
+  justify-content: center !important; /* Centered under text */
+  margin-left: 0 !important;
+}
+
+.featured-nav-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  background: var(--bg-soft) !important;
+  border: 1px solid var(--line-soft) !important;
+  color: var(--text-muted) !important;
+  cursor: pointer !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.featured-nav-btn:hover {
+  background: var(--line-soft) !important;
+  color: var(--text-heading) !important;
+  transform: scale(1.06) !important;
+}
+
+.featured-nav-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.featured-nav-btn svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+body.is-home-page .docs-home-featured {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+body.is-home-page .docs-home-featured[hidden] {
+  display: none !important;
+}
+
+body.is-home-page .docs-home-featured__link {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.25fr) !important; /* Large visual layout */
+  gap: 48px !important;
+  align-items: stretch !important; /* Equal height columns for stable buttons */
+  height: 260px !important; /* Shorter, more balanced card height */
+}
+
+/* Collapse grid to a single column when the slide has no image */
+body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+@media (max-width: 960px) {
+  body.is-home-page .docs-home-featured__link {
+    gap: 24px !important;
+    height: 230px !important; /* Proportionally shorter on medium viewports */
+  }
+
+  body.is-home-page .docs-home-featured__title {
+    font-size: 30px !important; /* Slightly smaller title on medium screens */
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    font-size: 14.5px !important;
+  }
+}
+
+/* Featured card skeleton state */
+body.is-home-page .docs-home-featured {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  transform: none !important;
+  min-height: 260px !important; /* Pre-allocate space to fully eliminate layout shift flicker */
+  opacity: 0.85;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated {
+  opacity: 1 !important;
+}
+
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__title {
+  display: block !important;
+  background: var(--bg-soft) !important;
+  color: transparent !important;
+  height: 32px !important;
+  width: 80% !important;
+  border-radius: 6px !important;
+  animation: pulse-featured 1.5s infinite ease-in-out !important;
+}
+
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__summary {
+  display: block !important;
+  background: var(--bg-soft) !important;
+  color: transparent !important;
+  height: 18px !important;
+  width: 60% !important;
+  border-radius: 4px !important;
+  margin-top: 14px !important;
+  animation: pulse-featured 1.5s infinite ease-in-out !important;
+}
+
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__media {
+  background: var(--bg-soft) !important;
+  animation: pulse-featured 1.5s infinite ease-in-out !important;
+}
+
+@keyframes pulse-featured {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+body.is-home-page .docs-home-featured__copy {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important; /* Push buttons cleanly to the bottom */
+  height: 100% !important;
+}
+
+body.is-home-page .docs-home-featured__title {
+  display: -webkit-box !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  color: var(--text-heading) !important;
+  font-size: 38px !important; /* Bold, commanding title */
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.03em !important;
+  word-break: keep-all !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+body.is-home-page .docs-home-featured__summary {
+  display: -webkit-box !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  color: var(--text-muted) !important;
+  font-size: 15.5px !important;
+  line-height: 1.65 !important;
+  word-break: keep-all !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+body.is-home-page .docs-home-featured__media {
+  position: relative !important; /* Absolute positioning reference */
+  width: 100% !important;
+  height: 100% !important; /* Lock height to match container */
+  overflow: hidden !important;
+  border-radius: 16px !important; /* Premium wide rounding */
+  background: var(--bg-soft) !important;
+  transition: background 0.4s ease, opacity 0.4s ease !important;
+}
+
+body.is-home-page .docs-home-featured__media.is-empty {
+  background: linear-gradient(135deg, #3182f6 0%, #60a5fa 100%) !important; /* Premium Toss Cool Blue Gradient */
+}
+
+html[data-ui-theme="dark"] body.is-home-page .docs-home-featured__media.is-empty {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important; /* Deep Premium Navy Gradient in Dark Mode */
+}
+
+body.is-home-page .docs-home-featured__media img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Force-hide img inside empty media containers — prevents previous slide image from bleeding through */
+body.is-home-page .docs-home-featured__media.is-empty img {
+  display: none !important;
+}
+
+/* Zoom transition is now handled cleanly by unified selectors below */
+
+/* Premium Dynamic Emoji Placeholders Floating animations */
+.docs-home-featured__emoji {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 72px !important; /* Large modern emoji style */
+  user-select: none !important;
+  animation: emoji-float 3s ease-in-out infinite !important; /* Subtly floats in the center */
+}
+
+@keyframes emoji-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.05);
+  }
+}
+
+body.is-home-page .docs-list-item__title {
+  color: #111827 !important;
+}
+
+html[data-ui-theme="dark"] body.is-home-page .docs-list-item__title {
+  color: var(--text-heading) !important;
+}
+
+
+/* Sidebar should own the mobile layer, not sit under the sticky header. */
+@media (max-width: 1100px) {
+  .docs-sidebar {
+    top: 0 !important;
+    z-index: 120 !important;
+  }
+
+  .docs-sidebar-overlay {
+    z-index: 110 !important;
+  }
+
+  .docs-topbar {
+    z-index: 60 !important;
+  }
+
+  body.nav-open {
+    overflow: hidden !important;
+  }
+
+  .docs-sidebar .docs-profile-avatar {
+    width: 54px !important;
+    height: 54px !important;
+  }
+}
+
+/* Mobile list keeps the compact split layout and avoids collapsed/overlapping rows. */
+@media (max-width: 760px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+
+  .docs-topbar-profile-avatar {
+    display: none !important;
+  }
+
+  body.is-home-page .docs-home-overview {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 12px 0 24px 0 !important;
+    transform: none !important;
+  }
+
+  body.is-home-page .docs-home-profile {
+    display: none !important;
+  }
+
+  body.is-home-page .docs-home-featured {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  body.is-home-page .docs-home-featured__link {
+    display: flex !important;
+    flex-direction: column-reverse !important; /* Image on top, copy below */
+    gap: 18px !important;
+    height: auto !important; /* Reset locked height on mobile */
+  }
+
+  /* Stable height on mobile for Featured card without image */
+  body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+    min-height: 180px !important;
+  }
+
+  body.is-home-page .docs-home-featured__copy {
+    display: grid !important;
+    grid-template-rows: minmax(0, 1fr) 44px !important;
+    gap: 12px !important;
+    height: 154px !important;
+    min-height: 154px !important;
+    max-height: 154px !important;
+    overflow: hidden !important;
+  }
+
+  body.is-home-page .featured-nav-controls {
+    margin-top: 16px !important;
+    padding-top: 0 !important;
+  }
+
+  body.is-home-page .docs-home-featured__media {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    border-radius: 12px !important;
+  }
+
+  body.is-home-page .docs-home-featured__title {
+    font-size: 20px !important;
+    line-height: 1.35 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    margin-top: 8px !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.is-home-page .docs-home-latest {
+    display: none !important;
+  }
+
+  body.has-list-page .docs-content,
+  .docs-content:has(.docs-list-item) {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: none !important;
+    gap: 0 !important;
+    padding-right: 24px !important;
+    padding-left: 24px !important;
+  }
+
+  body.has-list-page .docs-list-item {
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.has-list-page .docs-list-item__inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 106px !important;
+    gap: 16px !important;
+    align-items: center !important;
+    min-height: 80px !important;
+    padding: 14px 0 !important;
+    border-bottom: 1px solid var(--line-soft) !important;
+  }
+
+  body.has-list-page .docs-list-item__content {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    gap: 12px !important;
+    align-content: center !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb-link {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb {
+    width: 106px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+    border-radius: 8px !important;
+  }
+
+  body.has-list-page .docs-list-item__title {
+    color: var(--text-heading) !important;
+    font-size: 16px !important;
+    line-height: 1.36 !important;
+    -webkit-line-clamp: 3 !important;
+  }
+
+  body.has-list-page .docs-list-item__summary:not([hidden]) {
+    display: -webkit-box !important;
+    margin: 6px 0 0 !important;
+    color: var(--text-muted) !important;
+    font-size: 13.5px !important;
+    line-height: 1.45 !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+    word-break: keep-all !important;
+  }
+
+  body.has-list-page .docs-list-item__meta {
+    flex-wrap: wrap !important;
+    color: var(--text-soft) !important;
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.has-list-page .docs-content,
+  .docs-content:has(.docs-list-item) {
+    padding-right: 16px !important;
+    padding-left: 16px !important;
+  }
+
+  body.has-list-page .docs-list-item__inner {
+    grid-template-columns: minmax(0, 1fr) 96px !important;
+    min-height: 72px !important;
+    gap: 12px !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb {
+    width: 96px !important;
+    height: 54px !important;
+    min-height: 54px !important;
+    max-height: 54px !important;
+    border-radius: 8px !important;
+  }
+}
+
+/* Category index keeps the folder explorer instead of being hidden by list-page rules. */
+body.is-category-page .docs-home-overview,
+body.is-category-page .docs-home-featured,
+body.is-category-index .docs-home-profile,
+body.is-category-index .docs-home-latest {
+  display: none !important;
+}
+
 body.is-category-index .docs-page-head,
-#tt-body-index .docs-page-head {
+body.is-category-index .docs-content:has(.docs-list-item) .docs-page-head {
+  display: none !important;
+}
+
+body.is-category-index .docs-category-map {
+  display: block !important;
+}
+
+body.is-category-index .docs-list-item,
+body.is-category-index .docs-paging {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Featured Card Custom Swap Transition Animations
+   ========================================================================== */
+body.is-home-page .docs-home-featured__title {
+  opacity: 0 !important;
+  transform: translateY(6px) !important;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated .docs-home-featured__title {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease !important;
+}
+
+body.is-home-page .docs-home-featured__media img {
+  opacity: 0 !important;
+  transform: scale(0.97) !important;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated .docs-home-featured__media img {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Explicitly disable transitions on summary so it renders instantly! */
+body.is-home-page .docs-home-featured__summary {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* ==========================================================================
+   Minimalist Premium Footer
+   ========================================================================== */
+body.has-list-page .docs-layout {
+  padding: 40px 0 0 !important; /* Completely eliminate bottom padding to snug up footer */
+}
+
+.docs-footer {
+  margin-top: 48px !important;
+  padding: 16px 0 24px !important; /* Premium bottom padding for breathing room */
+  border-top: 1px solid var(--line-soft) !important;
+  width: 100% !important;
+  max-width: 768px !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+body.is-home-page .docs-footer {
+  max-width: 1024px !important; /* Matches overview block on home page! */
+}
+
+@media (max-width: 1100px) {
+  .docs-footer {
+    padding: 16px 24px 32px !important; /* Premium responsive gutters on mobile & tablet viewports */
+  }
+}
+
+.docs-footer__inner {
+  display: flex !important;
+  justify-content: flex-end !important; /* Right align the singular GitHub icon */
+  align-items: center !important;
+  color: var(--text-soft) !important;
+  font-size: 13px !important;
+}
+
+.docs-footer__github {
+  color: var(--text-soft) !important;
+  transition: color 0.2s ease, transform 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.docs-footer__github:hover {
+  color: var(--text-heading) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Featured Card Info Wrapper (Grouped title and summary for cohesion) */
+body.is-home-page .docs-home-featured__info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  padding-top: 32px !important; /* Premium top margin padding to match screenshot 1 */
+}
+
+@media (max-width: 760px) {
+  body.is-home-page .docs-home-featured__info {
+    padding-top: 0 !important; /* Reset on mobile devices */
+  }
+  
+  body.is-home-page .featured-nav-controls {
+    margin-left: 0 !important; /* Reset negative margin on mobile devices */
+  }
+}
+
+/* Final layout guards */
+html,
+body {
+  min-height: 100% !important;
+}
+
+.docs-app,
+.docs-main-shell {
+  min-height: 100vh !important;
+}
+
+.docs-main-shell {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.docs-layout {
+  display: flex !important;
+  flex: 1 0 auto !important;
+  flex-direction: column !important;
+  min-height: calc(100vh - 60px) !important;
+}
+
+.docs-content {
+  flex: 1 0 auto !important;
+}
+
+body.has-list-page .docs-list-item.is-empty .docs-list-item__ghost-container {
+  display: none !important;
+}
+
+body.has-list-page .docs-list-item__placeholder-emoji {
+  color: rgba(255, 255, 255, 0.86) !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+body.has-list-page .docs-list-item:hover .docs-list-item__placeholder-emoji {
+  transform: scale(1.15) !important;
+}
+
+body.is-home-page .docs-home-featured__link {
+  height: 244px !important;
+}
+
+body.is-home-page .docs-home-featured__copy {
+  justify-content: space-between !important;
+}
+
+body.is-home-page .docs-home-featured__info {
+  flex: 0 1 auto !important;
+  padding-top: 20px !important;
+}
+
+body.is-home-page .docs-home-featured__title {
+  font-size: 34px !important;
+  font-weight: 740 !important;
+  line-height: 1.24 !important;
+  letter-spacing: 0 !important;
+}
+
+body.is-home-page .docs-home-featured__summary {
+  margin-top: 0 !important;
+  font-size: 15px !important;
+  line-height: 1.62 !important;
+}
+
+body.is-home-page .featured-nav-controls {
+  flex: none !important;
+  margin-top: auto !important;
+  padding-top: 0 !important;
+  justify-content: flex-start !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__media img {
+  transform: scale(1.05) !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__title {
+  color: var(--accent-strong) !important;
+}
+
+body.is-home-page .docs-home-featured__emoji {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 58px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 12px 34px rgba(0, 0, 0, 0.24) !important;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__emoji {
+  transform: scale(1.05) !important;
+}
+
+body.is-category-page:not(.is-category-index) .docs-list-item {
+  display: block !important;
+}
+
+body.is-category-page:not(.is-category-index) .docs-paging {
+  display: flex !important;
+}
+
+/* Revert zoom & color changes when hovering over the navigation buttons */
+body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__media img,
+body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__emoji {
+  transform: scale(1) !important;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__title {
+  color: var(--text-heading) !important;
+}
+
+@media (max-width: 760px) {
+  body.has-list-page .docs-list-item__inner {
+    grid-template-columns: minmax(0, 1fr) 128px !important;
+    min-height: 128px !important;
+    gap: 16px !important;
+    padding: 20px 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb-link {
+    grid-column: 2 !important;
+  }
+
+  body.has-list-page .docs-list-item__content {
+    grid-column: 1 !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb {
+    width: 128px !important;
+    height: 96px !important;
+    min-height: 96px !important;
+    max-height: 96px !important;
+    border-radius: 14px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.has-list-page .docs-list-item__inner {
+    grid-template-columns: minmax(0, 1fr) 124px !important;
+    min-height: 124px !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb {
+    width: 124px !important;
+    height: 92px !important;
+    min-height: 92px !important;
+    max-height: 92px !important;
+    border-radius: 13px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  body.has-list-page .docs-list-item__inner {
+    grid-template-columns: minmax(0, 1fr) 112px !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb {
+    width: 112px !important;
+    height: 84px !important;
+    min-height: 84px !important;
+    max-height: 84px !important;
+  }
+}
+
+body.is-category-index .docs-page-head {
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.is-category-index .docs-category-map {
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.is-category-index .vs-tree--large {
+  padding: 24px !important;
+}
+
+/* Toss-like home rhythm: keep the 1024px stage, reduce the oversized top gap. */
+body.is-home-page .docs-layout {
+  width: min(1024px, calc(100% - 80px)) !important;
+  max-width: 1024px !important;
+  padding-top: 20px !important;
+}
+
+body.is-home-page .docs-home-overview {
+  width: min(1024px, calc(100vw - 80px)) !important;
+  margin-top: 0 !important;
+  margin-bottom: 48px !important;
+}
+
+body.is-home-page .docs-home-featured__link {
+  height: 232px !important;
+  gap: 40px !important;
+}
+
+body.is-home-page .docs-home-featured__info {
+  padding-top: 8px !important;
+}
+
+body.is-home-page .docs-home-featured__title {
+  font-size: 32px !important;
+  line-height: 1.25 !important;
+}
+
+body.is-home-page .docs-home-featured__summary {
+  margin-top: 10px !important;
+  font-size: 14.5px !important;
+  line-height: 1.58 !important;
+}
+
+@media (max-width: 960px) {
+  body.is-home-page .docs-home-featured__link {
+    height: 220px !important;
+    gap: 28px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.is-home-page .docs-layout {
+    width: 100% !important;
+    padding-top: 20px !important;
+  }
+}
+
+/* Cleaner list/recommend rhythm: remove repeated divider lines. */
+body.has-list-page .docs-list-item,
+body.has-list-page .docs-list-item:hover {
+  border-color: transparent !important;
+}
+
+body.has-list-page .docs-list-item__inner {
+  border-bottom: 0 !important;
+}
+
+.docs-related,
+.docs-article-recommend {
+  border-top: 0 !important;
+}
+
+body.has-list-page .docs-list-item__ghost-container,
+body.has-list-page .docs-list-item__ghost {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  body.has-list-page .docs-list-item__inner {
+    border-bottom: 0 !important;
+  }
+}
+
+/* Mobile featured card: image, title, summary, centered controls. */
+@media (max-width: 760px) {
+  body.is-home-page .docs-home-overview {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 20px auto 16px !important;
+    transform: none !important;
+  }
+
+  body.is-home-page .docs-home-featured {
+    width: 100% !important;
+    max-width: none !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+  }
+
+  body.is-home-page .docs-home-featured__link,
+  body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  body.is-home-page .docs-home-featured__media {
+    display: grid !important;
+    order: 1 !important;
+    width: 100% !important;
+    max-width: none !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    place-items: center !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  body.is-home-page .docs-home-featured__media img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+  }
+
+  body.is-home-page .docs-home-featured__copy {
+    display: flex !important;
+    order: 2 !important;
+    min-height: 0 !important;
+    flex-direction: column !important;
+    justify-content: initial !important;
+    align-items: stretch !important;
+  }
+
+  body.is-home-page .docs-home-featured__info {
+    gap: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  body.is-home-page .docs-home-featured__title {
+    font-size: clamp(28px, 6.8vw, 40px) !important;
+    font-weight: 740 !important;
+    line-height: 1.2 !important;
+    -webkit-line-clamp: 3 !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    margin-top: 0 !important;
+    font-size: clamp(15px, 3.6vw, 18px) !important;
+    line-height: 1.62 !important;
+    -webkit-line-clamp: 3 !important;
+  }
+
+  body.is-home-page .featured-nav-controls {
+    justify-content: center !important;
+    gap: 18px !important;
+    margin-top: 22px !important;
+  }
+
+  body.is-home-page .featured-nav-btn {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  body.is-home-page .featured-nav-btn svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+}
+
+/* Category pages should use the narrow post layout width (760px) as requested by the user. */
+body.is-category-page .docs-layout {
+  width: min(760px, calc(100% - 80px)) !important;
+  max-width: 760px !important;
+}
+
+body.is-category-page .docs-content,
+body.is-category-page .docs-content:has(.docs-list-item) {
+  width: 100% !important;
+  max-width: 760px !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+body.is-category-index .docs-page-head,
+body.is-category-index .docs-category-map {
+  width: 100% !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.is-category-index .docs-content,
+body.is-category-index .docs-content:has(.docs-list-item) {
+  display: block !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+}
+
+@media (max-width: 760px) {
+  body.is-category-page .docs-layout,
+  body.is-category-page .docs-content,
+  body.is-category-page .docs-content:has(.docs-list-item) {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Mobile list spacing: item box owns only its content, parent grid owns vertical distance. */
+@media (max-width: 760px) {
+  body.has-list-page .docs-content,
+  .docs-content:has(.docs-list-item) {
+    gap: 20px !important;
+    row-gap: 20px !important;
+  }
+
+  body.has-list-page .docs-list-item {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  body.has-list-page .docs-list-item__inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 128px !important;
+    gap: 16px !important;
+    align-items: center !important;
+    min-height: 96px !important;
+    padding: 0 !important;
+    border-bottom: 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb-link {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+  }
+
+  body.has-list-page .docs-list-item__content {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+    gap: 8px !important;
+    padding: 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb {
+    width: 128px !important;
+    height: 96px !important;
+    min-height: 96px !important;
+    max-height: 96px !important;
+    border-radius: 14px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.has-list-page .docs-content,
+  .docs-content:has(.docs-list-item) {
+    gap: 20px !important;
+    row-gap: 20px !important;
+  }
+
+  body.has-list-page .docs-list-item__inner {
+    grid-template-columns: minmax(0, 1fr) 124px !important;
+    min-height: 92px !important;
+    gap: 14px !important;
+    padding: 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb {
+    width: 124px !important;
+    height: 92px !important;
+    min-height: 92px !important;
+    max-height: 92px !important;
+    border-radius: 13px !important;
+  }
+}
+
+/* List spacing contract: list gap owns vertical spacing on every viewport. */
+body.has-list-page .docs-content,
+.docs-content:has(.docs-list-item) {
+  gap: 20px !important;
+  row-gap: 20px !important;
+}
+
+body.has-list-page .docs-list-item,
+body.has-list-page .docs-list-item:hover {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+body.has-list-page .docs-list-item__inner {
+  padding: 0 !important;
+  border-bottom: 0 !important;
+}
+
+@media (max-width: 760px) {
+  body.has-list-page .docs-content,
+  .docs-content:has(.docs-list-item) {
+    gap: 20px !important;
+    row-gap: 20px !important;
+  }
+
+  body.has-list-page .docs-list-item__inner {
+    padding: 0 !important;
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.has-list-page .docs-content,
+  .docs-content:has(.docs-list-item) {
+    gap: 20px !important;
+    row-gap: 20px !important;
+  }
+}
+
+/* Mobile slide: stable text area, fixed controls, two-line summary. */
+@media (max-width: 760px) {
+  body.is-home-page .docs-home-featured__link,
+  body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto minmax(206px, auto) !important;
+    grid-auto-flow: row !important;
+    gap: 22px !important;
+  }
+
+  body.is-home-page .docs-home-featured__media {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  body.is-home-page .docs-home-featured__copy {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    min-height: 0 !important;
+  }
+
+  body.is-home-page .docs-home-featured__info {
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important; /* Elegant vertical gap between title and summary */
+  }
+
+  body.is-home-page .docs-home-featured__title {
+    font-size: clamp(27px, 6.4vw, 38px) !important;
+    line-height: 1.18 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    display: -webkit-box !important;
+    max-height: calc(1.58em * 2) !important;
+    margin-top: 0 !important;
+    overflow: hidden !important;
+    font-size: clamp(15px, 3.4vw, 17px) !important;
+    line-height: 1.58 !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.is-home-page .featured-nav-controls {
+    align-self: center !important;
+    justify-content: center !important;
+    gap: 16px !important;
+    height: 50px !important;
+    margin-top: 4px !important;
+    padding-top: 0 !important;
+  }
+
+  body.is-home-page .featured-nav-btn {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  body.is-home-page .featured-nav-btn svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+}
+
+/* Tablet home hero should not leave a large blank band below the slide. */
+@media (min-width: 761px) and (max-width: 1199px) {
+  body.is-home-page .docs-home-overview {
+    margin-bottom: 18px !important;
+  }
+}
+
+/* Desktop home hero breathing room. Keep 1024/tablet/mobile rules untouched. */
+@media (min-width: 1200px) {
+  body.is-home-page .docs-layout {
+    padding-top: 32px !important;
+  }
+
+  body.is-home-page .docs-home-overview {
+    margin-top: 12px !important;
+    margin-bottom: 24px !important;
+  }
+
+  body.is-home-page .docs-home-featured,
+  body.is-home-page .docs-home-featured__link {
+    min-height: 292px !important;
+  }
+
+  body.is-home-page .docs-home-featured__link {
+    height: 292px !important;
+  }
+
+  body.is-home-page .docs-home-featured__copy {
+    justify-content: flex-start !important;
+    padding-top: 26px !important;
+    padding-bottom: 8px !important;
+  }
+
+  body.is-home-page .docs-home-featured__info {
+    padding-top: 0 !important;
+  }
+
+  body.is-home-page .docs-home-featured__title {
+    font-size: 40px !important;
+    font-weight: 700 !important;
+    line-height: 1.22 !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    margin-top: 0 !important;
+    font-size: 16px !important;
+    line-height: 1.72 !important;
+  }
+
+  body.is-home-page .featured-nav-controls {
+    margin-top: auto !important;
+  }
+}
+
+/* Perfect alignment for list page heads with the 760px content column */
+body.has-list-page:not(.is-category-index) .docs-page-head {
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+  padding: 0 0 32px !important;
+}
+
+/* Remove bottom margin from page head eyebrow to let flex-gap handle spacing exclusively */
+.docs-page-head__eyebrow {
+  margin-bottom: 0 !important;
+}
+
+/* Center and scale the empty state container card to match the 760px column width */
+body.has-list-page .docs-empty-state {
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+}
+
+/* Mobile category index: strictly hide list items and pagination links below the tree explorer */
+@media (max-width: 760px) {
+  body.is-category-index .docs-list-item,
+  body.is-category-index .docs-paging {
+    display: none !important;
+  }
+}
+
+body.is-home-page .docs-page-head,
+body.is-category-index .docs-page-head {
+  display: none !important;
+}
+
+body.has-list-page .docs-empty-state {
+  grid-column: 1 / -1 !important;
+  width: min(760px, 100%) !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.has-list-page .docs-list-item__summary[data-list-summary]:not([data-preview-ready="true"]) {
+  display: none !important;
+}
+
+.article-body .article-image-link {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  color: inherit;
+  text-decoration: none;
+}
+
+.article-body .article-image-link img {
+  margin: 0 auto !important;
+  cursor: zoom-in;
+}
+
+@media (max-width: 760px) {
+  body.has-list-page .docs-empty-state {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  body.is-home-page .docs-home-featured__link,
+  body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+    grid-template-rows: auto minmax(106px, auto) !important;
+    gap: 18px !important;
+  }
+
+  body.is-home-page .docs-home-featured__copy {
+    display: grid !important;
+    grid-template-rows: minmax(0, 1fr) 44px !important;
+    gap: 12px !important;
+    height: 154px !important;
+    min-height: 154px !important;
+    max-height: 154px !important;
+    overflow: hidden !important;
+  }
+
+  body.is-home-page .docs-home-featured__info {
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    max-height: calc(1.52em * 2) !important;
+    line-height: 1.52 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.is-home-page .featured-nav-controls {
+    align-self: end !important;
+    justify-content: center !important;
+    gap: 22px !important;
+    height: 44px !important;
+    margin-top: 0 !important;
+  }
+
+  body.is-home-page .featured-nav-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  body.is-home-page .featured-nav-btn svg {
+    width: 19px !important;
+    height: 19px !important;
+  }
+}
+
+/* Mobile form guard: keep controls at 16px to prevent iOS zoom. */
+@media (max-width: 768px) {
+  input,
+  textarea,
+  select,
+  [contenteditable="true"] {
+    font-size: 16px !important;
+  }
+
+  .docs-searchbar__input {
+    font-size: 16px !important;
+    transform: scale(0.875) !important;
+    transform-origin: left center !important;
+    width: 114.285% !important;
+  }
+
+  .docs-protected input {
+    font-size: 16px !important;
+    transform: scale(0.875) !important;
+    transform-origin: left center !important;
+    width: 114.285% !important;
+  }
+}
+
+/* Smooth dark mode theme transition for topbar background and border */
+.docs-topbar {
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* 1. Absolute override to ensure the list page head title (h1) is strictly hidden on home and category views */
+body.is-home-page .docs-page-head,
+body[class*="is-home-page"] .docs-page-head,
+body.is-category-index .docs-page-head,
+#tt-body-index .docs-page-head,
+.docs-content:has(.docs-list-item).is-category-index .docs-page-head,
+.docs-content:has(.docs-list-item).is-home-page .docs-page-head,
+.docs-content:has(.docs-list-item)#tt-body-index .docs-page-head {
   display: none !important;
 }
 
@@ -138,322 +1511,4 @@ body.is-search-empty-body .docs-content {
   max-width: 760px !important;
   margin-left: auto !important;
   margin-right: auto !important;
-}
-
-/* 5. Center and scale the empty state container card to match the 760px column width */
-body.has-list-page .docs-empty-state {
-  grid-column: 1 / -1 !important;
-  width: min(760px, 100%) !important;
-  max-width: 760px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-@media (max-width: 760px) {
-  body.has-list-page .docs-empty-state {
-    width: 100% !important;
-    max-width: none !important;
-  }
-}
-
-/* ==========================================================================
-   Premium Overrides: Dark Mode Header Transition Synchronization (Issue 3)
-   ========================================================================== */
-.docs-searchbar {
-  transition: border-color 0.25s ease, background-color 0.25s ease !important;
-}
-
-.docs-icon-button {
-  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.15s ease !important;
-}
-
-/* ==========================================================================
-   Premium Featured Slider (docs-home-overview & docs-home-featured)
-   ========================================================================== */
-
-/* 1. Base display rules - Hidden by default on non-home pages */
-.docs-home-overview,
-.docs-home-featured,
-.docs-home-profile,
-.docs-home-latest {
-  display: none !important;
-}
-
-/* 2. Desktop featured slider container styling */
-body.is-home-page .docs-home-overview {
-  grid-column: 1 / -1 !important;
-  display: block !important;
-  width: min(1024px, calc(100vw - 80px)) !important;
-  max-width: none !important;
-  margin: 24px auto 36px !important;
-}
-
-body.is-home-page .docs-home-featured {
-  display: block !important;
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  transform: none !important;
-}
-
-body.is-home-page .docs-home-featured[hidden] {
-  display: none !important;
-}
-
-body.is-home-page .docs-home-featured__link {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.25fr) !important;
-  gap: 48px !important;
-  align-items: stretch !important;
-  height: 260px !important;
-}
-
-body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
-  grid-template-columns: minmax(0, 1fr) !important;
-}
-
-body.is-home-page .docs-home-featured__media {
-  position: relative !important;
-  width: 100% !important;
-  height: 100% !important;
-  overflow: hidden !important;
-  border-radius: 16px !important;
-  background: var(--bg-soft) !important;
-  transition: background 0.4s ease, opacity 0.4s ease !important;
-}
-
-body.is-home-page .docs-home-featured__media.is-empty {
-  background: linear-gradient(135deg, #3182f6 0%, #60a5fa 100%) !important;
-}
-
-html[data-ui-theme="dark"] body.is-home-page .docs-home-featured__media.is-empty {
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
-}
-
-body.is-home-page .docs-home-featured__media img {
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-body.is-home-page .docs-home-featured__media.is-empty img {
-  display: none !important;
-}
-
-body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__media img {
-  transform: scale(1.05) !important;
-}
-
-body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__title {
-  color: var(--accent-strong) !important;
-}
-
-body.is-home-page .docs-home-featured.is-hydrated:hover .docs-home-featured__emoji {
-  transform: scale(1.05) !important;
-}
-
-body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__media {
-  background: var(--bg-soft) !important;
-  animation: pulse-featured 1.5s infinite ease-in-out !important;
-}
-
-@keyframes pulse-featured {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-body.is-home-page .docs-home-featured__copy {
-  min-width: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
-  height: 100% !important;
-}
-
-body.is-home-page .docs-home-featured__title {
-  display: -webkit-box !important;
-  margin: 0 !important;
-  overflow: hidden !important;
-  color: var(--text-heading) !important;
-  font-size: 36px !important;
-  font-weight: 800 !important;
-  line-height: 1.22 !important;
-  letter-spacing: -0.03em !important;
-  word-break: keep-all !important;
-  -webkit-box-orient: vertical !important;
-  -webkit-line-clamp: 2 !important;
-}
-
-body.is-home-page .docs-home-featured__summary {
-  display: -webkit-box !important;
-  max-width: 100% !important;
-  margin: 12px 0 0 !important;
-  overflow: hidden !important;
-  color: var(--text-muted) !important;
-  font-size: 15.5px !important;
-  line-height: 1.65 !important;
-  -webkit-box-orient: vertical !important;
-  -webkit-line-clamp: 3 !important;
-}
-
-/* Premium Floating Emoji Placeholders */
-.docs-home-featured__emoji {
-  position: absolute !important;
-  inset: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 72px !important;
-  user-select: none !important;
-  color: rgba(255, 255, 255, 0.9) !important;
-  text-shadow: 0 12px 34px rgba(0, 0, 0, 0.24) !important;
-  animation: emoji-float 3s ease-in-out infinite !important;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-@keyframes emoji-float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8px) scale(1.05); }
-}
-
-/* Premium slider navigation buttons controls */
-.featured-nav-controls {
-  display: flex !important;
-  gap: 16px !important;
-  margin-top: auto !important;
-  padding-top: 16px !important;
-  justify-content: flex-start !important;
-}
-
-.featured-nav-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 44px !important;
-  height: 44px !important;
-  border-radius: 50% !important;
-  background: var(--bg-soft) !important;
-  border: 1px solid var(--line-soft) !important;
-  color: var(--text-muted) !important;
-  cursor: pointer !important;
-  outline: none !important;
-  transition: all 0.2s ease !important;
-}
-
-.featured-nav-btn:hover {
-  background: var(--line-soft) !important;
-  color: var(--text-heading) !important;
-  transform: scale(1.06) !important;
-}
-
-.featured-nav-btn:active {
-  transform: scale(0.95) !important;
-}
-
-.featured-nav-btn svg {
-  display: block !important;
-  width: 20px !important;
-  height: 20px !important;
-}
-
-body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__media img,
-body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__emoji {
-  transform: scale(1) !important;
-}
-
-body.is-home-page .docs-home-featured.is-hydrated:has(.featured-nav-controls:hover) .docs-home-featured__title {
-  color: var(--text-heading) !important;
-}
-
-/* ==========================================================================
-   Premium Mobile Layout Locks for Slide Height Shift (Issue 4)
-   ========================================================================== */
-@media (max-width: 760px) {
-  body.is-home-page .docs-home-overview {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 20px auto 16px !important;
-    transform: none !important;
-  }
-
-  body.is-home-page .docs-home-featured {
-    width: 100% !important;
-    max-width: none !important;
-    margin-right: auto !important;
-    margin-left: auto !important;
-  }
-
-  body.is-home-page .docs-home-featured__link,
-  body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: auto minmax(154px, auto) !important;
-    grid-auto-flow: row !important;
-    gap: 18px !important;
-    height: auto !important;
-    min-height: 0 !important;
-  }
-
-  body.is-home-page .docs-home-featured__media {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    aspect-ratio: 16 / 9 !important;
-  }
-
-  body.is-home-page .docs-home-featured__copy {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    display: grid !important;
-    grid-template-rows: minmax(0, 1fr) 44px !important;
-    gap: 12px !important;
-    min-height: 154px !important;
-    max-height: 154px !important;
-    overflow: hidden !important;
-  }
-
-  body.is-home-page .docs-home-featured__info {
-    min-height: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 6px !important;
-    overflow: hidden !important;
-  }
-
-  body.is-home-page .docs-home-featured__title {
-    font-size: clamp(24px, 5.8vw, 30px) !important;
-    line-height: 1.2 !important;
-    -webkit-line-clamp: 2 !important;
-  }
-
-  body.is-home-page .docs-home-featured__summary {
-    display: -webkit-box !important;
-    max-height: calc(1.52em * 2) !important;
-    margin-top: 0 !important;
-    overflow: hidden !important;
-    font-size: clamp(14px, 3.2vw, 15px) !important;
-    line-height: 1.52 !important;
-    -webkit-box-orient: vertical !important;
-    -webkit-line-clamp: 2 !important;
-  }
-
-  body.is-home-page .featured-nav-controls {
-    align-self: end !important;
-    justify-content: center !important;
-    gap: 22px !important;
-    height: 44px !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
-  body.is-home-page .featured-nav-btn {
-    width: 44px !important;
-    height: 44px !important;
-  }
-
-  body.is-home-page .featured-nav-btn svg {
-    width: 19px !important;
-    height: 19px !important;
-  }
 }

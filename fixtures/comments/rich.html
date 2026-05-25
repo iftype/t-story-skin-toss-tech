@@ -1,0 +1,68 @@
+<div id="entry123Comment" data-tistory-react-app="Comment">
+  <div class="tt-comment-cont">
+    <div class="tt-box-total">댓글 <span class="tt_txt_g">2</span></div>
+    <form class="tt-form-comment" action="#" method="post">
+      <div class="tt-area-write">
+        <div class="tt-box-thumb">
+          <span class="tt-thumbnail" style="background-image:url('https://t1.daumcdn.net/tistory_admin/static/manage/images/r3/default_S.png')"></span>
+        </div>
+        <div class="tt-wrap-write">
+          <div class="tt-box-account">
+            <input class="tt_inp_g tt_txt_user" type="text" name="name" placeholder="이름">
+            <input class="tt_inp_g" type="password" name="password" placeholder="비밀번호">
+          </div>
+          <div class="tt-box-textarea">
+            <textarea class="tt-cmt tt_inp_g" name="comment" placeholder="댓글을 입력하세요"></textarea>
+          </div>
+          <div class="tt-box-write">
+            <label class="tt-label-secret"><input type="checkbox" name="secret"> 비밀글</label>
+            <button class="tt-btn_register" type="submit">등록</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <ul class="tt-list-reply">
+      <li class="tt-item-reply" id="comment101">
+        <div class="tt-wrap-cmt">
+          <div class="tt-box-thumb">
+            <span class="tt-thumbnail" style="background-image:url('https://t1.daumcdn.net/tistory_admin/static/manage/images/r3/default_S.png')"></span>
+          </div>
+          <div class="tt-box-content">
+            <div class="tt-box-meta">
+              <a class="tt-link-user" href="#">tester</a>
+            </div>
+            <div class="tt-wrap-info">
+              <span class="tt_date">2026.05.26 10:00</span>
+              <a class="tt-link-comment" href="#reply101"><span class="tt_txt_g">답글</span></a>
+            </div>
+            <div class="tt-box-modify">
+              <button class="tt-button-modify" type="button" aria-label="댓글 메뉴"></button>
+              <ul class="tt-list-modify">
+                <li><a href="#">수정</a></li>
+                <li><a href="#">삭제</a></li>
+              </ul>
+            </div>
+            <div class="tt_desc">**굵은 댓글**입니다.<br><br>```js<br>const value = 1<br>```</div>
+          </div>
+        </div>
+        <ul class="tt-list-reply-comment">
+          <li class="tt-item-reply" id="comment102">
+            <div class="tt-wrap-cmt">
+              <div class="tt-box-thumb">
+                <span class="tt-thumbnail" style="background-image:url('https://t1.daumcdn.net/tistory_admin/static/manage/images/r3/default_S.png')"></span>
+              </div>
+              <div class="tt-box-content">
+                <div class="tt-box-meta"><a class="tt-link-user" href="#">reply-user</a></div>
+                <div class="tt-wrap-info">
+                  <span class="tt_date">2026.05.26 10:10</span>
+                  <a class="tt-link-comment" href="#reply102"><span class="tt_txt_g">답글</span></a>
+                </div>
+                <div class="tt_desc"><em class="tt-txt-mention">@tester</em> 답글 본문입니다.</div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

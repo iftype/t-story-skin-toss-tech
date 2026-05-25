@@ -1,6 +1,6 @@
 # 토스 테크 스타일 티스토리 스킨
 
-티스토리 블로그에 토스 테크 블로그의 디자인을 적용할 수 있습니다. 코드 블록, 목차, 카테고리 트리, 다크 모드를 기본으로 지원합니다.
+티스토리 블로그에 토스 테크 블로그의 디자인을 적용할 수 있습니다. 코드 블록, 목차, 카테고리 트리, 다크 모드, 커스텀 댓글 UI를 기본으로 지원합니다.
 
 ## 스킨 다운로드
 
@@ -16,44 +16,18 @@
 
 1. `tistory-skin-toss-tech.zip` 압축을 풉니다.
 2. 티스토리 관리자 → **꾸미기 > 스킨 변경 > 스킨 등록**으로 이동합니다.
-3. **추가** 버튼을 눌러 루트 폴더의 파일을 업로드합니다.
-   - `skin.html`, `style.css`, `index.xml`, `preview.gif`, `preview256.jpg`, `preview560.jpg`
-4. 다시 **추가** 버튼을 눌러 `images/` 폴더 안의 파일을 업로드합니다.
-   - `images/script.js`, `images/style.css`, `images/style-tight.css`
-   - 티스토리가 자동으로 `./images/` 경로에 매핑합니다.
+3. **추가** 버튼을 눌러 압축 해제한 파일을 모두 업로드합니다.
+   - `skin.html`, `style.css`, `index.xml`, `script.js`, `preview.gif`, `preview256.jpg`, `preview560.jpg`
+   - ZIP은 하위 폴더 없이 1단계 flat 구조로 배포됩니다.
+4. 티스토리는 업로드한 보조 파일을 스킨 내부 이미지 경로로 관리하므로 `script.js`는 `skin.html`의 `./images/script.js` 참조와 연결됩니다.
 5. **저장** 버튼을 누르고 스킨 이름을 입력합니다.
 6. **스킨 변경 > 스킨 보관함**에서 등록한 스킨을 선택하고 **적용**을 누릅니다.
 
 ---
 
-## 본문 여백 스타일 바꾸기
+## 본문 스타일
 
-기본값은 마크다운 스타일(넓은 여백)입니다. 좁은 여백이 필요하면 아래 방법으로 변경할 수 있습니다.
-
-### 방법 A. CSS 교체하기 (권장)
-
-티스토리 **스킨 편집 > Html 편집 > CSS 탭**에 원하는 파일의 내용을 붙여넣고 **적용**을 누릅니다.
-
-| 스타일 | 사용할 파일 |
-|---|---|
-| 마크다운 (기본, 넓은 여백) | `style.css` |
-| 타이트 (좁은 여백) | `images/style-tight.css` |
-
-### 방법 B. HTML 주석 수정하기
-
-**스킨 편집 > Html 편집 > HTML 탭**의 22~37번 줄에서 사용할 스타일 파일의 주석을 제거합니다.
-
-마크다운 스타일 적용:
-```html
-<link rel="stylesheet" href="./images/style.css">
-<!-- <link rel="stylesheet" href="./images/style-tight.css"> -->
-```
-
-타이트 스타일 적용:
-```html
-<!-- <link rel="stylesheet" href="./images/style.css"> -->
-<link rel="stylesheet" href="./images/style-tight.css">
-```
+마크다운 본문 모드는 더 이상 제공하지 않습니다. `style.css` 하나에 일반 포스트 본문, 제목, 인용문, 댓글 스타일이 모두 포함되어 있습니다.
 
 ---
 
@@ -68,9 +42,13 @@ npm run dev
 
 # 빌드
 npm run build
+
+# 티스토리 치환자/댓글 fixture 기반 로컬 검증
+npm run test:local
 ```
 
 빌드가 완료되면 `dist/tistory-skin-toss-tech.zip` 파일이 생성됩니다.
+로컬 검증은 `dev/article.html`, `dev/skin.html`을 생성한 뒤 댓글 작성 폼, 커스텀 댓글 마크다운 렌더링, 답글 트리거, 목차, 홈 슬라이더, 자동 썸네일 대체 이미지를 Playwright로 확인합니다.
 
 ---
 
@@ -79,6 +57,6 @@ npm run build
 버전 태그를 push하면 GitHub Actions가 자동으로 빌드하고 릴리즈를 생성합니다.
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+git tag v2.0.0
+git push origin v2.0.0
 ```
