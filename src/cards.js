@@ -15,6 +15,7 @@ export function markPageState() {
 
   const bodyId = document.body.id || ''
   const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/'
+  document.body.dataset.path = normalizedPath
   const listBodyIds = new Set([
     'tt-body-index',
     'tt-body-category',
@@ -48,6 +49,11 @@ export function markPageState() {
     if (normalizedPath === '/category') {
       document.body.classList.add('is-category-index')
     }
+  }
+
+  const pageHead = document.querySelector('.docs-page-head')
+  if (pageHead) {
+    pageHead.hidden = normalizedPath === '/' || normalizedPath === '/category' || normalizedPath.endsWith('/skin.html')
   }
 }
 

@@ -1,0 +1,142 @@
+/* Final targeted layout fixes loaded after the legacy aggregate stylesheet. */
+
+/* Home and /category should not render the generated list heading. */
+body.is-home-page .docs-page-head,
+body.is-category-index .docs-page-head,
+body[data-path="/"] .docs-page-head,
+body[data-path="/category"] .docs-page-head,
+#tt-body-index .docs-page-head,
+body.has-list-page.is-home-page .docs-page-head,
+body.has-list-page.is-category-index .docs-page-head,
+body.has-list-page[data-path="/"] .docs-page-head,
+body.has-list-page[data-path="/category"] .docs-page-head,
+body.is-home-page:not(.is-category-page) .docs-content:has(.docs-list-item) .docs-page-head,
+body.is-category-index .docs-content:has(.docs-list-item) .docs-page-head,
+body.is-home-page #main-content.docs-content:has(.docs-list-item) .docs-page-head,
+body.is-category-index #main-content.docs-content:has(.docs-list-item) .docs-page-head,
+body[data-path="/"] #main-content.docs-content:has(.docs-list-item) .docs-page-head,
+body[data-path="/category"] #main-content.docs-content:has(.docs-list-item) .docs-page-head,
+body.is-home-page #main-content#main-content.docs-content:has(.docs-list-item) .docs-page-head,
+body.is-category-index #main-content#main-content.docs-content:has(.docs-list-item) .docs-page-head,
+body[data-path="/"] #main-content#main-content.docs-content:has(.docs-list-item) .docs-page-head,
+body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-list-item) .docs-page-head {
+  display: none !important;
+}
+
+/* Keep the article "latest/more" link visible on desktop and mobile. */
+.docs-article-recommend:not([hidden]) {
+  display: block !important;
+}
+
+.docs-article-recommend__header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+}
+
+.docs-article-recommend__more {
+  display: inline-flex !important;
+  flex: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 34px !important;
+  padding: 0 10px !important;
+  border-radius: 8px !important;
+  color: var(--accent) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.docs-article-recommend__more:hover {
+  background: var(--accent-soft) !important;
+}
+
+/* Mobile featured slider: reserve image space and let two-line titles breathe. */
+@media (max-width: 760px) {
+  body.is-home-page .docs-home-featured__link,
+  body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    gap: 22px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.is-home-page .docs-home-featured__media {
+    grid-row: 1 !important;
+    width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+  }
+
+  body.is-home-page .docs-home-featured__copy {
+    grid-row: 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.is-home-page .docs-home-featured__info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.is-home-page .docs-home-featured__title {
+    display: block !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    font-size: 32px !important;
+    line-height: 1.24 !important;
+    letter-spacing: 0 !important;
+    -webkit-box-orient: initial !important;
+    -webkit-line-clamp: initial !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    margin: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    font-size: 16px !important;
+    line-height: 1.58 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.is-home-page .featured-nav-controls {
+    flex: none !important;
+    align-self: center !important;
+    height: 50px !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.is-home-page .docs-home-featured__title {
+    font-size: 30px !important;
+    line-height: 1.24 !important;
+  }
+}

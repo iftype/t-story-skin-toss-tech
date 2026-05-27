@@ -1,4 +1,5 @@
 import './styles.css'
+import './styles/fixes.css'
 
 import { injectCodeCSS, enhanceCodeBlocks } from './code.js'
 import { getSavedTheme, applyTheme, cleanInlineStyles, preserveWordCombination } from './theme.js'
