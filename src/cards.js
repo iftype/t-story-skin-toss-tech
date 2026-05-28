@@ -654,29 +654,52 @@ export async function fillRecommendationSummaries(items, parser) {
     const cached = window.sessionStorage.getItem(cacheKey)
     if (cached) {
       try {
-        const parsed = cached.trim().startsWith('{')
-          ? JSON.parse(cached)
-          : { summary: cached }
+        const parsed = JSON.parse(cached)
         if (parsed.summary) {
           item.summary = parsed.summary
-          return
         }
+        if (parsed.thumb) {
+          item.thumb = parsed.thumb
+        }
+        return
       } catch (_) {
         window.sessionStorage.removeItem(cacheKey)
       }
     }
 
-    // 2. Fetch the detail page to extract the premium custom summary
+    // 2. Fetch the detail page to extract the premium custom summary and thumbnail
     try {
       const response = await fetch(item.href, { credentials: 'same-origin' })
       if (!response.ok) return
       const html = await response.text()
       const doc = parser.parseFromString(html, 'text/html')
+      
       const articleRoot = doc.querySelector('[data-docs-article], .docs-article__body, .article-body')
       const summary = extractListSummaryFromArticle(articleRoot)
+      
+      let thumb = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || ''
+      if (thumb && (thumb.includes('tistory.com/static') || thumb.includes('img_blank'))) {
+        thumb = ''
+      }
+      if (!thumb && articleRoot) {
+        const firstImg = articleRoot.querySelector('img')
+        if (firstImg) {
+          thumb = firstImg.getAttribute('src') || ''
+        }
+      }
+
+      const cacheObj = {}
       if (summary) {
-        window.sessionStorage.setItem(cacheKey, JSON.stringify({ summary }))
         item.summary = summary
+        cacheObj.summary = summary
+      }
+      if (thumb) {
+        item.thumb = thumb
+        cacheObj.thumb = thumb
+      }
+
+      if (summary || thumb) {
+        window.sessionStorage.setItem(cacheKey, JSON.stringify(cacheObj))
       }
     } catch (_) {
       // Ignore recommendation summary hydration failures.
@@ -693,7 +716,7 @@ export function renderArticleRecommendations(items, options = {}) {
 
   list.innerHTML = items.map((item) => renderPostCardHtml(item, 'docs-article-recommend')).join('')
 
-  title.textContent = options.title || '포스트 더보기'
+  title.textContent = options.title || '최신글 더보기'
   more.setAttribute('href', options.moreHref || '/')
 
   root.hidden = false
@@ -825,5 +848,178 @@ export function setupThumbnailFallbacks() {
       applyRatioClass()
     })
     img.addEventListener('error', handleFallback)
+  })
+}
+
+export function hydrateArticleRecommendationsFromSidebar() {
+  const root = document.querySelector('[data-article-recommend-sidebar]')
+  const list = root?.querySelector('.docs-article-recommend__list')
+  if (!root || !list) return
+
+  const recentLinks = Array.from(document.querySelectorAll('.docs-nav__list--recent a'))
+  if (recentLinks.length === 0) return
+
+  const currentPathname = window.location.pathname.replace(/\/+$/, '') || '/'
+  const items = []
+
+  for (const link of recentLinks) {
+    const href = link.getAttribute('href') || ''
+    if (!href) continue
+
+    let url
+    try {
+      url = new URL(href, window.location.origin)
+    } catch (_) {
+      continue
+    }
+
+    const pathname = url.pathname.replace(/\/+$/, '') || '/'
+    if (pathname === currentPathname) continue
+
+    const title = cleanTextContent(link.textContent || '')
+    if (!title) continue
+
+    items.push({
+      href: url.href,
+      title,
+      thumb: '',
+      hasNoImage: false
+    })
+
+    if (items.length >= 3) break
+  }
+
+  if (items.length === 0) return
+
+  const cachePrefix = 'docs-list-summary-v3:'
+  const pendingItems = []
+  let hasHydrated = false
+
+  // 1. 캐시 사전 검사 및 세팅
+  items.forEach(item => {
+    const cached = window.sessionStorage.getItem(`${cachePrefix}${item.href}`)
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+        if (parsed.thumb && !isDefaultThumbnailUrl(parsed.thumb)) {
+          item.thumb = parsed.thumb
+        } else if (parsed.hasNoImage) {
+          item.hasNoImage = true
+        }
+      } catch (_) {
+        window.sessionStorage.removeItem(`${cachePrefix}${item.href}`)
+      }
+    }
+    if (!item.thumb && !item.hasNoImage) {
+      pendingItems.push(item)
+    }
+  })
+
+  // 캐시가 완전히 잡혀있다면 채집 완료 상태로 즉시 개시
+  if (pendingItems.length === 0) {
+    hasHydrated = true
+  }
+
+  // 2. 렌더러 함수 정의 (썸네일 유무에 따라 진짜 이미지 vs 그라데이션 분기)
+  const renderList = () => {
+    list.innerHTML = items.map((item) => {
+      const hasThumb = item.thumb && !isDefaultThumbnailUrl(item.thumb)
+      const { gradient, label } = generateStablePlaceholder(placeholderSeed(item.href, item.title), item.title)
+      
+      let thumbHtml = ''
+      if (hasThumb) {
+        // 원래 대표 이미지가 존재하는 글 -> 진짜 이미지 카드 출력
+        thumbHtml = `<span class="docs-article-recommend__thumb"><img src="${item.thumb}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async"></span>`
+      } else if (hasHydrated || item.hasNoImage) {
+        // 이미지가 실제로 존재하지 않는다고 확인된 글 -> Toss Tech HSL 그라데이션 기본 이미지 노출
+        thumbHtml = `<span class="docs-article-recommend__thumb is-empty" style="background: ${gradient} !important;"><span class="docs-article-recommend__placeholder">${escapeHtml(label)}</span></span>`
+      } else {
+        // 로딩 채집이 진행 중인 대기 상태 글 -> 단정한 회색 스켈레톤 카드 뼈대 노출 (튀는 색상 배제)
+        thumbHtml = `<span class="docs-article-recommend__thumb is-loading-skeleton" style="background: var(--bg-soft) !important;"></span>`
+      }
+
+      return `
+        <a class="docs-article-recommend__item" href="${item.href}">
+          ${thumbHtml}
+          <span class="docs-article-recommend__body">
+            <strong>${escapeHtml(item.title)}</strong>
+          </span>
+        </a>
+      `
+    }).join('')
+  }
+
+  // 3. Phase 1: 즉각 렌더링 (CLS 방지 및 100% 댓글 안전 로딩)
+  renderList()
+  root.hidden = false
+
+  // 4. Phase 2: 리액트 댓글창 초기 마운트가 완전히 완료된 3.2초 뒤 백그라운드 채집 가동
+  if (pendingItems.length > 0) {
+    setTimeout(async () => {
+      const parser = new DOMParser()
+      
+      await Promise.allSettled(pendingItems.map(async (item) => {
+        try {
+          const response = await fetch(item.href, { credentials: 'same-origin' })
+          if (!response.ok) return
+          const html = await response.text()
+          const doc = parser.parseFromString(html, 'text/html')
+          
+          let thumb = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || ''
+          if (thumb && (thumb.includes('tistory.com/static') || thumb.includes('img_blank'))) {
+            thumb = ''
+          }
+          if (!thumb) {
+            const bodyImg = doc.querySelector('[data-docs-article] img, .docs-article__body img, .article-body img')
+            if (bodyImg) {
+              thumb = bodyImg.getAttribute('src') || ''
+            }
+          }
+
+          const existing = window.sessionStorage.getItem(`${cachePrefix}${item.href}`)
+          let cacheObj = {}
+          if (existing) {
+            try { cacheObj = JSON.parse(existing) } catch (_) {}
+          }
+
+          if (thumb && !isDefaultThumbnailUrl(thumb)) {
+            item.thumb = thumb
+            cacheObj.thumb = thumb
+            cacheObj.hasNoImage = false
+          } else {
+            item.hasNoImage = true
+            cacheObj.thumb = ''
+            cacheObj.hasNoImage = true
+          }
+          
+          window.sessionStorage.setItem(`${cachePrefix}${item.href}`, JSON.stringify(cacheObj))
+        } catch (_) {
+          // 채집 실패 시 그라데이션 카드 보류
+        }
+      }))
+
+      // 모든 채집 성공/실패 여부를 확정하고 수분 공급 렌더링 가동
+      hasHydrated = true
+      renderList()
+    }, 3200)
+  }
+}
+
+export function hydrateNativeRecommendations() {
+  const list = document.querySelector('[data-article-recommend-native] .docs-article-recommend__list')
+  if (!list) return
+
+  const items = Array.from(list.querySelectorAll('.docs-article-recommend__item'))
+  items.forEach(item => {
+    const titleEl = item.querySelector('strong')
+    const title = titleEl ? titleEl.textContent.trim() : ''
+    const href = item.getAttribute('href') || ''
+    
+    // 로컬 데이터 기반 HSL 그라데이션 및 라벨 해시 생성 (네트워크 fetch 없음)
+    const { gradient, label } = generateStablePlaceholder(placeholderSeed(href, title), title)
+    
+    // CSS 변수 주입
+    item.style.setProperty('--recommend-gradient', gradient)
+    item.style.setProperty('--recommend-label', `"${label}"`)
   })
 }

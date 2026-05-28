@@ -22,10 +22,7 @@
     <!-- 기본 style.css 하나로 일반 포스트 본문, 제목, 인용문 스타일을 적용합니다. -->
     <link rel="stylesheet" href="./style.css">
     
-    <!-- Highlight.js Syntax Highlighting (CDN) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-    
-    <!-- Prism Syntax Highlighting (CDN for Comments Markdown) -->
+    <!-- Prism.js Syntax Highlighting (CDN) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
   </head>
@@ -66,7 +63,7 @@
                 <span class="docs-profile-avatar__fallback">[##_title_##]</span>
               </a>
               <div class="docs-brand__copy">
-                <a class="docs-brand__title" href="[##_blog_link_##]">[##_title_##]</a>
+                <a class="docs-brand__title" href="[##_blog_link_##]">[##_blogger_##]</a>
                 <div class="docs-profile-actions admin-only" style="display:none;">
                   <a class="docs-profile-actions__link" href="[##_owner_url_##]">관리</a>
                   <a class="docs-profile-actions__link" href="[##_blog_link_##]manage/newpost/?type=post&amp;returnURL=%2Fmanage%2Fposts%2F">글쓰기</a>
@@ -121,7 +118,7 @@
                 <img class="docs-profile-avatar__image" src="[##_image_##]" alt="프로필" loading="lazy" decoding="async">
                 <span class="docs-profile-avatar__fallback">[##_title_##]</span>
               </a>
-              <a class="docs-topbar__brand" href="[##_blog_link_##]">[##_title_##]</a>
+              <a class="docs-topbar__brand" href="[##_blog_link_##]">[##_blogger_##]</a>
               <div class="docs-profile-actions admin-only" style="display:none; margin: 0 0 0 12px !important;">
                 <a class="docs-profile-actions__link" href="[##_owner_url_##]">관리</a>
                 <a class="docs-profile-actions__link" href="[##_blog_link_##]manage/newpost/?type=post&amp;returnURL=%2Fmanage%2Fposts%2F">글쓰기</a>
@@ -409,10 +406,10 @@
                         </s_rp>
                       </section>
 
-                      <section class="docs-article-recommend" data-article-recommend hidden>
+                      <section class="docs-article-recommend" data-article-recommend-sidebar hidden>
                         <div class="docs-article-recommend__header">
-                          <h2 class="docs-article-recommend__title">최신글 보러가기</h2>
-                          <a class="docs-article-recommend__more" href="#">전체 보기</a>
+                          <h2 class="docs-article-recommend__title">최신글 더보기</h2>
+                          <a class="docs-article-recommend__more" href="/">전체 보기</a>
                         </div>
                         <div class="docs-article-recommend__list"></div>
                       </section>

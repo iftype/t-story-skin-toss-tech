@@ -57,14 +57,14 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
   background: var(--accent-soft) !important;
 }
 
-/* Mobile featured slider: reserve image space and let two-line titles breathe. */
+/* Mobile featured slider: reserve strict space to prevent button jumping and text clipping */
 @media (max-width: 760px) {
   body.is-home-page .docs-home-featured__link,
   body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
     grid-template-rows: auto auto !important;
-    gap: 22px !important;
+    gap: 16px !important;
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
@@ -85,52 +85,58 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     grid-row: 2 !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 18px !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
+    justify-content: space-between !important; /* Keep controls firmly at the bottom */
+    height: 154px !important; /* Strict reserved height to lock button position */
+    min-height: 154px !important;
+    max-height: 154px !important;
+    overflow: hidden !important;
+    gap: 10px !important;
   }
 
   body.is-home-page .docs-home-featured__info {
     display: flex !important;
     flex-direction: column !important;
-    gap: 12px !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
+    gap: 6px !important;
+    height: 98px !important; /* Reserved text space: Title (52px) + Summary (40px) + Gap (6px) */
+    min-height: 98px !important;
+    max-height: 98px !important;
+    overflow: hidden !important;
   }
 
   body.is-home-page .docs-home-featured__title {
-    display: block !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
     margin: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-    font-size: 32px !important;
-    line-height: 1.24 !important;
-    letter-spacing: 0 !important;
-    -webkit-box-orient: initial !important;
-    -webkit-line-clamp: initial !important;
+    height: 52px !important; /* Exact height for max 2 lines of 21px font with 1.25 line-height */
+    font-size: 21px !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.02em !important;
+    word-break: keep-all !important;
   }
 
   body.is-home-page .docs-home-featured__summary {
-    margin: 0 !important;
-    max-height: none !important;
-    overflow: hidden !important;
-    font-size: 16px !important;
-    line-height: 1.58 !important;
+    display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    height: 40px !important; /* Exact height for max 2 lines of 14px font with 1.4 line-height */
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    color: var(--text-muted) !important;
+    word-break: keep-all !important;
   }
 
   body.is-home-page .featured-nav-controls {
     flex: none !important;
     align-self: center !important;
-    height: 50px !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+    height: 38px !important; /* Slimmer, crisp controls layout */
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
   }
 }
 
@@ -140,3 +146,190 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     line-height: 1.24 !important;
   }
 }
+
+/* ==========================================================================
+   Fluid Comment Font Scaling (PC: 14px, Mobile: 15px)
+   ========================================================================== */
+
+/* PC (Default): Style comment text distinctly smaller than main body (16px) */
+body .docs-comments .tt_desc,
+body .docs-comments .tt-wrap-desc,
+body .docs-comments .docs-comment-markdown,
+body .docs-comments .tt_desc p,
+body .docs-comments .tt-wrap-desc p,
+body .docs-comments .docs-comment-markdown p,
+body .docs-comments .tt_desc li,
+body .docs-comments .tt-wrap-desc li,
+body .docs-comments .docs-comment-markdown li,
+body .docs-comments .tt_desc ul,
+body .docs-comments .tt-wrap-desc ul,
+body .docs-comments .docs-comment-markdown ul,
+body .docs-comments .tt_desc ol,
+body .docs-comments .tt-wrap-desc ol,
+body .docs-comments .docs-comment-markdown ol {
+  font-size: 14px !important;
+}
+
+/* Mobile (max-width: 760px): Scale up comments text to match mobile body density (15px) */
+@media (max-width: 760px) {
+  body .docs-comments .tt_desc,
+  body .docs-comments .tt-wrap-desc,
+  body .docs-comments .docs-comment-markdown,
+  body .docs-comments .tt_desc p,
+  body .docs-comments .tt-wrap-desc p,
+  body .docs-comments .docs-comment-markdown p,
+  body .docs-comments .tt_desc li,
+  body .docs-comments .tt-wrap-desc li,
+  body .docs-comments .docs-comment-markdown li,
+  body .docs-comments .tt_desc ul,
+  body .docs-comments .tt-wrap-desc ul,
+  body .docs-comments .docs-comment-markdown ul,
+  body .docs-comments .tt_desc ol,
+  body .docs-comments .tt-wrap-desc ol,
+  body .docs-comments .docs-comment-markdown ol {
+    font-size: 15px !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile Header Slimming & Scale Reduction (48px height, 120px locked searchbar)
+   ========================================================================== */
+@media (max-width: 760px) {
+  /* 1. 헤더 탑바 세로 높이 슬림화 (60px -> 48px) */
+  .docs-topbar {
+    min-height: 48px !important;
+    height: 48px !important;
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+
+  .docs-topbar__left {
+    gap: 8px !important;
+  }
+
+  /* 2. 로고 크기 아담하게 스케일 다운 */
+  .docs-topbar__brand {
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.3px !important;
+  }
+
+  .docs-topbar__right {
+    gap: 8px !important;
+  }
+
+  /* 3. 검색창 모바일 가로 너비 잠금 및 세로 슬림화 */
+  .docs-searchbar {
+    min-height: 28px !important;
+    height: 28px !important;
+    width: 120px !important; /* 모바일에서 다른 버튼들과 가로 배치되도록 너비 고정 */
+    padding: 0 8px !important;
+    border-radius: 6px !important; /* 플랫 정교한 테마에 어울리는 스퀘어 라운딩 */
+  }
+
+  .docs-searchbar__icon {
+    font-size: 12px !important;
+  }
+
+  .docs-searchbar__submit {
+    display: none !important; /* 모바일 검색 단축키 뱃지 숨김 */
+  }
+
+  /* 4. 헤더 우측 테마/메뉴 버튼들 크기 슬림화 */
+  .docs-icon-button {
+    min-width: 28px !important;
+    min-height: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile Input Auto-Focus Zoom Prevention (Force 16px, Scale Down 0.875)
+   ========================================================================== */
+@media (max-width: 760px) {
+  /* 1. 검색바 모바일 인풋 확대 방지 스케일 (16px 기준 85% 축소 -> 13.6px 비주얼) */
+  .docs-searchbar__input {
+    font-size: 16px !important;
+    transform: scale(0.85) !important;
+    transform-origin: left center !important;
+    width: 117.6% !important; /* 스케일 다운 비율(100 / 0.85)만큼 너비 보정 */
+  }
+
+  /* 2. 댓글, 방명록 및 사이트 전역의 모든 모바일 인풋 / 텍스트에어리어 포커스 줌 방지 */
+  body .docs-comments input,
+  body .docs-comments textarea,
+  body .docs-comments select,
+  body .docs-comments .tt-area-write input,
+  body .docs-comments .tt-area-write textarea,
+  body .docs-comments [id^="entry"][id$="Comment"] input,
+  body .docs-comments [id^="entry"][id$="Comment"] textarea {
+    font-size: 16px !important;
+    transform: scale(0.875) !important; /* 16px 기준 87.5% 축소 -> 14px 비주얼 */
+    transform-origin: left top !important;
+    width: 114.28% !important; /* 스케일 다운 비율(100 / 0.875)만큼 너비 보정 */
+    margin-bottom: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 인풋 래퍼 및 마크업 그리드 영역에 스케일 보정으로 인한 스크롤바가 생기지 않도록 overflow 제어 */
+  body .docs-comments .tt-area-write,
+  body .docs-comments .tt-wrap-desc {
+    overflow: hidden !important;
+  }
+}
+
+html[data-ui-theme=dark] {
+  --bg: #202026 !important; /* 그레이와 블랙 사이의 가장 우아하고 부드러운 차콜 그레이 */
+  --bg-elevated: #282832 !important;
+  --panel: #2f2f3a !important;
+  --bg-soft: #353542 !important;
+  --line-soft: #272731 !important;
+  --line: #373746 !important;
+  
+  /* 탑바 및 댓글 컴포넌트 톤 매칭 */
+  --topbar-bg: rgba(32, 32, 38, 0.9) !important;
+  --comment-panel-bg: #282832 !important;
+  --comment-card-bg: #353542 !important;
+  --comment-avatar-bg: #373746 !important;
+}
+
+/* ==========================================================================
+   Clean Text-Based Hashtag Override (No bubble backgrounds, pure text style)
+   ========================================================================== */
+
+/* 티스토리가 생성하는 기본 쉼표(,) 구분선 감추기 */
+.docs-tags__items {
+  font-size: 0 !important;
+}
+
+/* 태그 링크 스타일을 알약(버블) 형태가 아닌 순수 텍스트(글자) 형태로 변경 */
+.docs-tags__items a {
+  display: inline-block !important;
+  background: transparent !important;
+  color: var(--text-muted) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 0 !important;
+  margin: 0 14px 0 0 !important;
+  border-radius: 0 !important;
+  min-height: 0 !important;
+  line-height: 1.5 !important;
+  transition: color 0.15s ease, opacity 0.15s ease !important;
+}
+
+/* 태그 텍스트 앞에 해시(#) 기호 추가하여 글자 형태를 강조 */
+.docs-tags__items a::before {
+  content: "#" !important;
+  margin-right: 2px !important;
+  color: var(--accent) !important;
+  font-weight: 600 !important;
+}
+
+.docs-tags__items a:hover {
+  color: var(--accent) !important;
+  text-decoration: underline !important;
+  background: transparent !important;
+}
+
+

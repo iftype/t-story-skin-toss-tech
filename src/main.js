@@ -5,7 +5,7 @@ import { injectCodeCSS, enhanceCodeBlocks } from './code.js'
 import { getSavedTheme, applyTheme, cleanInlineStyles, preserveWordCombination } from './theme.js'
 import { decorateWriteLinks, showAdminElements, normalizeProfileAvatars, bindGlobalActions, normalizeFooterGithubLink } from './header.js'
 import { setupCategoryTree, renderCategoryMap } from './category.js'
-import { markPageState, setupPageHeadEyebrow, showEmptyStateWhenNeeded, normalizeListMeta, normalizeListCards, hydrateHomeFeatured, hydrateListSummaries, hydrateArticleRecommendations, setupThumbnailFallbacks } from './cards.js'
+import { markPageState, setupPageHeadEyebrow, showEmptyStateWhenNeeded, normalizeListMeta, normalizeListCards, hydrateHomeFeatured, hydrateListSummaries, setupThumbnailFallbacks, hydrateArticleRecommendationsFromSidebar } from './cards.js'
 import { enableArticleImageLinks, normalizeArticleMedia, normalizeMarkdownListParagraphs, assignHeadingIds, setupHeadingAnchors } from './article.js'
 import { generateTOC, updateTocStickyBoundary } from './toc.js'
 import { syncCommentComposerAvatar, normalizeLegacyComments, trackOpenCommentMenus, renderCommentMarkdown, setupCommentFallback, setupCommentReplyClick, setupCommentAvatarLogin } from './comments.js'
@@ -19,6 +19,7 @@ function init() {
   showAdminElements()
   normalizeProfileAvatars()
   setupThumbnailFallbacks()
+  hydrateArticleRecommendationsFromSidebar()
   renderCategoryMap()
   setupCategoryTree()
   bindGlobalActions()
@@ -34,16 +35,32 @@ function init() {
   hydrateHomeFeatured()
   hydrateListSummaries()
     .then(() => hydrateHomeFeatured())
-  hydrateArticleRecommendations()
+
+
   assignHeadingIds()
   generateTOC()
   updateTocStickyBoundary()
   setupHeadingAnchors()
 
-  // --- 100% 순정 댓글 안정성 보장을 위해 자바스크립트 간섭 완전 해제 ---
-  // 티스토리 코어 React 댓글 시스템과의 Virtual DOM 충돌 및 크래시(Minified React Error)를 방지하기 위해,
-  // 돔을 헤집어놓는 외부 자바스크립트 감시자(MutationObserver)와 동적 파싱 개입을 완전히 배제합니다.
-  // 대신 Toss Tech 스타일의 완성형 프리미엄 CSS 테마를 통해 순정 상태로 100% 무결하게 렌더링되도록 보장합니다.
+  // --- 격리식 댓글 마크다운 렌더러 활성화 및 100% 리액트 안전 감시자 가동 ---
+  // 기존 리액트 댓글 노드를 파괴하지 않고 바로 하위에 별도로 생성된 격리 노드(.docs-comment-markdown)에만 
+  // 마크다운 번역 결과를 인젝션하므로, React Virtual DOM 붕괴(Minified React Error) 우려가 전혀 없는 100% 안전한 기법입니다.
+  renderCommentMarkdown()
+  const commentsRoot = document.querySelector('.docs-comments')
+  if (commentsRoot && 'MutationObserver' in window) {
+    let commentsTimer = null
+    const commentsObserver = new MutationObserver(() => {
+      clearTimeout(commentsTimer)
+      commentsTimer = setTimeout(() => {
+        try {
+          renderCommentMarkdown()
+        } catch (e) {
+          // silent bypass
+        }
+      }, 120)
+    })
+    commentsObserver.observe(commentsRoot, { childList: true, subtree: true })
+  }
 
   cleanInlineStyles()
   preserveWordCombination()
