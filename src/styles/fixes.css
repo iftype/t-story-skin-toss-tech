@@ -142,8 +142,8 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
 
 @media (max-width: 420px) {
   body.is-home-page .docs-home-featured__title {
-    font-size: 30px !important;
-    line-height: 1.24 !important;
+    font-size: 20px !important; /* 좁은 모바일 화면에 맞추어 폰트 크기를 부드럽게 20px로 보정하여 잘림 예방 */
+    line-height: 1.35 !important;
   }
 }
 
