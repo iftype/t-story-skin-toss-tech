@@ -360,5 +360,66 @@ html[data-ui-theme="dark"] body .docs-comments input[type="submit"]:disabled {
   transition: background-color 0.2s ease, color 0.2s ease !important;
 }
 
+/* ==========================================================================
+   Premium Shimmer Skeleton UI (Gleaming Sweep Animation)
+   ========================================================================== */
+
+/* Shimmer 애니메이션 정의: 빛이 왼쪽에서 오른쪽으로 스쳐 지나가는 비치는 느낌 */
+@keyframes shimmer-sweep {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 기본 Shimmer 효과 적용 대상 */
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__title,
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__summary,
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__media,
+body.has-list-page .docs-list-item__summary:empty,
+body.has-list-page .docs-list-item__thumb:not(:has(img)) {
+  background: linear-gradient(
+    90deg,
+    var(--bg-soft) 25%,
+    var(--line) 37%,
+    var(--bg-soft) 63%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer-sweep 1.4s infinite linear !important;
+  border-radius: 8px !important;
+  color: transparent !important;
+}
+
+/* 피처드 제목 스켈레톤 형태 보완 (모바일/PC 공통 대응) */
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__title {
+  height: 38px !important;
+  width: 75% !important;
+  display: block !important;
+  margin-bottom: 12px !important;
+}
+
+/* 피처드 요약 스켈레톤 형태 보완 */
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__summary {
+  height: 20px !important;
+  width: 50% !important;
+  display: block !important;
+  margin-top: 14px !important;
+}
+
+/* 피처드 미디어 스켈레톤 형태 보완 */
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__media {
+  border-radius: 12px !important;
+  aspect-ratio: 16 / 9 !important;
+  width: 100% !important;
+}
+
+/* 일반 리스트 카드의 썸네일 로딩 스켈레톤 */
+body.has-list-page .docs-list-item__thumb:not(:has(img)) {
+  border-radius: 10px !important;
+}
+
+
 
 
