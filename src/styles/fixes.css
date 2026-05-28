@@ -489,11 +489,47 @@ body.has-list-page .docs-list-item__summary {
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
   margin: 10px 0 !important; /* 마진도 고정 제어 */
-  height: 42px !important; /* 글자 크기 15px 기준 2줄 최대 42px 엄수 */
-  min-height: 42px !important;
-  max-height: 42px !important;
+  height: auto !important; /* 글이 채워진 후에는 텍스트 길이에 맞춰 유연한 자동 높이 */
+  min-height: 0 !important;
+  max-height: 42px !important; /* 글자 크기 15px 기준 최대 2줄 42px */
   line-height: 1.4 !important;
   box-sizing: border-box !important;
+}
+
+/* 비동기 긁어오기(fetch) 중인 로딩 상태일 때만 2줄 42px Shimmer 영역 예약 */
+body.has-list-page .docs-list-item__summary.is-loading-skeleton {
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  content: " " !important;
+  background: linear-gradient(
+    90deg,
+    #f1f5f9 25%,
+    #ffffff 50%,
+    #f1f5f9 75%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer-sweep 1.4s infinite linear !important;
+  border-radius: 6px !important;
+}
+
+html[data-ui-theme="dark"] body.has-list-page .docs-list-item__summary.is-loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    #25252e 25%,
+    #3c3c4b 50%,
+    #25252e 75%
+  ) !important;
+  background-size: 200% 100% !important;
+}
+
+/* 최종적으로 요약 정보가 아예 비어있는 글은 낭비 영역 없이 칼같이 숨기기 (Collapse) */
+body.has-list-page .docs-list-item__summary[hidden],
+body.has-list-page .docs-list-item__summary:empty {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 body.has-list-page .docs-list-item__meta {
@@ -520,10 +556,44 @@ body.has-list-page .docs-list-item__meta {
     font-size: 12px !important;
     margin-top: 4px !important;
     margin-bottom: 0 !important;
-    height: 35px !important; /* 모바일 글자 12px 기준 2줄 최대 35px 엄수 */
+    height: auto !important; /* 글이 채워진 후에는 유연한 높이 */
+    min-height: 0 !important;
+    max-height: 35px !important; /* 모바일 글자 12px 기준 최대 2줄 35px */
+    line-height: 1.45 !important;
+  }
+
+  /* 모바일 로딩 중일 때 35px Shimmer 스켈레톤 영역 유지 */
+  body.has-list-page .docs-list-item__summary.is-loading-skeleton {
+    height: 35px !important;
     min-height: 35px !important;
     max-height: 35px !important;
-    line-height: 1.45 !important;
+    background: linear-gradient(
+      90deg,
+      #f1f5f9 25%,
+      #ffffff 50%,
+      #f1f5f9 75%
+    ) !important;
+    background-size: 200% 100% !important;
+    animation: shimmer-sweep 1.4s infinite linear !important;
+    border-radius: 4px !important;
+  }
+
+  html[data-ui-theme="dark"] body.has-list-page .docs-list-item__summary.is-loading-skeleton {
+    background: linear-gradient(
+      90deg,
+      #25252e 25%,
+      #3c3c4b 50%,
+      #25252e 75%
+    ) !important;
+    background-size: 200% 100% !important;
+  }
+
+  body.has-list-page .docs-list-item__summary[hidden],
+  body.has-list-page .docs-list-item__summary:empty {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   /* 모바일에서 숨겨져 있던 날짜 & 카테고리를 다시 세련되게 노출하고 높이를 16px로 굳건히 예약 */

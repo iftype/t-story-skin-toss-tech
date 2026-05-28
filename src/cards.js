@@ -479,10 +479,13 @@ export function previewFromInlineListSource(item) {
 }
 
 export function applyListPreview(summaryNode, preview) {
+  summaryNode.classList.remove('is-loading-skeleton') // 로딩 완료
   if (preview.summary) {
     summaryNode.textContent = preview.summary
     summaryNode.dataset.previewReady = 'true'
     summaryNode.hidden = false
+  } else {
+    summaryNode.hidden = true // 요약이 진짜 없는 글은 접기
   }
 }
 
@@ -527,8 +530,11 @@ export async function hydrateListSummaries() {
     if (!summaryNode || !href) return
 
     const nativeSummary = cleanTextContent(summaryNode.textContent || '')
+    
+    // 비동기 fetch 도중에도 요약 박스 크기를 고정 유지하도록 Shimmer 스켈레톤 클래스 개시
     summaryNode.textContent = ''
-    summaryNode.hidden = true
+    summaryNode.classList.add('is-loading-skeleton')
+    summaryNode.hidden = false
     delete summaryNode.dataset.previewReady
 
     // 1. Try to read from sessionStorage cache first
@@ -573,10 +579,13 @@ export async function hydrateListSummaries() {
     }
 
     // 4. Fallback to native Tistory auto-summary if all custom parsers failed
+    summaryNode.classList.remove('is-loading-skeleton') // 스켈레톤 해제
     if (nativeSummary && !nativeSummary.includes('[##_')) {
       summaryNode.textContent = nativeSummary
       summaryNode.dataset.previewReady = 'true'
       summaryNode.hidden = false
+    } else {
+      summaryNode.hidden = true // 최종적으로 비어 있으면 낭비 없이 접기
     }
   }))
 }
