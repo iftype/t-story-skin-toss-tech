@@ -361,10 +361,22 @@ html[data-ui-theme="dark"] body .docs-comments input[type="submit"]:disabled {
 }
 
 /* ==========================================================================
-   Premium Shimmer Skeleton UI (Gleaming Sweep Animation)
+   Premium Shimmer Skeleton UI (Gleaming Sweep Animation & Smooth Fade-In)
    ========================================================================== */
 
-/* Shimmer 애니메이션 정의: 빛이 왼쪽에서 오른쪽으로 스쳐 지나가는 비치는 느낌 */
+/* 스켈레톤 진입 시 툭 끊겨 나타나지 않고, 부드럽고 우아하게 페이드인되는 애니메이션 */
+@keyframes fadeInSkeleton {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shimmer 애니메이션 정의: 빛이 왼쪽에서 오른쪽으로 부드럽게 스쳐 지나가는 비치는 효과 */
 @keyframes shimmer-sweep {
   0% {
     background-position: 200% 0;
@@ -374,7 +386,7 @@ html[data-ui-theme="dark"] body .docs-comments input[type="submit"]:disabled {
   }
 }
 
-/* 기본 Shimmer 효과 적용 대상 - 데이터 로드 완료 전(:not(.is-hydrated)) 무조건 강제 노출 */
+/* 기본 Shimmer 효과 적용 대상 - 고대비 그라데이션 광원 적용 (라이트모드 최적화) */
 body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__title,
 body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__summary,
 body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__media,
@@ -382,37 +394,68 @@ body.has-list-page .docs-list-item__summary:empty,
 body.has-list-page .docs-list-item__thumb:not(:has(img)) {
   background: linear-gradient(
     90deg,
-    var(--bg-soft) 25%,
-    var(--line) 37%,
-    var(--bg-soft) 63%
+    #f1f5f9 25%,
+    #ffffff 50%,
+    #f1f5f9 75%
   ) !important;
   background-size: 200% 100% !important;
   animation: shimmer-sweep 1.4s infinite linear !important;
-  border-radius: 8px !important;
+  border-radius: 12px !important;
   color: transparent !important;
   pointer-events: none !important;
+  
+  /* 부드러운 스켈레톤 페이드인 가미 */
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
+  animation: shimmer-sweep 1.4s infinite linear, fadeInSkeleton 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
-/* 피처드 제목 스켈레톤 형태 보완 (비어 있어도 확실하게 가상 요소를 얹어 영역 확보) */
+/* 다크모드 전용 Shimmer 고대비 광원 설계 (빛이 흘러 지나가는 Shimmer를 선명하게 표현) */
+html[data-ui-theme="dark"] body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__title,
+html[data-ui-theme="dark"] body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__summary,
+html[data-ui-theme="dark"] body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__media,
+html[data-ui-theme="dark"] body.has-list-page .docs-list-item__summary:empty,
+html[data-ui-theme="dark"] body.has-list-page .docs-list-item__thumb:not(:has(img)) {
+  background: linear-gradient(
+    90deg,
+    #25252e 25%,
+    #3c3c4b 50%,
+    #25252e 75%
+  ) !important;
+  background-size: 200% 100% !important;
+}
+
+/* 피처드 제목 스켈레톤 형태 보완 (비어 있어도 확실하게 가상 요소를 얹어 강제 영역 노출) */
 body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__title {
-  height: 38px !important;
-  width: 75% !important;
   display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  width: 75% !important;
+  min-width: 200px !important;
   margin-bottom: 12px !important;
   content: " " !important;
 }
 
 /* 피처드 요약 스켈레톤 형태 보완 */
 body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__summary {
-  height: 20px !important;
-  width: 50% !important;
   display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  width: 50% !important;
+  min-width: 140px !important;
   margin-top: 14px !important;
   content: " " !important;
 }
 
 /* 피처드 미디어 스켈레톤 형태 보완 */
 body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__media {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
   border-radius: 12px !important;
   aspect-ratio: 16 / 9 !important;
   width: 100% !important;
@@ -422,6 +465,7 @@ body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__med
 body.has-list-page .docs-list-item__thumb:not(:has(img)) {
   border-radius: 10px !important;
 }
+
 
 
 

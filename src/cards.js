@@ -189,16 +189,16 @@ export async function hydrateHomeFeatured() {
   // Prevent double hydration if sidebar data is already loaded and active
   if (root.classList.contains('is-hydrated') && root.dataset.source === 'sidebar') return
 
+  // Forcefully strip hydration and ready classes at the very beginning of fetch to show skeletons
+  root.classList.remove('is-hydrated')
+  root.classList.remove('is-ready')
+
   // Extract articles from Tistory's sidebar recent posts widget — respect the admin's configured count
   const recentLinks = Array.from(document.querySelectorAll('.docs-nav__list--recent a'))
   let slides = []
 
   if (recentLinks.length > 0) {
     root.dataset.source = 'sidebar'
-    // Keep skeleton showing (by ensuring is-hydrated is removed during loading)
-    root.classList.remove('is-hydrated')
-
-    // Fetch and parse all 3 articles in parallel asynchronously
     const slidePromises = recentLinks.map(async (linkEl) => {
       const href = linkEl.getAttribute('href')
       const title = cleanTextContent(linkEl.textContent || '')
