@@ -332,4 +332,33 @@ html[data-ui-theme=dark] {
   background: transparent !important;
 }
 
+/* ==========================================================================
+   Comment Register/Submit Button Disabled State Override (Elegant Gray)
+   ========================================================================== */
+
+/* 라이트모드 및 기본 비활성화 */
+body .docs-comments .tt-btn_register:disabled,
+body .docs-comments .tt_btn_submit:disabled,
+body .docs-comments button[type="submit"]:disabled,
+body .docs-comments input[type="submit"]:disabled {
+  background: #e2e8f0 !important; /* 소프트 라이트 실버 회색 */
+  color: #94a3b8 !important; /* 차분한 텍스트용 회색 */
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+/* 다크모드 비활성화 */
+html[data-ui-theme="dark"] body .docs-comments .tt-btn_register:disabled,
+html[data-ui-theme="dark"] body .docs-comments .tt_btn_submit:disabled,
+html[data-ui-theme="dark"] body .docs-comments button[type="submit"]:disabled,
+html[data-ui-theme="dark"] body .docs-comments input[type="submit"]:disabled {
+  background: #2b2c31 !important; /* 그레이와 블랙 사이의 어두운 매트 차콜 */
+  color: #5b5c61 !important; /* 어두운 그레이 글자색 */
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+
 
