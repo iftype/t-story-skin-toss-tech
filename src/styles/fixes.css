@@ -466,6 +466,84 @@ body.has-list-page .docs-list-item__thumb:not(:has(img)) {
   border-radius: 10px !important;
 }
 
+/* ==========================================================================
+   List Item Card Layout Locking & Pre-reservation (Strict CLS Elimination)
+   ========================================================================== */
+
+/* 1. 데스크톱 (PC) 환경: 글제목, 요약문, 메타 영역 높이 칼같이 예약 */
+body.has-list-page .docs-list-item__title {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  height: 58px !important; /* 글자 크기 21px 기준 2줄 최대 58px 엄수 */
+  min-height: 58px !important;
+  max-height: 58px !important;
+  line-height: 1.4 !important;
+}
+
+body.has-list-page .docs-list-item__summary {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  margin: 10px 0 !important; /* 마진도 고정 제어 */
+  height: 42px !important; /* 글자 크기 15px 기준 2줄 최대 42px 엄수 */
+  min-height: 42px !important;
+  max-height: 42px !important;
+  line-height: 1.4 !important;
+  box-sizing: border-box !important;
+}
+
+body.has-list-page .docs-list-item__meta {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  height: 20px !important; /* 날짜&카테고리 영역 공간 20px 엄수 */
+  min-height: 20px !important;
+  max-height: 20px !important;
+  overflow: hidden !important;
+}
+
+/* 2. 모바일 (Mobile: max-width: 760px) 환경: 글제목, 요약문, 메타 영역 리디자인 및 높이 예약 */
+@media (max-width: 760px) {
+  body.has-list-page .docs-list-item__title {
+    font-size: 15px !important;
+    height: 42px !important; /* 모바일 글자 15px 기준 2줄 최대 42px 엄수 */
+    min-height: 42px !important;
+    max-height: 42px !important;
+    line-height: 1.4 !important;
+  }
+
+  body.has-list-page .docs-list-item__summary {
+    font-size: 12px !important;
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
+    height: 35px !important; /* 모바일 글자 12px 기준 2줄 최대 35px 엄수 */
+    min-height: 35px !important;
+    max-height: 35px !important;
+    line-height: 1.45 !important;
+  }
+
+  /* 모바일에서 숨겨져 있던 날짜 & 카테고리를 다시 세련되게 노출하고 높이를 16px로 굳건히 예약 */
+  body.has-list-page .docs-list-item__meta {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-top: 6px !important;
+    margin-bottom: 0 !important;
+    height: 16px !important;
+    min-height: 16px !important;
+    max-height: 16px !important;
+    font-size: 11px !important;
+    color: var(--text-soft) !important;
+    font-weight: 500 !important;
+    overflow: hidden !important;
+  }
+}
+
+
 
 
 
