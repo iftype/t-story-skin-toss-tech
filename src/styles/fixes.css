@@ -86,9 +86,9 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important; /* Keep controls firmly at the bottom */
-    height: 154px !important; /* Strict reserved height to lock button position */
-    min-height: 154px !important;
-    max-height: 154px !important;
+    height: 166px !important; /* Strict reserved height to lock button position */
+    min-height: 166px !important;
+    max-height: 166px !important;
     overflow: hidden !important;
     gap: 10px !important;
   }
@@ -97,9 +97,9 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     display: flex !important;
     flex-direction: column !important;
     gap: 6px !important;
-    height: 98px !important; /* Reserved text space: Title (52px) + Summary (40px) + Gap (6px) */
-    min-height: 98px !important;
-    max-height: 98px !important;
+    height: 112px !important; /* Reserved text space: Title (62px) + Summary (44px) + Gap (6px) */
+    min-height: 112px !important;
+    max-height: 112px !important;
     overflow: hidden !important;
   }
 
@@ -109,9 +109,9 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     margin: 0 !important;
-    height: 52px !important; /* Exact height for max 2 lines of 21px font with 1.25 line-height */
+    height: 62px !important; /* Generous height + 1.4 line-height guarantees no clipping on any device font */
     font-size: 21px !important;
-    line-height: 1.25 !important;
+    line-height: 1.4 !important;
     letter-spacing: -0.02em !important;
     word-break: keep-all !important;
   }
@@ -122,9 +122,9 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     margin: 0 !important;
-    height: 40px !important; /* Exact height for max 2 lines of 14px font with 1.4 line-height */
+    height: 44px !important; /* Generous height + 1.5 line-height guarantees no clipping on summary text */
     font-size: 14px !important;
-    line-height: 1.4 !important;
+    line-height: 1.5 !important;
     color: var(--text-muted) !important;
     word-break: keep-all !important;
   }
