@@ -86,20 +86,20 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important; /* Keep controls firmly at the bottom */
-    height: 166px !important; /* Strict reserved height to lock button position */
-    min-height: 166px !important;
-    max-height: 166px !important;
+    height: 172px !important; /* Strict reserved height to lock button position */
+    min-height: 172px !important;
+    max-height: 172px !important;
     overflow: hidden !important;
-    gap: 10px !important;
+    gap: 12px !important;
   }
 
   body.is-home-page .docs-home-featured__info {
     display: flex !important;
     flex-direction: column !important;
     gap: 6px !important;
-    height: 112px !important; /* Reserved text space: Title (62px) + Summary (44px) + Gap (6px) */
-    min-height: 112px !important;
-    max-height: 112px !important;
+    height: 118px !important; /* Reserved text space: Title + Summary + Gap */
+    min-height: 118px !important;
+    max-height: 118px !important;
     overflow: hidden !important;
   }
 
@@ -109,9 +109,9 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     margin: 0 !important;
-    height: 62px !important; /* Generous height + 1.4 line-height guarantees no clipping on any device font */
+    max-height: 64px !important; /* Let font render naturally without hard clipping height */
     font-size: 21px !important;
-    line-height: 1.4 !important;
+    line-height: 1.35 !important;
     letter-spacing: -0.02em !important;
     word-break: keep-all !important;
   }
@@ -122,9 +122,9 @@ body[data-path="/category"] #main-content#main-content.docs-content:has(.docs-li
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     margin: 0 !important;
-    height: 44px !important; /* Generous height + 1.5 line-height guarantees no clipping on summary text */
+    max-height: 46px !important; /* Let summary render naturally without hard clipping height */
     font-size: 14px !important;
-    line-height: 1.5 !important;
+    line-height: 1.45 !important;
     color: var(--text-muted) !important;
     word-break: keep-all !important;
   }
