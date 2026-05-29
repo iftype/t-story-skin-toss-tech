@@ -544,23 +544,28 @@ body.has-list-page .docs-list-item__meta {
 
 /* 2. 모바일 (Mobile: max-width: 760px) 환경: 글제목, 요약문, 메타 영역 리디자인 및 높이 예약 */
 @media (max-width: 760px) {
-  /* 1. 리스트 아이템 레이아웃을 세로 방향 풀와이드 카드로 전면 전환 (김민지 블로그 스타일) */
+  /* 0. 모바일에서 상단 피처드 슬라이더 영역 완전 차단 (사용자 요청 반영) */
+  body.is-home-page .docs-home-featured {
+    display: none !important;
+  }
+
+  /* 1. 리스트 아이템 레이아웃을 세로 방향 초밀착 카드로 전환 */
   body.has-list-page .docs-list-item__inner {
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 12px !important;
+    gap: 0px !important; /* 이미지와 텍스트 거리를 초밀착시키기 위해 갭 완전 제거 */
     min-height: 0 !important;
-    padding: 24px 0 !important; /* 위아래 넉넉하고 쾌적한 간격 */
+    padding: 14px 0 !important; /* 모바일 높이를 줄이기 위해 세로 여백 대폭 감소 */
     border-bottom: 1px solid var(--line-soft) !important;
   }
 
-  /* 2. 썸네일 영역을 상단에 풀와이드 16:9 비율로 고정 배치 */
+  /* 2. 썸네일 영역을 슬림한 가로형 와이드 비율(21:9)로 조정하여 세로형 카드 비대화 방지 */
   body.has-list-page .docs-list-item__thumb-link {
     grid-column: auto !important;
     grid-row: auto !important;
     width: 100% !important;
-    aspect-ratio: 16 / 9 !important;
+    aspect-ratio: 21 / 9 !important;
     height: auto !important;
     align-self: stretch !important;
   }
@@ -568,59 +573,59 @@ body.has-list-page .docs-list-item__meta {
   body.has-list-page .docs-list-item__thumb {
     width: 100% !important;
     height: auto !important;
-    aspect-ratio: 16 / 9 !important;
+    aspect-ratio: 21 / 9 !important;
     min-height: 0 !important;
     max-height: none !important;
-    border-radius: 12px !important; /* 아름답고 둥근 곡률 적용 */
+    border-radius: 12px !important;
     overflow: hidden !important;
   }
 
-  /* 3. 텍스트 컨텐츠 블록을 하단 풀와이드로 배치 */
+  /* 3. 텍스트 컨텐츠 블록 배치 */
   body.has-list-page .docs-list-item__content {
     grid-column: auto !important;
     grid-row: auto !important;
-    gap: 0 !important; /* 미세 간격은 개별 텍스트 요소 마진으로 세밀화 */
+    gap: 0 !important;
     width: 100% !important;
-    padding: 0 4px !important; /* 썸네일 정렬선에 흐름이 맞물리도록 측면 패딩 미세 조정 */
+    padding: 0 4px !important;
   }
 
-  /* 4. 제목 스타일 조정: 풀와이드 가로 폭을 확보한 만큼 폰트 스케일을 키워 듬직하고 가독성 높게 조정 */
+  /* 4. 제목과 사진 밀착: 4px 여백으로 초밀착 */
   body.has-list-page .docs-list-item__title {
-    font-size: 19px !important; /* 15px에서 19px로 풍성하게 증대 */
+    font-size: 19px !important;
     font-weight: 700 !important;
     color: var(--text-heading) !important;
     line-height: 1.35 !important;
-    margin: 8px 0 0 0 !important; /* 썸네일 밑에 기분 좋은 여백 */
-    height: auto !important; /* 강제 고정 대신 자연스러운 자동 높이 */
+    margin: 4px 0 0 0 !important; /* 썸네일 바로 밑으로 초밀착 */
+    height: auto !important;
     min-height: 0 !important;
-    max-height: 52px !important; /* 19px 기준 최대 2줄 52px 보정 */
+    max-height: 52px !important; /* 최대 2줄 제한 */
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
   }
 
-  /* 5. 요약문 스타일 조정: 충분한 가로 폭에 맞추어 13.5px로 조절, 2줄 안정 높이 적용 */
+  /* 5. 요약문 스타일 조정: 카드 높이를 낮추기 위해 1줄 최고 제한 설정 */
   body.has-list-page .docs-list-item__summary {
-    font-size: 13.5px !important; /* 12px에서 13.5px로 쾌적하게 조절 */
+    font-size: 13.5px !important;
     color: var(--text-muted) !important;
     line-height: 1.45 !important;
-    margin-top: 6px !important;
+    margin-top: 3px !important; /* 여백 3px로 촘촘히 조절 */
     margin-bottom: 0 !important;
     height: auto !important;
     min-height: 0 !important;
-    max-height: 40px !important; /* 13.5px 기준 최대 2줄 40px */
+    max-height: 20px !important; /* 1줄 최대 높이 20px 제한 */
     display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
+    -webkit-line-clamp: 1 !important; /* 깔끔한 한 줄 요약 */
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
   }
 
-  /* 6. 모바일 비동기 로딩 중인 2줄 요약문 Shimmer 스켈레톤 높이 보정 */
+  /* 6. 모바일 비동기 로딩 중인 1줄 요약문 Shimmer 스켈레톤 높이 보정 */
   body.has-list-page .docs-list-item__summary.is-loading-skeleton {
-    height: 40px !important;
-    min-height: 40px !important;
-    max-height: 40px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
     background: linear-gradient(
       90deg,
       #f1f5f9 25%,
@@ -629,7 +634,7 @@ body.has-list-page .docs-list-item__meta {
     ) !important;
     background-size: 200% 100% !important;
     animation: shimmer-sweep 1.4s infinite linear !important;
-    border-radius: 6px !important;
+    border-radius: 4px !important;
   }
 
   html[data-ui-theme="dark"] body.has-list-page .docs-list-item__summary.is-loading-skeleton {
@@ -650,17 +655,17 @@ body.has-list-page .docs-list-item__meta {
     padding: 0 !important;
   }
 
-  /* 7. 날짜 및 메타 데이터 정보 쾌적하게 공간 확보 및 배치 */
+  /* 7. 날짜 및 메타 데이터 정보 초밀착 간격 조정 */
   body.has-list-page .docs-list-item__meta {
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
-    margin-top: 10px !important; /* 요약문 아래 10px 여백으로 여유감 증대 */
+    margin-top: 6px !important; /* 요약문 아래 6px 여백으로 밀착 */
     margin-bottom: 0 !important;
     height: 18px !important;
     min-height: 18px !important;
     max-height: 18px !important;
-    font-size: 12px !important; /* 11px에서 12px로 선명도 보강 */
+    font-size: 12px !important;
     color: var(--text-soft) !important;
     font-weight: 500 !important;
     overflow: hidden !important;
