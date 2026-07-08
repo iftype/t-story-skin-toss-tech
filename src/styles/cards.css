@@ -202,7 +202,7 @@ body.has-list-page .docs-list-item__main-link {
 body.has-list-page .docs-list-item__title {
   display: -webkit-box !important;
   margin: 0 !important;
-  font-size: 21px !important;
+  font-size: 18px !important;
   font-weight: 600 !important;
   line-height: 1.4 !important;
   -webkit-box-orient: vertical !important;
@@ -367,7 +367,7 @@ body.has-list-page .docs-list-item__meta:has(.docs-list-item__reading-time[hidde
 
   body.has-list-page .docs-list-item__title {
     display: -webkit-box !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     line-height: 1.4 !important;
     font-weight: 700 !important;
     -webkit-box-orient: vertical !important;

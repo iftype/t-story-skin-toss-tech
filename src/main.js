@@ -11,7 +11,11 @@ import { generateTOC, updateTocStickyBoundary } from './toc.js'
 import { syncCommentComposerAvatar, normalizeLegacyComments, trackOpenCommentMenus, renderCommentMarkdown, setupCommentFallback, setupCommentReplyClick, setupCommentAvatarLogin } from './comments.js'
 import { setupFloatingLikeButton, arrangeLikeButton } from './likes.js'
 
+// 모듈 로드 즉시 페이지 상태 클래스를 설정하여 CSS 레이아웃 깜빡임(FOUC) 방지
+markPageState()
+
 function init() {
+  markPageState() // DOMContentLoaded 후 재확인
   injectCodeCSS()
   normalizeFooterGithubLink()
   applyTheme(getSavedTheme())
@@ -24,7 +28,7 @@ function init() {
   setupCategoryTree()
   bindGlobalActions()
   enhanceCodeBlocks()
-  markPageState()
+
   setupPageHeadEyebrow()
   normalizeArticleMedia()
   enableArticleImageLinks()
@@ -92,11 +96,20 @@ function init() {
 
   setupFloatingLikeButton()
 
-  requestAnimationFrame(() => {
+  const releaseInitialTransitionLock = () => {
     requestAnimationFrame(() => {
-      document.documentElement.classList.remove('no-transitions')
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove('no-transitions')
+      })
     })
-  })
+  }
+
+  if (document.readyState === 'complete') {
+    releaseInitialTransitionLock()
+  } else {
+    window.addEventListener('load', releaseInitialTransitionLock, { once: true })
+    window.setTimeout(releaseInitialTransitionLock, 1800)
+  }
 }
 
 if (document.readyState === 'loading') {

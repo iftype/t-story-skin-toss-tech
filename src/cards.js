@@ -53,7 +53,9 @@ export function markPageState() {
 
   const pageHead = document.querySelector('.docs-page-head')
   if (pageHead) {
-    pageHead.hidden = normalizedPath === '/' || normalizedPath === '/category' || normalizedPath.endsWith('/skin.html')
+    const shouldHidePageHead = normalizedPath === '/' || normalizedPath === '/category' || normalizedPath.endsWith('/skin.html')
+    const shouldShowMobilePageHead = window.matchMedia('(max-width: 760px)').matches
+    pageHead.hidden = shouldHidePageHead && !shouldShowMobilePageHead
   }
 }
 
@@ -400,8 +402,16 @@ export function extractListPreviewInfo(articleRoot) {
   
   // Query all heading and body content elements in strict pre-order document tree order
   // This flattens any wrapping/nested divs that Tistory's editor or layouts inject.
-  const nodes = Array.from(articleRoot.querySelectorAll('h2, h3, p, ul, ol'))
-  const firstH2Index = nodes.findIndex((node) => node.tagName === 'H2')
+  const allNodes = Array.from(articleRoot.querySelectorAll('h1, h2, h3, h4, h5, h6, p, blockquote, ul, ol'))
+  
+  // Filter out nested children inside blockquotes, pre tags, and tables to avoid duplicate text collection
+  const nodes = allNodes.filter((node) => {
+    if (node.tagName !== 'BLOCKQUOTE' && node.closest('blockquote')) return false
+    if (node.closest('pre, table')) return false
+    return true
+  })
+
+  const firstHeadingIndex = nodes.findIndex((node) => /^H[1-6]$/.test(node.tagName))
 
   const collected = []
   const appendText = (text) => {
@@ -412,12 +422,10 @@ export function extractListPreviewInfo(articleRoot) {
 
   const takeFromRange = (rangeNodes, stopAtHeading = true) => {
     for (const node of rangeNodes) {
-      // If we encounter a sibling heading or blocked element, stop
-      if (stopAtHeading && (node.tagName === 'H2' || node.tagName === 'H3' || node.closest('blockquote, pre, table'))) {
+      // If we encounter any heading level (H1-H6), stop collecting immediately
+      if (stopAtHeading && /^H[1-6]$/.test(node.tagName)) {
         break
       }
-      // Skip if the node itself is nested inside a blocked tag (blockquote, pre code frame, or tables)
-      if (node.closest('blockquote, pre, table')) continue
       
       appendText(textFromNode(node))
       if (cleanTextContent(collected.join(' ')).length >= 220) break
@@ -427,13 +435,13 @@ export function extractListPreviewInfo(articleRoot) {
   // 1. Explicitly tagged preview section
   const explicitPreviewNode = articleRoot.querySelector('[data-list-preview-section], [data-preview-section]')
   if (explicitPreviewNode) {
-    takeFromRange(Array.from(explicitPreviewNode.querySelectorAll('p, ul, ol')), false)
+    takeFromRange(Array.from(explicitPreviewNode.querySelectorAll('p, blockquote, ul, ol')), false)
   }
 
   // 2. Match precise intro/introduction heading keywords
   if (collected.length === 0) {
     const previewHeadingIndex = nodes.findIndex((node) => {
-      if (node.tagName !== 'H2' && node.tagName !== 'H3') return false
+      if (!/^H[1-6]$/.test(node.tagName)) return false
       const text = textFromNode(node).replace(/\[preview\]/gi, '').trim()
       const startsWithIntro = /^(?:들어가며|시작하며|소개|intro)/i.test(text)
       return startsWithIntro && text.length <= 15
@@ -443,14 +451,14 @@ export function extractListPreviewInfo(articleRoot) {
     }
   }
 
-  // 3. Fallback: text before the first H2
-  if (collected.length === 0 && firstH2Index > 0) {
-    takeFromRange(nodes.slice(0, firstH2Index))
+  // 3. Fallback: text before the first heading
+  if (collected.length === 0 && firstHeadingIndex > 0) {
+    takeFromRange(nodes.slice(0, firstHeadingIndex))
   }
 
-  // 4. Fallback: text after the first H2
-  if (collected.length === 0 && firstH2Index >= 0) {
-    takeFromRange(nodes.slice(firstH2Index + 1))
+  // 4. Fallback: text after the first heading
+  if (collected.length === 0 && firstHeadingIndex >= 0) {
+    takeFromRange(nodes.slice(firstHeadingIndex + 1))
   }
 
   // 5. Hard fallback: parse all nodes
@@ -522,7 +530,7 @@ export async function hydrateListSummaries() {
   })
 
   const parser = new DOMParser()
-  const cachePrefix = 'docs-list-summary-v3:'
+  const cachePrefix = 'docs-list-summary-v4:'
 
   await Promise.allSettled(items.map(async (item) => {
     const summaryNode = item.querySelector('[data-list-summary]')
@@ -655,7 +663,7 @@ export function recommendationContext() {
 export async function fillRecommendationSummaries(items, parser) {
   if (items.length === 0) return
 
-  const cachePrefix = 'docs-list-summary-v3:'
+  const cachePrefix = 'docs-list-summary-v4:'
 
   await Promise.allSettled(items.map(async (item) => {
     // 1. Try sessionStorage cache first
@@ -900,7 +908,7 @@ export function hydrateArticleRecommendationsFromSidebar() {
 
   if (items.length === 0) return
 
-  const cachePrefix = 'docs-list-summary-v3:'
+  const cachePrefix = 'docs-list-summary-v4:'
   const pendingItems = []
   let hasHydrated = false
 

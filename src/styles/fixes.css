@@ -574,32 +574,43 @@ body.has-list-page .docs-list-item__meta {
     border-bottom: 1px solid var(--line-soft) !important;
   }
 
-  /* 2. 썸네일 영역을 슬림한 가로형 와이드 비율(21:9)로 조정하여 세로형 카드 비대화 방지 */
+  /* 2. 썸네일 영역: 풀와이드 16:9 비율로 이미지가 컨테이너를 빈틈없이 채움 */
   body.has-list-page .docs-list-item__thumb-link {
     display: block !important;
     grid-column: auto !important;
     grid-row: auto !important;
     width: 100% !important;
-    aspect-ratio: 21 / 9 !important;
     height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
     border-radius: 12px !important;
     align-self: stretch !important;
+    line-height: 0 !important; /* 인라인 이미지 하단 갭 제거 */
   }
 
   body.has-list-page .docs-list-item__thumb {
     display: block !important;
     width: 100% !important;
-    height: 100% !important;
-    aspect-ratio: 21 / 9 !important;
+    aspect-ratio: 3 / 2 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
     border-radius: 12px !important;
     overflow: hidden !important;
     background: var(--bg-soft) !important;
+  }
+
+  /* 2.1. 이미지가 썸네일 컨테이너를 빈틈없이 채우도록 강제 */
+  body.has-list-page .docs-list-item__thumb img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 0 !important;
   }
 
   /* 3. 텍스트 컨텐츠 블록 배치: flex 열 레이아웃으로 변경하여 그리드 행 정렬 여백을 완벽히 리셋 */
@@ -641,28 +652,28 @@ body.has-list-page .docs-list-item__meta {
     overflow: hidden !important;
   }
 
-  /* 5. 요약문 스타일 조정: 카드 높이를 낮추기 위해 1줄 최고 제한 설정 */
+  /* 5. 요약문 스타일 조정: 2줄까지 표시 */
   body.has-list-page .docs-list-item__summary {
     font-size: 13.5px !important;
     color: var(--text-muted) !important;
     line-height: 1.45 !important;
-    margin-top: 3px !important; /* 여백 3px로 촘촘히 조절 */
+    margin-top: 3px !important;
     margin-bottom: 0 !important;
     padding: 0 !important;
     height: auto !important;
     min-height: 0 !important;
-    max-height: 20px !important; /* 1줄 최대 높이 20px 제한 */
+    max-height: 40px !important; /* 2줄 최대 높이 */
     display: -webkit-box !important;
-    -webkit-line-clamp: 1 !important; /* 깔끔한 한 줄 요약 */
+    -webkit-line-clamp: 2 !important; /* 2줄 요약 */
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
   }
 
-  /* 6. 모바일 비동기 로딩 중인 1줄 요약문 Shimmer 스켈레톤 높이 보정 */
+  /* 6. 모바일 비동기 로딩 중인 2줄 요약문 Shimmer 스켈레톤 높이 보정 */
   body.has-list-page .docs-list-item__summary.is-loading-skeleton {
-    height: 20px !important;
-    min-height: 20px !important;
-    max-height: 20px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
     background: linear-gradient(
       90deg,
       #f1f5f9 25%,
@@ -710,8 +721,499 @@ body.has-list-page .docs-list-item__meta {
   }
 }
 
+/* Mobile refresh guard: keep image geometry stable until CSS, JS, and image decode settle. */
+html.no-transitions body.has-list-page .docs-list-item__thumb,
+html.no-transitions body.has-list-page .docs-list-item__thumb img,
+html.no-transitions body.is-home-page .docs-home-featured__media,
+html.no-transitions body.is-home-page .docs-home-featured__media img,
+html.no-transitions .article-body img {
+  transition: none !important;
+  transform: none !important;
+  animation: none !important;
+}
 
+@media (max-width: 760px) {
+  body.has-list-page .docs-list-item__thumb-link {
+    contain: layout paint !important;
+  }
 
+  body.has-list-page .docs-list-item__thumb {
+    flex: none !important;
+  }
 
+  body.has-list-page .docs-list-item__thumb img {
+    max-width: none !important;
+  }
 
+  .article-body .imageblock,
+  .article-body figure,
+  .article-body p:has(> img),
+  .article-body .article-media--wide,
+  .article-body figure.article-media--wide,
+  .article-body p.article-media--wide {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    transform: none !important;
+  }
 
+  .article-body img,
+  .article-body .imageblock img,
+  .article-body figure img,
+  .article-body p:has(> img) img,
+  .article-body .article-media--wide img,
+  .article-body figure.article-media--wide img,
+  .article-body p.article-media--wide img {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 420px !important;
+    object-fit: contain !important;
+    transform: none !important;
+  }
+}
+
+/* Final phone list contract: image, title, summary, then date/category. */
+@media (max-width: 640px) {
+  body.has-list-page .docs-list-item__inner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border-bottom: 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb-link {
+    display: block !important;
+    order: 1 !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    contain: layout paint !important;
+    line-height: 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb,
+  body.has-list-page .docs-list-item__thumb.is-thumb-wide,
+  body.has-list-page .docs-list-item__thumb.is-thumb-standard,
+  body.has-list-page .docs-list-item__thumb.is-thumb-tall {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: 2 / 1 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+  }
+
+  body.has-list-page .docs-list-item__thumb img {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transform: none !important;
+  }
+
+  body.has-list-page .docs-list-item__content {
+    display: flex !important;
+    order: 2 !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 4px !important;
+    margin: 0 !important;
+    gap: 0 !important;
+  }
+
+  body.has-list-page .docs-list-item__title {
+    margin: 6px 0 0 !important;
+    font-size: 19px !important;
+    font-weight: 700 !important;
+    line-height: 1.35 !important;
+    max-height: 52px !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body.has-list-page .docs-list-item__summary {
+    display: block !important;
+    margin: 3px 0 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: 59px !important;
+    font-size: 13.5px !important;
+    line-height: 1.45 !important;
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+    overflow: hidden !important;
+  }
+
+  body.has-list-page .docs-list-item__meta {
+    order: 3 !important;
+    margin-top: 5px !important;
+    height: 18px !important;
+    min-height: 18px !important;
+    max-height: 18px !important;
+  }
+
+  html body.has-list-page .docs-list-item .docs-list-item__content .docs-list-item__summary,
+  html body.has-list-page .docs-list-item .docs-list-item__content .docs-list-item__summary[data-list-summary] {
+    display: block !important;
+    max-height: 59px !important;
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+    overflow: hidden !important;
+  }
+}
+
+/* Tablet keeps the featured slider; only phone-sized screens hide it. */
+@media (min-width: 641px) and (max-width: 760px) {
+  body.is-home-page .docs-home-featured {
+    display: block !important;
+  }
+
+  body.is-home-page .docs-home-featured__link,
+  body.is-home-page .docs-home-featured.has-no-image .docs-home-featured__link {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr) !important;
+    grid-template-rows: none !important;
+    align-items: stretch !important;
+    gap: 24px !important;
+    height: 220px !important;
+    min-height: 220px !important;
+    max-height: 220px !important;
+  }
+
+  body.is-home-page .docs-home-featured__media {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    order: initial !important;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
+  }
+
+  body.is-home-page .docs-home-featured__copy {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    order: initial !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body.is-home-page .docs-home-overview {
+    display: none !important;
+  }
+
+  body.is-home-page .docs-home-featured {
+    display: none !important;
+  }
+}
+
+/* Mobile page heads should stay visible and sit close to the first card/image. */
+@media (max-width: 760px) {
+  body.has-list-page .docs-layout,
+  body.is-search-empty-body .docs-layout {
+    width: 100% !important;
+    max-width: none !important;
+    padding-right: 16px !important;
+    padding-left: 16px !important;
+  }
+
+  body.has-list-page .docs-content,
+  body.has-list-page .docs-content:has(.docs-list-item),
+  body.is-search-empty-body .docs-content {
+    width: 100% !important;
+    max-width: none !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  body.has-list-page .docs-page-head,
+  body.has-list-page .docs-page-head[hidden],
+  body.is-home-page .docs-page-head,
+  body.is-home-page .docs-page-head[hidden],
+  body.is-category-index .docs-page-head,
+  body.is-category-index .docs-page-head[hidden],
+  body[data-path="/"] .docs-page-head,
+  body[data-path="/"] .docs-page-head[hidden],
+  body[data-path="/category"] .docs-page-head,
+  body[data-path="/category"] .docs-page-head[hidden],
+  #tt-body-index .docs-page-head,
+  #tt-body-index .docs-page-head[hidden],
+  body.has-list-page.is-home-page #main-content#main-content.docs-content .docs-page-head,
+  body.has-list-page.is-home-page #main-content#main-content.docs-content .docs-page-head[hidden],
+  body.is-home-page #main-content#main-content.docs-content:has(.docs-list-item) .docs-page-head,
+  body.is-home-page #main-content#main-content.docs-content:has(.docs-list-item) .docs-page-head[hidden],
+  body[data-path="/"] #main-content#main-content.docs-content:has(.docs-list-item) .docs-page-head,
+  body[data-path="/"] #main-content#main-content.docs-content:has(.docs-list-item) .docs-page-head[hidden] {
+    display: flex !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 4px !important;
+  }
+
+  body.has-list-page .docs-page-head__title {
+    font-size: 25px !important;
+    line-height: 1.22 !important;
+  }
+
+  body.has-list-page .docs-page-head__meta {
+    margin-top: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   Final visual tuning: smaller brand, darker dark mode, tighter home rhythm
+   ========================================================================== */
+
+.docs-topbar__brand {
+  font-size: 20px !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0 !important;
+}
+
+@media (max-width: 760px) {
+  .docs-topbar__brand {
+    font-size: 16px !important;
+    line-height: 1.1 !important;
+  }
+}
+
+html[data-ui-theme="dark"] {
+  --bg: #0f1117 !important;
+  --bg-elevated: #141821 !important;
+  --bg-soft: #171b24 !important;
+  --panel: #151922 !important;
+  --line: #29303d !important;
+  --line-soft: #202631 !important;
+  --text-heading: #f8fafc !important;
+  --text: #e6e8ee !important;
+  --text-muted: #b7becb !important;
+  --text-soft: #7f8795 !important;
+  --accent-soft: rgba(110, 168, 254, 0.12) !important;
+  --topbar-bg: rgba(15, 17, 23, 0.92) !important;
+  --comment-panel-bg: #141821 !important;
+  --comment-card-bg: #171b24 !important;
+  --comment-avatar-bg: #222936 !important;
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.34) !important;
+}
+
+body.is-home-page .docs-home-featured__title {
+  font-size: 30px !important;
+  line-height: 1.24 !important;
+  font-weight: 720 !important;
+}
+
+body.is-home-page .docs-home-featured__summary {
+  font-size: 13.75px !important;
+  line-height: 1.54 !important;
+}
+
+body.is-home-page .featured-nav-controls {
+  gap: 12px !important;
+}
+
+body.is-home-page .featured-nav-btn {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+}
+
+body.is-home-page .featured-nav-btn svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+body.is-home-page.has-list-page .docs-list-item__summary,
+body.is-home-page .docs-list-item__summary {
+  margin-top: 5px !important;
+}
+
+@media (min-width: 1200px) {
+  body.is-home-page .docs-home-featured__title {
+    font-size: 36px !important;
+    line-height: 1.22 !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    font-size: 15px !important;
+    line-height: 1.62 !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1199px) {
+  body.is-home-page .docs-home-featured__title {
+    font-size: 28px !important;
+    line-height: 1.24 !important;
+  }
+
+  body.is-home-page .docs-home-featured__summary {
+    font-size: 13.5px !important;
+    line-height: 1.5 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.is-home-page .featured-nav-btn {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+  }
+
+  body.is-home-page .featured-nav-btn svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+
+  body.is-home-page.has-list-page .docs-list-item__summary,
+  body.is-home-page .docs-list-item__summary {
+    margin-top: 2px !important;
+  }
+}
+
+/* ==========================================================================
+   Final density pass: remove featured skeleton, compact list typography
+   ========================================================================== */
+
+body.is-home-page .docs-home-featured:not(.is-hydrated),
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) {
+  opacity: 1 !important;
+}
+
+body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__title,
+body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__summary,
+body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__media,
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__title,
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__summary,
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__media {
+  animation: none !important;
+  background: transparent !important;
+  color: inherit !important;
+}
+
+body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__media,
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__media {
+  opacity: 0 !important;
+}
+
+body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__title:empty,
+body.is-home-page .docs-home-featured:not(.is-hydrated) .docs-home-featured__summary:empty,
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__title:empty,
+body.is-home-page .docs-home-featured:not(.is-ready):not(.is-hydrated) .docs-home-featured__summary:empty {
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+body.has-list-page .docs-list-item__inner {
+  gap: 24px !important;
+}
+
+body.has-list-page .docs-list-item__content {
+  gap: 0 !important;
+}
+
+body.has-list-page .docs-list-item__main-link {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+body.has-list-page .docs-list-item__title {
+  font-size: 19px !important;
+  line-height: 1.34 !important;
+  height: auto !important;
+  min-height: 32px !important;
+  max-height: 52px !important;
+}
+
+body.has-list-page .docs-list-item__summary {
+  margin: 4px 0 0 !important;
+  font-size: 14px !important;
+  line-height: 1.36 !important;
+  max-height: 38px !important;
+}
+
+body.has-list-page .docs-list-item__meta {
+  margin-top: 10px !important;
+  font-size: 12px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  max-height: 18px !important;
+}
+
+@media (max-width: 760px) {
+  body.has-list-page .docs-list-item__title {
+    font-size: 18px !important;
+    line-height: 1.32 !important;
+    max-height: 48px !important;
+  }
+
+  body.has-list-page .docs-list-item__summary {
+    margin-top: 2px !important;
+    font-size: 13px !important;
+    line-height: 1.38 !important;
+    max-height: 54px !important;
+  }
+
+  body.has-list-page .docs-list-item__meta {
+    margin-top: 4px !important;
+  }
+}
+
+/* Pagination: remove outlined boxes and quiet down Prev/Next labels. */
+.docs-paging__button,
+.docs-paging__number {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.docs-paging__button:hover,
+.docs-paging__number:hover {
+  border-color: transparent !important;
+  background: var(--accent-soft) !important;
+}
+
+.docs-paging__button {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.docs-paging__number {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+@media (max-width: 760px) {
+  .docs-paging__button {
+    font-size: 12px !important;
+  }
+
+  .docs-paging__number {
+    font-size: 13px !important;
+  }
+}
