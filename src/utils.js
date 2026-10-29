@@ -1,5 +1,8 @@
+import { highlighter } from './highlight/index.js'
+
+// 이름은 예전(hljs) 그대로 두고, 실제로는 스킨에 넣은 Prism 하이라이터를 쓴다
 export function getHljs() {
-  return window.hljs || { highlightElement: () => {}, getLanguage: () => {} }
+  return highlighter
 }
 
 const STORAGE_KEY = 'docs-theme'
