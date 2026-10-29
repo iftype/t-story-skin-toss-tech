@@ -175,18 +175,16 @@ export function setupCategoryTree() {
       return
     }
 
-    // Double-click or clicking empty space in folder row toggles too
+    // 하위 카테고리가 있는 상위 카테고리는 폴더처럼 동작한다:
+    // 이름을 눌러도 페이지로 이동하지 않고 펼치기/접기만 한다
     const row = e.target.closest('.vs-tree-row')
     if (row) {
-      const link = e.target.closest('a')
-      if (!link) {
-        const item = row.closest('.vs-tree-item')
-        if (item && item.classList.contains('is-folder')) {
-          e.preventDefault()
-          const href = item.getAttribute('data-href')
-          const isOpen = item.classList.toggle('is-open')
-          localStorage.setItem('vs-tree-folder:' + href, isOpen ? 'true' : 'false')
-        }
+      const item = row.closest('.vs-tree-item')
+      if (item && item.classList.contains('is-folder')) {
+        e.preventDefault()
+        const href = item.getAttribute('data-href')
+        const isOpen = item.classList.toggle('is-open')
+        localStorage.setItem('vs-tree-folder:' + href, isOpen ? 'true' : 'false')
       }
     }
   })
@@ -368,18 +366,16 @@ export function renderCategoryMap() {
       return
     }
 
+    // 하위 카테고리가 있는 상위 카테고리는 폴더처럼 동작한다:
+    // 이름을 눌러도 페이지로 이동하지 않고 펼치기/접기만 한다
     const row = e.target.closest('.vs-tree-row')
     if (row) {
-      const link = e.target.closest('a')
-      if (!link) {
-        // Clicking row toggles folder if it is a folder
-        const item = row.closest('.vs-tree-item')
-        if (item && item.classList.contains('is-folder')) {
-          e.preventDefault()
-          const href = item.getAttribute('data-href')
-          const isOpen = item.classList.toggle('is-open')
-          localStorage.setItem('vs-tree-folder:' + href, isOpen ? 'true' : 'false')
-        }
+      const item = row.closest('.vs-tree-item')
+      if (item && item.classList.contains('is-folder')) {
+        e.preventDefault()
+        const href = item.getAttribute('data-href')
+        const isOpen = item.classList.toggle('is-open')
+        localStorage.setItem('vs-tree-folder:' + href, isOpen ? 'true' : 'false')
       }
     }
   })
