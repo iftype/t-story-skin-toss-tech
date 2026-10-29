@@ -8,7 +8,7 @@ import { decorateWriteLinks, showAdminElements, normalizeProfileAvatars, bindGlo
 import { setupCategoryTree, renderCategoryMap } from './category.js'
 import { attachPostsToCategoryTrees } from './category-posts.js'
 import { markPageState, setupPageHeadEyebrow, showEmptyStateWhenNeeded, normalizeListMeta, normalizeListCards, hydrateHomeFeatured, hydrateListSummaries, setupThumbnailFallbacks, hydrateArticleRecommendationsFromSidebar } from './cards.js'
-import { enableArticleImageLinks, normalizeArticleMedia, normalizeMarkdownListParagraphs, assignHeadingIds, setupHeadingAnchors } from './article.js'
+import { enableArticleImageLinks, normalizeArticleMedia, normalizeMarkdownListParagraphs, assignHeadingIds, setupHeadingAnchors, renderInlineBackticks } from './article.js'
 import { generateTOC, updateTocStickyBoundary } from './toc.js'
 import { syncCommentComposerAvatar, normalizeLegacyComments, trackOpenCommentMenus, renderCommentMarkdown, setupCommentFallback, setupCommentReplyClick, setupCommentAvatarLogin } from './comments.js'
 import { setupFloatingLikeButton, arrangeLikeButton } from './likes.js'
@@ -33,6 +33,7 @@ function init() {
   attachPostsToCategoryTrees()
   bindGlobalActions()
   enhanceCodeBlocks()
+  renderInlineBackticks()
 
   setupPageHeadEyebrow()
   normalizeArticleMedia()

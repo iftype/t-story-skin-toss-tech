@@ -99,7 +99,8 @@ export function enableArticleImageLinks() {
       else { closeZoom(true); if (window.innerWidth > 760) openZoom(image) }
     }
   }, true)
-  window.addEventListener('scroll', () => closeZoom(), { passive: true })
+  // 스크롤 중에 줄어드는 애니메이션을 하면 원래 자리가 계속 움직여 어색하다. 바로 닫는다
+  window.addEventListener('scroll', () => closeZoom(true), { passive: true })
   window.addEventListener('resize', () => closeZoom(true))
 }
 
@@ -274,3 +275,47 @@ export function setupHeadingAnchors() {
   })
 }
 
+
+// 티스토리 기본 에디터는 `코드` 처럼 백틱으로 감싼 글자를 그대로 둔다.
+// 본문에서 백틱 한 쌍으로 감싼 부분을 인라인 코드(<code>)로 바꿔 보여준다.
+// 코드 블록·이미 code 인 곳·링크 주소 등은 건드리지 않고, 한 줄 안의 짝만 바꾼다.
+export function renderInlineBackticks() {
+  const article = document.querySelector('[data-docs-article]')
+  if (!article) return
+
+  const pattern = /`([^`\n]+)`/g
+  const blocks = article.querySelectorAll('p, li, td, th, blockquote, h2, h3, h4, figcaption')
+  blocks.forEach((block) => block.normalize())
+
+  const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+    acceptNode: (node) => {
+      const parent = node.parentElement
+      if (!parent || parent.closest('pre, code, .code-frame, script, style, textarea')) return NodeFilter.FILTER_REJECT
+      return node.nodeValue.includes('`') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+    },
+  })
+
+  const targets = []
+  while (walker.nextNode()) targets.push(walker.currentNode)
+
+  targets.forEach((node) => {
+    const text = node.nodeValue
+    pattern.lastIndex = 0
+    if (!pattern.test(text)) return
+    pattern.lastIndex = 0
+
+    const fragment = document.createDocumentFragment()
+    let last = 0
+    let match
+    while ((match = pattern.exec(text))) {
+      if (match.index > last) fragment.appendChild(document.createTextNode(text.slice(last, match.index)))
+      const code = document.createElement('code')
+      code.className = 'inline-code'
+      code.textContent = match[1]
+      fragment.appendChild(code)
+      last = match.index + match[0].length
+    }
+    if (last < text.length) fragment.appendChild(document.createTextNode(text.slice(last)))
+    node.parentNode.replaceChild(fragment, node)
+  })
+}
