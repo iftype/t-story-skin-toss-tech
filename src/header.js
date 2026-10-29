@@ -1,5 +1,5 @@
 import { cleanTextContent } from './utils.js'
-import { toggleTheme } from './theme.js'
+import { toggleThemeAnimated } from './motion.js'
 
 export function buildWriteUrl() {
   const blogLink = document.querySelector('.docs-brand__title')?.getAttribute('href') || '/'
@@ -81,7 +81,7 @@ export function bindGlobalActions() {
     const target = e.target.closest('[data-action]')
     if (target) {
       const action = target.getAttribute('data-action')
-      if (action === 'toggle-theme') toggleTheme()
+      if (action === 'toggle-theme') toggleThemeAnimated(target)
       if (action === 'toggle-nav') toggleSidebar()
       return
     }

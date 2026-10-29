@@ -271,12 +271,26 @@ export async function hydrateHomeFeatured() {
   const imageNode = root.querySelector('.docs-home-featured__media img')
   const mediaContainer = root.querySelector('.docs-home-featured__media')
 
+  const AUTOPLAY_MS = 7000
+
+  // 남은 시간을 보여주는 진행 바. 타이머를 다시 시작할 때마다 처음부터 채운다
+  function restartProgress() {
+    const bar = root.querySelector('.featured-progress')
+    if (!bar) return
+    bar.style.setProperty('--featured-duration', `${AUTOPLAY_MS}ms`)
+    bar.classList.remove('is-running')
+    void bar.offsetWidth
+    if (featuredAutoplayTimer) bar.classList.add('is-running')
+  }
+
   function startAutoplay() {
     stopAutoplay()
     if (slides.length <= 1) return
     featuredAutoplayTimer = setInterval(() => {
-      showSlide(currentSlide + 1)
-    }, 7000) // 7 seconds comfortable cycle
+      showSlide(currentSlide + 1, 1)
+      restartProgress()
+    }, AUTOPLAY_MS)
+    restartProgress()
   }
 
   function stopAutoplay() {
@@ -284,12 +298,14 @@ export async function hydrateHomeFeatured() {
       clearInterval(featuredAutoplayTimer)
       featuredAutoplayTimer = null
     }
+    root.querySelector('.featured-progress')?.classList.remove('is-running')
   }
 
-  function showSlide(index) {
+  function showSlide(index, direction = 1) {
     if (index < 0) index = slides.length - 1
     if (index >= slides.length) index = 0
     currentSlide = index
+    root.dataset.slideDir = direction < 0 ? 'prev' : 'next'
 
     const data = slides[currentSlide]
     
@@ -348,9 +364,16 @@ export async function hydrateHomeFeatured() {
     }, 150)
   }
 
+  // hydrateHomeFeatured는 두 번 호출된다(main.js). 버튼은 한 번만 연결되므로
+  // 항상 마지막 초기화의 슬라이드 상태를 쓰도록 root에 현재 핸들러를 걸어둔다.
+  root.__featuredNav = (direction) => {
+    showSlide(currentSlide + direction, direction)
+    startAutoplay() // 수동으로 넘기면 다음 자동 전환까지의 시간을 처음부터 다시 센다
+  }
+  root.__featuredAutoplay = { start: startAutoplay, stop: stopAutoplay }
+
   // Initial render
   showSlide(0)
-  startAutoplay()
 
   // Append premium slider navigation buttons under copy
   const copyContainer = root.querySelector('.docs-home-featured__copy')
@@ -366,21 +389,28 @@ export async function hydrateHomeFeatured() {
         <button class="featured-nav-btn next" aria-label="다음 슬라이드">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </button>
+        <span class="featured-progress" aria-hidden="true"><span></span></span>
       `
       copyContainer.appendChild(controls)
 
       controls.querySelector('.prev').addEventListener('click', (e) => {
         e.preventDefault()
-        showSlide(currentSlide - 1)
-        startAutoplay() // Reset timer on manual click
+        root.__featuredNav?.(-1)
       })
       controls.querySelector('.next').addEventListener('click', (e) => {
         e.preventDefault()
-        showSlide(currentSlide + 1)
-        startAutoplay() // Reset timer on manual click
+        root.__featuredNav?.(1)
+      })
+
+      // 탭이 안 보이는 동안에는 멈췄다가 돌아오면 처음부터 다시 센다
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) root.__featuredAutoplay?.stop()
+        else root.__featuredAutoplay?.start()
       })
     }
   }
+
+  startAutoplay()
 
   root.hidden = false
 }

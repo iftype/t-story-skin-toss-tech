@@ -1,0 +1,329 @@
+/* ==========================================================================
+   Micro-interactions
+   main.js 에서 가장 마지막에 불러온다. 기존 규칙이 !important 로 transition 을
+   색상만으로 고정해 두었기 때문에, 여기서는 html:not(.no-transitions) 로
+   우선순위를 올려 transform/opacity 전환을 다시 더한다.
+   (.no-transitions 가 붙어 있는 첫 로드 순간에는 적용되지 않아 깜빡임이 없다)
+   ========================================================================== */
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --color-fade: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* ---------- 1. 버튼 공통: 호버 살짝 떠오름 + 누르는 순간 눌림 ---------- */
+html:not(.no-transitions) .docs-icon-button,
+html:not(.no-transitions) .docs-profile-actions__link,
+html:not(.no-transitions) .docs-paging__button,
+html:not(.no-transitions) .docs-paging__number {
+  transition: var(--color-fade), transform 0.22s var(--ease-out) !important;
+}
+
+html:not(.no-transitions) .docs-icon-button:hover,
+html:not(.no-transitions) .docs-profile-actions__link:hover,
+html:not(.no-transitions) .docs-paging__button:hover,
+html:not(.no-transitions) .docs-paging__number:hover {
+  transform: translateY(-1px) !important;
+}
+
+html:not(.no-transitions) .docs-icon-button.is-pressed,
+html:not(.no-transitions) .docs-profile-actions__link.is-pressed,
+html:not(.no-transitions) .docs-paging__button.is-pressed,
+html:not(.no-transitions) .docs-paging__number.is-pressed,
+html:not(.no-transitions) .code-copy.is-pressed {
+  transform: scale(0.92) !important;
+  transition-duration: 0.08s !important;
+}
+
+html:not(.no-transitions) .docs-icon-button:focus-visible,
+html:not(.no-transitions) .featured-nav-btn:focus-visible,
+html:not(.no-transitions) .docs-like-btn:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+
+/* ---------- 2. 상단 내비 링크: 밑줄이 왼쪽에서 자라난다 ---------- */
+.docs-topbar__nav-link {
+  position: relative;
+}
+
+.docs-topbar__nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.28s var(--ease-out);
+}
+
+.docs-topbar__nav-link:hover::after,
+.docs-topbar__nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+html:not(.no-transitions) .docs-topbar__nav-link {
+  transition: color 0.2s ease !important;
+}
+
+/* ---------- 3. 검색창: 포커스하면 넓어지고 테두리가 강조된다 ---------- */
+html:not(.no-transitions) .docs-searchbar {
+  transition: var(--color-fade), flex-basis 0.32s var(--ease-out), width 0.32s var(--ease-out) !important;
+}
+
+@media (min-width: 1101px) {
+  .docs-topbar__right .docs-searchbar:focus-within {
+    flex-basis: 240px !important;
+    width: 240px !important;
+  }
+}
+
+.docs-searchbar:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-soft) !important;
+}
+
+/* ---------- 4. 다크모드 토글 ---------- */
+.theme-mark {
+  display: inline-block;
+}
+
+.theme-mark.is-spinning {
+  animation: theme-mark-spin 0.6s var(--ease-spring);
+}
+
+@keyframes theme-mark-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  45% { transform: rotate(200deg) scale(0.78); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* View Transitions: 원형으로 퍼지는 동안 기본 crossfade 는 끈다 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* 스냅샷을 찍는 동안 요소별 색상 transition 이 섞이지 않게 한다 */
+html.is-theme-switching.is-theme-switching:not(.no-transitions) *,
+html.is-theme-switching.is-theme-switching:not(.no-transitions) *::before,
+html.is-theme-switching.is-theme-switching:not(.no-transitions) *::after {
+  transition: none !important;
+}
+
+/* ---------- 5. 사이드바(햄버거 메뉴) ---------- */
+@media (max-width: 1100px) {
+  html:not(.no-transitions) .docs-sidebar {
+    transition: transform 0.42s var(--ease-drawer), var(--color-fade) !important;
+  }
+
+  /* display 토글 대신 투명도로 오버레이를 서서히 보여준다 */
+  .docs-sidebar-overlay {
+    display: block !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  html:not(.no-transitions) .docs-sidebar-overlay {
+    transition: opacity 0.32s ease, visibility 0s linear 0.32s !important;
+  }
+
+  body.nav-open .docs-sidebar-overlay {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  html:not(.no-transitions) body.nav-open .docs-sidebar-overlay {
+    transition: opacity 0.32s ease, visibility 0s linear 0s !important;
+  }
+
+  /* 열릴 때 섹션이 위에서부터 차례로 들어온다 */
+  body.nav-open .docs-sidebar .docs-brand,
+  body.nav-open .docs-sidebar .docs-nav__section {
+    animation: drawer-item-in 0.5s var(--ease-out) both;
+  }
+
+  body.nav-open .docs-sidebar .docs-nav__section:nth-child(1) { animation-delay: 0.06s; }
+  body.nav-open .docs-sidebar .docs-nav__section:nth-child(2) { animation-delay: 0.12s; }
+  body.nav-open .docs-sidebar .docs-nav__section:nth-child(3) { animation-delay: 0.18s; }
+  body.nav-open .docs-sidebar .docs-nav__section:nth-child(n + 4) { animation-delay: 0.24s; }
+
+  html:not(.no-transitions) .docs-sidebar__close:hover {
+    transform: rotate(90deg) !important;
+  }
+}
+
+@keyframes drawer-item-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- 6. 카테고리 트리 펼침 ---------- */
+.vs-tree-item.is-open > .vs-tree-sub-list,
+.category-tree li.is-open > ul {
+  animation: tree-open 0.28s var(--ease-out);
+  transform-origin: top left;
+}
+
+@keyframes tree-open {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.vs-tree-chevron svg {
+  transition: transform 0.24s var(--ease-spring) !important;
+}
+
+/* ---------- 7. 홈 슬라이더: 넘기는 방향으로 살짝 밀리며 바뀌고, 남은 시간 바 ---------- */
+body.is-home-page .docs-home-featured.is-hydrated .docs-home-featured__title,
+body.is-home-page .docs-home-featured.is-hydrated .docs-home-featured__summary {
+  animation: featured-copy-in 0.5s var(--ease-out) both;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated .docs-home-featured__summary {
+  animation-delay: 0.05s;
+}
+
+body.is-home-page .docs-home-featured.is-hydrated[data-slide-dir="prev"] .docs-home-featured__title,
+body.is-home-page .docs-home-featured.is-hydrated[data-slide-dir="prev"] .docs-home-featured__summary {
+  animation-name: featured-copy-in-prev;
+}
+
+@keyframes featured-copy-in {
+  from { opacity: 0; transform: translateX(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes featured-copy-in-prev {
+  from { opacity: 0; transform: translateX(-14px); }
+  to { opacity: 1; transform: none; }
+}
+
+html:not(.no-transitions) .featured-nav-btn {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.22s var(--ease-out) !important;
+}
+
+html:not(.no-transitions) .featured-nav-btn.is-pressed {
+  transform: scale(0.88) !important;
+  transition-duration: 0.08s !important;
+}
+
+html:not(.no-transitions) .featured-nav-btn.prev:hover svg { transform: translateX(-2px); }
+html:not(.no-transitions) .featured-nav-btn.next:hover svg { transform: translateX(2px); }
+
+.featured-nav-btn svg {
+  transition: transform 0.22s var(--ease-out);
+}
+
+.featured-nav-controls {
+  align-items: center !important;
+}
+
+.featured-progress {
+  position: relative;
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-left: 4px;
+  border-radius: 999px;
+  background: var(--line-soft);
+  overflow: hidden;
+}
+
+.featured-progress > span {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--text-soft);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.featured-progress.is-running > span {
+  animation: featured-progress var(--featured-duration, 7000ms) linear forwards;
+}
+
+@keyframes featured-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ---------- 8. 공감(하트) ---------- */
+/* 글에 들어가면 왼쪽 하트가 아래에서 톡 떠오르며 나타난다 */
+.docs-like-btn--floating.is-entering:not(.is-vanishing):not(.is-drifting) {
+  animation: heart-reveal 0.7s var(--ease-spring) both;
+}
+
+@keyframes heart-reveal {
+  0% { opacity: 0; transform: translateY(10px) scale(0.6); }
+  60% { opacity: 0.45; transform: translateY(-2px) scale(1.08); }
+  100% { opacity: 0.45; transform: none; }
+}
+
+.docs-like-btn.is-pressed svg {
+  transform: scale(0.82) !important;
+  transition-duration: 0.08s !important;
+}
+
+.docs-like-btn svg.is-popping {
+  animation: heart-pop 0.5s var(--ease-spring) !important;
+}
+
+@keyframes heart-pop {
+  0% { transform: scale(0.82); }
+  40% { transform: scale(1.32); }
+  70% { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+
+.like-burst-dot {
+  position: fixed;
+  z-index: 1000;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #ff4a5a;
+  pointer-events: none;
+}
+
+.like-burst-dot:nth-of-type(3n) { background: #ff8a95; width: 5px; height: 5px; }
+.like-burst-dot:nth-of-type(3n + 1) { background: #ffb3ba; width: 4px; height: 4px; }
+
+.docs-like-btn--inline .like-count.is-ticking {
+  display: inline-block;
+  animation: count-tick 0.36s var(--ease-out);
+}
+
+@keyframes count-tick {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- 9. 동작 줄이기 설정 존중 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .featured-progress {
+    display: none !important;
+  }
+}

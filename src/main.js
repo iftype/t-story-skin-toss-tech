@@ -1,5 +1,6 @@
 import './styles.css'
 import './styles/fixes.css'
+import './styles/motion.css'
 
 import { injectCodeCSS, enhanceCodeBlocks } from './code.js'
 import { getSavedTheme, applyTheme, cleanInlineStyles, preserveWordCombination } from './theme.js'
@@ -10,6 +11,7 @@ import { enableArticleImageLinks, normalizeArticleMedia, normalizeMarkdownListPa
 import { generateTOC, updateTocStickyBoundary } from './toc.js'
 import { syncCommentComposerAvatar, normalizeLegacyComments, trackOpenCommentMenus, renderCommentMarkdown, setupCommentFallback, setupCommentReplyClick, setupCommentAvatarLogin } from './comments.js'
 import { setupFloatingLikeButton, arrangeLikeButton } from './likes.js'
+import { setupLikeMotion, setupPressFeedback } from './motion.js'
 
 // 모듈 로드 즉시 페이지 상태 클래스를 설정하여 CSS 레이아웃 깜빡임(FOUC) 방지
 markPageState()
@@ -95,6 +97,8 @@ function init() {
   window.addEventListener('load', updateTocStickyBoundary, { once: true })
 
   setupFloatingLikeButton()
+  setupLikeMotion()
+  setupPressFeedback()
 
   const releaseInitialTransitionLock = () => {
     requestAnimationFrame(() => {
