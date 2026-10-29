@@ -21,18 +21,16 @@ function targetRect(image, from) {
 
 function closeZoom(immediate = false) {
   if (!zoomed) return
-  const { image, layer, backdrop } = zoomed
+  const { layer, backdrop } = zoomed
   zoomed = null
-  const back = image.getBoundingClientRect()
+  if (immediate) { layer.remove(); backdrop.remove(); return }
+  layer.style.opacity = '0'
+  layer.style.transform = 'translate(-50%, -50%) scale(0.96)'
   backdrop.style.opacity = '0'
-  if (immediate || !back.width) {
-    layer.remove(); backdrop.remove(); image.style.visibility = ''
-    return
-  }
-  Object.assign(layer.style, { left: `${back.left}px`, top: `${back.top}px`, width: `${back.width}px`, height: `${back.height}px` })
-  window.setTimeout(() => { layer.remove(); backdrop.remove(); image.style.visibility = '' }, ZOOM_MS)
+  window.setTimeout(() => { layer.remove(); backdrop.remove() }, ZOOM_MS)
 }
 
+// 본문의 이미지는 제자리에 그대로 두고, 같은 이미지를 크게 한 장 더 화면 가운데에 띄운다
 function openZoom(image) {
   const from = image.getBoundingClientRect()
   if (!from.width) return
@@ -42,16 +40,25 @@ function openZoom(image) {
   backdrop.className = 'image-zoom-backdrop'
   const layer = document.createElement('img')
   layer.className = 'image-zoom-layer'
-  layer.src = image.currentSrc || image.src
+  // 본문은 작은 썸네일 주소일 수 있어 가능한 한 큰 원본(srcset 의 마지막 후보)을 쓴다
+  const srcset = image.getAttribute('srcset') || ''
+  const largest = srcset.split(',').map((part) => part.trim().split(/\s+/)[0]).filter(Boolean).pop()
+  layer.src = largest || image.currentSrc || image.src
   layer.alt = image.alt || ''
-  Object.assign(layer.style, { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, transition: `left ${ZOOM_MS}ms ${ZOOM_EASE}, top ${ZOOM_MS}ms ${ZOOM_EASE}, width ${ZOOM_MS}ms ${ZOOM_EASE}, height ${ZOOM_MS}ms ${ZOOM_EASE}` })
+  Object.assign(layer.style, {
+    width: `${to.width}px`,
+    height: `${to.height}px`,
+    opacity: '0',
+    transform: 'translate(-50%, -50%) scale(0.96)',
+    transition: `opacity ${ZOOM_MS}ms ease, transform ${ZOOM_MS}ms ${ZOOM_EASE}`,
+  })
   document.body.append(backdrop, layer)
-  image.style.visibility = 'hidden'
   zoomed = { image, layer, backdrop }
 
   void layer.offsetWidth
   backdrop.style.opacity = '1'
-  Object.assign(layer.style, { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px` })
+  layer.style.opacity = '1'
+  layer.style.transform = 'translate(-50%, -50%) scale(1)'
 }
 
 export function enableArticleImageLinks() {

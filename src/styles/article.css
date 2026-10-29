@@ -806,6 +806,8 @@ html[data-ui-theme="dark"] .image-zoom-backdrop {
 
 .image-zoom-layer {
   position: fixed;
+  left: 50%;
+  top: 50%;
   z-index: 1001;
   margin: 0;
   border-radius: 12px;
