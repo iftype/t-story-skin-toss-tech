@@ -781,3 +781,29 @@ html[data-ui-theme="light"] .article-body {
   font-weight: 400 !important;
 }
 
+
+/* 본문 이미지 클릭 확대 */
+@media (min-width: 761px) {
+  .article-body img.article-image-zoomable {
+    cursor: zoom-in !important;
+  }
+}
+
+.article-body .is-image-zoomed img.article-image-zoomable {
+  cursor: zoom-out !important;
+}
+
+.article-body .is-image-zoomed {
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+/* 확대한 이미지가 오른쪽 목차와 겹치지 않게 잠시 목차를 흐리게 숨긴다 */
+.docs-toc {
+  transition: opacity 0.25s ease !important;
+}
+
+body.has-zoomed-image .docs-toc {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
