@@ -175,6 +175,41 @@ export function injectCodeCSS() {
   document.head.appendChild(style)
 }
 
+// 화면에 보여주는 이름 -> Highlight.js 엔진 이름 매핑
+const LANGUAGE_MAP = {
+  'js': 'javascript',
+  'jsx': 'javascript',
+  'javascript': 'javascript',
+  'ts': 'typescript',
+  'tsx': 'typescript',
+  'typescript': 'typescript',
+  'sh': 'bash',
+  'shell': 'bash',
+  'zsh': 'bash',
+  'bash': 'bash',
+  'py': 'python',
+  'python': 'python',
+  'yml': 'yaml',
+  'yaml': 'yaml',
+  'md': 'markdown',
+  'markdown': 'markdown',
+  'html': 'xml',
+  'xml': 'xml',
+  'svg': 'xml',
+  'markup': 'xml',
+  'css': 'css',
+  'json': 'json',
+  'c++': 'cpp',
+  'cpp': 'cpp',
+  'c#': 'csharp',
+  'csharp': 'csharp',
+  'java': 'java',
+  'sql': 'sql',
+  'text': null,
+  'plaintext': null,
+  'plain': null,
+}
+
 export function resolveCodeLanguage(value) {
   if (!value) return { display: 'text', hljs: null }
   const raw = String(value)
@@ -185,44 +220,9 @@ export function resolveCodeLanguage(value) {
     
   const normalized = raw.toLowerCase()
     
-  // 화면에 보여주는 이름 -> Highlight.js 엔진 이름 매핑
-  const map = {
-    'js': 'javascript',
-    'jsx': 'javascript',
-    'javascript': 'javascript',
-    'ts': 'typescript',
-    'tsx': 'typescript',
-    'typescript': 'typescript',
-    'sh': 'bash',
-    'shell': 'bash',
-    'zsh': 'bash',
-    'bash': 'bash',
-    'py': 'python',
-    'python': 'python',
-    'yml': 'yaml',
-    'yaml': 'yaml',
-    'md': 'markdown',
-    'markdown': 'markdown',
-    'html': 'xml',
-    'xml': 'xml',
-    'svg': 'xml',
-    'markup': 'xml',
-    'css': 'css',
-    'json': 'json',
-    'c++': 'cpp',
-    'cpp': 'cpp',
-    'c#': 'csharp',
-    'csharp': 'csharp',
-    'java': 'java',
-    'sql': 'sql',
-    'text': null,
-    'plaintext': null,
-    'plain': null,
-  }
-
   let hljsLang
-  if (normalized in map) {
-    hljsLang = map[normalized]  // null이면 하이라이팅 안 함
+  if (normalized in LANGUAGE_MAP) {
+    hljsLang = LANGUAGE_MAP[normalized]  // null이면 하이라이팅 안 함
   } else if (getHljs().getLanguage(normalized)) {
     hljsLang = normalized
   } else if (/^[a-z0-9-]+$/.test(normalized)) {
@@ -237,27 +237,26 @@ export function resolveCodeLanguage(value) {
   }
 }
 
+// 티스토리는 언어를 고르지 않은 코드 블록에도 자동 추측한 언어를 `<pre class="clojure">`처럼 저장한다.
+// 이 값은 JSON을 clojure, 일반 텍스트를 prolog로 보는 등 자주 틀리므로 라벨로 쓰지 않는다.
+// 에디터에서 직접 고른 언어(data-ke-language)나 마크다운 펜스(language-xxx)만 믿는다.
+const AUTO_DETECT_SUBSET = ['javascript', 'typescript', 'json', 'bash', 'yaml', 'sql', 'xml', 'css', 'python', 'java', 'kotlin', 'markdown']
+
 export function getCodeBlockMeta(pre, block) {
-  const hljs = getHljs()
-  const langFromCodeClass = (Array.from(block.classList)
-    .find(c => c.startsWith('language-') || hljs.getLanguage(c)) || block.className.split(' ')[0])?.replace(/^language-/, '')
-
-  const langFromPreClass = Array.from(pre.classList)
-    .find(c => /^[a-z0-9_+-]+$/i.test(c) && c !== 'line-numbers')?.replace(/^language-/, '')
-
-  const resolved = resolveCodeLanguage(
-    langFromCodeClass ||
+  const explicit =
     pre.getAttribute('data-ke-language') ||
     pre.getAttribute('data-language') ||
     pre.getAttribute('data-lang') ||
-    langFromPreClass ||
-    'text'
-  )
+    Array.from(block.classList).find(c => c.startsWith('language-')) ||
+    Array.from(pre.classList).find(c => c.startsWith('language-'))
 
-  return {
-    displayLang: resolved.display,
-    hljsLang: resolved.hljs
+  if (explicit) {
+    const resolved = resolveCodeLanguage(explicit)
+    return { displayLang: resolved.display, hljsLang: resolved.hljs }
   }
+
+  // 언어를 모르면 라벨은 비우고, 색상만 자주 쓰는 언어 안에서 자동 추측한다
+  return { displayLang: '', hljsLang: null, autoDetect: true }
 }
 
 export function stripCodeMetaDirective(block) {
@@ -269,6 +268,20 @@ export function stripCodeMetaDirective(block) {
   if (match) block.textContent = lines.slice(1).join('\n')
 }
 
+// 첫 줄이 `// bash`, `# python`처럼 언어 이름만 있는 주석이면 그 언어로 쓰고 줄은 지운다
+// 아는 언어 이름일 때만 인식해서 `// todo` 같은 일반 주석은 건드리지 않는다
+export function takeCodeLanguageDirective(block) {
+  const lines = (block.textContent || '').split('\n')
+  const match = lines[0]?.trim().match(/^(?:\/\/|#)\s*([a-z0-9_+#-]+)$/i)
+  if (!match) return null
+
+  const name = match[1].toLowerCase()
+  if (!(name in LANGUAGE_MAP) && !getHljs().getLanguage(name)) return null
+
+  block.textContent = lines.slice(1).join('\n')
+  return name
+}
+
 export async function enhanceCodeBlocks() {
   const blocks = document.querySelectorAll('pre > code')
   if (blocks.length === 0) return
@@ -277,11 +290,19 @@ export async function enhanceCodeBlocks() {
     const pre = block.parentElement
     if (pre.dataset.enhanced) return
     
-    const meta = getCodeBlockMeta(pre, block)
+    const directiveLang = takeCodeLanguageDirective(block)
+    const meta = directiveLang
+      ? { displayLang: directiveLang, hljsLang: resolveCodeLanguage(directiveLang).hljs }
+      : getCodeBlockMeta(pre, block)
     block.className = block.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
     pre.className = pre.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
     
     stripCodeMetaDirective(block)
+    // 티스토리가 추측해 넣은 언어 클래스(clojure, prolog 등)도 지워서 엉뚱한 하이라이터가 붙지 않게 한다
+    if (meta.autoDetect) {
+      const guessed = pre.className.split(/\s+/).filter(c => getHljs().getLanguage(c))
+      guessed.forEach(c => { pre.classList.remove(c); block.classList.remove(c) })
+    }
     if (meta.hljsLang) {
       block.classList.add(`language-${meta.hljsLang}`)
       block.classList.add(meta.hljsLang)
@@ -289,6 +310,16 @@ export async function enhanceCodeBlocks() {
         getHljs().highlightElement(block)
       } catch (e) {
         // 하이라이팅 실패해도 텍스트는 보임
+      }
+    } else if (meta.autoDetect) {
+      try {
+        const result = getHljs().highlightAuto(block.textContent || '', AUTO_DETECT_SUBSET)
+        if (result.language && result.relevance >= 5) {
+          block.innerHTML = result.value
+          block.classList.add('hljs', `language-${result.language}`)
+        }
+      } catch (e) {
+        // 추측 실패하면 색 없이 보여준다
       }
     }
 
@@ -299,7 +330,7 @@ export async function enhanceCodeBlocks() {
     header.className = 'code-header'
     header.innerHTML = `
       <div class="code-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-      <div class="code-title">${meta.displayLang}</div>
+      ${meta.displayLang ? `<div class="code-title">${meta.displayLang}</div>` : ''}
     `
 
     pre.parentNode.insertBefore(wrapper, pre)

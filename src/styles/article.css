@@ -188,7 +188,7 @@ html[data-ui-theme="light"] .article-body {
 }
 
 .article-body h2 {
-  margin-top: 56px !important;
+  margin-top: 28px !important;
   margin-bottom: 18px !important;
   font-size: var(--article-h2-size) !important;
   font-weight: 700 !important;
@@ -275,7 +275,7 @@ html[data-ui-theme="light"] .article-body {
 .article-body blockquote:not([data-ke-style]),
 .article-body blockquote[data-ke-style="style2"],
 .article-body blockquote[data-ke-style="style4"] {
-  padding: 28px 32px !important;
+  padding: 14px 32px !important;
   border: 0 !important;
   border-left: 4px solid var(--accent-strong) !important;
   border-radius: 0 6px 6px 0 !important;
@@ -517,7 +517,7 @@ html[data-ui-theme="light"] .article-body {
   }
 
   .article-body h2 {
-    margin: 36px 0 12px !important;
+    margin: 18px 0 12px !important;
   }
 
   .article-body h3 {
@@ -552,7 +552,7 @@ html[data-ui-theme="light"] .article-body {
   .article-body blockquote:not([data-ke-style]),
   .article-body blockquote[data-ke-style="style2"],
   .article-body blockquote[data-ke-style="style4"] {
-    padding: 20px 18px !important;
+    padding: 10px 18px !important;
     border-left-width: 3px !important;
   }
 
