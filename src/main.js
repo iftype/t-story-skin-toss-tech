@@ -6,6 +6,7 @@ import { injectCodeCSS, enhanceCodeBlocks } from './code.js'
 import { getSavedTheme, applyTheme, cleanInlineStyles, preserveWordCombination } from './theme.js'
 import { decorateWriteLinks, showAdminElements, normalizeProfileAvatars, bindGlobalActions, normalizeFooterGithubLink } from './header.js'
 import { setupCategoryTree, renderCategoryMap } from './category.js'
+import { attachPostsToCategoryTrees } from './category-posts.js'
 import { markPageState, setupPageHeadEyebrow, showEmptyStateWhenNeeded, normalizeListMeta, normalizeListCards, hydrateHomeFeatured, hydrateListSummaries, setupThumbnailFallbacks, hydrateArticleRecommendationsFromSidebar } from './cards.js'
 import { enableArticleImageLinks, normalizeArticleMedia, normalizeMarkdownListParagraphs, assignHeadingIds, setupHeadingAnchors } from './article.js'
 import { generateTOC, updateTocStickyBoundary } from './toc.js'
@@ -28,6 +29,7 @@ function init() {
   hydrateArticleRecommendationsFromSidebar()
   renderCategoryMap()
   setupCategoryTree()
+  attachPostsToCategoryTrees()
   bindGlobalActions()
   enhanceCodeBlocks()
 

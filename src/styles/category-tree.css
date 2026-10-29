@@ -272,3 +272,33 @@
     padding: 2px 6px;
   }
 }
+
+/* 글(파일) 항목: 제목이 길면 한 줄로 자르고, 카테고리보다 한 톤 옅게 */
+.vs-tree-item.is-post .vs-tree-link {
+  min-width: 0;
+}
+
+.vs-tree-item.is-post .vs-tree-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.vs-tree-item.is-post .post-icon {
+  flex: none;
+  opacity: 0.75;
+}
+
+.vs-tree-item.is-post .vs-tree-row.is-active .post-icon {
+  opacity: 1;
+}
+
+/* 글이 없는 폴더를 열었을 때 */
+.vs-tree-item.is-open > .vs-tree-sub-list:empty::before {
+  content: "글 없음";
+  display: block;
+  padding: 4px 0 4px 30px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
