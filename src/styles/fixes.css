@@ -1002,22 +1002,23 @@ html.no-transitions .article-body img {
 }
 
 html[data-ui-theme="dark"] {
-  --bg: #0f1117 !important;
-  --bg-elevated: #141821 !important;
-  --bg-soft: #171b24 !important;
-  --panel: #151922 !important;
-  --line: #29303d !important;
-  --line-soft: #202631 !important;
-  --text-heading: #f8fafc !important;
-  --text: #e6e8ee !important;
-  --text-muted: #b7becb !important;
-  --text-soft: #7f8795 !important;
+  /* 푸른 기 없는 중성 회색. 모바일(OLED)에서 새까맣게 보이지 않도록 한 단계 밝게 */
+  --bg: #1e1e20 !important;
+  --bg-elevated: #252528 !important;
+  --bg-soft: #2a2a2d !important;
+  --panel: #252528 !important;
+  --line: #3a3a3e !important;
+  --line-soft: #303034 !important;
+  --text-heading: #f5f5f6 !important;
+  --text: #e8e8ea !important;
+  --text-muted: #babac0 !important;
+  --text-soft: #8d8d94 !important;
   --accent-soft: rgba(110, 168, 254, 0.12) !important;
-  --topbar-bg: rgba(15, 17, 23, 0.92) !important;
-  --comment-panel-bg: #141821 !important;
-  --comment-card-bg: #171b24 !important;
-  --comment-avatar-bg: #222936 !important;
-  --shadow: 0 18px 48px rgba(0, 0, 0, 0.34) !important;
+  --topbar-bg: rgba(30, 30, 32, 0.92) !important;
+  --comment-panel-bg: #252528 !important;
+  --comment-card-bg: #2a2a2d !important;
+  --comment-avatar-bg: #3a3a3e !important;
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.3) !important;
 }
 
 body.is-home-page .docs-home-featured__title {

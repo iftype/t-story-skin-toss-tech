@@ -1,47 +1,8 @@
 // 마이크로 인터랙션 모음: 테마 전환, 하트 버스트, 공감 수 변화 등
 // 동작을 줄이도록 설정한 사용자(prefers-reduced-motion)에게는 애니메이션 없이 결과만 보여준다.
-import { toggleTheme } from './theme.js'
 
 export const prefersReducedMotion = () =>
   window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
-
-// 1. 다크모드 전환: 버튼 위치에서 원이 퍼지며 새 테마가 드러난다 (View Transitions API)
-//    지원하지 않는 브라우저에서는 기존처럼 색만 부드럽게 바뀐다.
-export function toggleThemeAnimated(button) {
-  const root = document.documentElement
-  const icon = button?.querySelector('.theme-mark')
-
-  if (icon) {
-    icon.classList.remove('is-spinning')
-    void icon.offsetWidth
-    icon.classList.add('is-spinning')
-  }
-
-  if (!document.startViewTransition || prefersReducedMotion() || !button) {
-    toggleTheme()
-    return
-  }
-
-  const rect = button.getBoundingClientRect()
-  const x = rect.left + rect.width / 2
-  const y = rect.top + rect.height / 2
-  const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y))
-
-  // 스냅샷을 찍는 동안 개별 요소의 색상 transition이 섞이지 않게 잠깐 끈다
-  root.classList.add('is-theme-switching')
-  const transition = document.startViewTransition(() => toggleTheme())
-
-  transition.ready
-    .then(() => {
-      root.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-        { duration: 520, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', pseudoElement: '::view-transition-new(root)' }
-      )
-    })
-    .catch(() => {})
-
-  transition.finished.finally(() => root.classList.remove('is-theme-switching'))
-}
 
 // 2. 공감(하트) 버튼: 누르면 작은 하트 조각이 튀고 아이콘이 통통 튄다
 function burstFrom(button) {

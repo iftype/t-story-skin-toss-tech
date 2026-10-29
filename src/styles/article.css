@@ -82,7 +82,7 @@ body.has-article-page .docs-article {
 
 @media(max-width:760px) {
   .docs-article__title {
-    font-size: 26px !important;
+    font-size: 28px !important;
   }
 }
 
@@ -461,18 +461,25 @@ html[data-ui-theme="light"] .article-body {
 }
 
 @media (max-width: 768px) {
+  /* 모바일은 html font-size 가 14px 로 줄어 rem 값이 87.5% 로 작아진다.
+     본문 크기가 기기 폭에 흔들리지 않도록 px 로 고정한다 (본문 16px, 토스 17px · 김민지 13.2px 사이) */
   .docs-layout {
+    --article-body-1-size: 17px;
+    --article-body-2-size: 16px;
+    --article-body-3-size: 15px;
     --article-font-size: var(--article-body-2-size);
-    --article-line-height: 1.72;
+    --article-line-height: 1.75;
     --article-letter-spacing: 0em; /* Zero negative tracking */
-    --article-h1-size: 1.78rem;
+    --article-h1-size: 26px;
     --article-h1-line-height: 1.36;
-    --article-h2-size: 1.38rem;
-    --article-h2-line-height: 1.45;
-    --article-h3-size: 1.18rem;
-    --article-h3-line-height: 1.5;
-    --article-h4-size: 1.06rem;
+    --article-h2-size: 22px;
+    --article-h2-line-height: 1.42;
+    --article-h3-size: 19px;
+    --article-h3-line-height: 1.48;
+    --article-h4-size: 17px;
     --article-h4-line-height: 1.55;
+    --article-quote-size: 16px;
+    --article-quote-emphasis-size: 17px;
     width: 100% !important;
     max-width: none !important;
   }
