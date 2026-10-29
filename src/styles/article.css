@@ -254,16 +254,31 @@ html[data-ui-theme="light"] .article-body {
   quotes: none !important;
 }
 
-/* Style 1: Line quote (Photo 2 style) */
+/* Style 1: 티스토리 에디터의 "인용구 1"처럼 큰 따옴표 아래 가운데 정렬 */
 .article-body blockquote[data-ke-style="style1"] {
-  padding: 8px 0 8px 24px !important;
+  padding: 40px 8px 4px !important;
   border: 0 !important;
-  border-left: 4px solid var(--text) !important;
   border-radius: 0 !important;
   background: transparent !important;
   color: var(--text) !important;
   font-size: var(--article-quote-emphasis-size) !important;
   font-weight: 600 !important;
+  text-align: center !important;
+  position: relative !important;
+}
+
+.article-body blockquote[data-ke-style="style1"]::before {
+  content: "\201C" !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  color: var(--text-soft) !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 48px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
 }
 
 .article-body blockquote[data-ke-style="style1"] > span:first-child,
@@ -296,9 +311,9 @@ html[data-ui-theme="light"] .article-body {
   font-weight: 400 !important;
 }
 
-.article-body blockquote::before,
+.article-body blockquote:not([data-ke-style="style1"])::before,
 .article-body blockquote::after,
-.article-body blockquote[data-ke-style]::before,
+.article-body blockquote[data-ke-style]:not([data-ke-style="style1"])::before,
 .article-body blockquote[data-ke-style]::after {
   content: none !important;
   display: none !important;
@@ -551,9 +566,12 @@ html[data-ui-theme="light"] .article-body {
   }
 
   .article-body blockquote[data-ke-style="style1"] {
-    padding: 4px 0 4px 14px !important;
-    border-left-width: 3px !important;
+    padding: 34px 4px 4px !important;
     font-size: var(--article-quote-emphasis-size) !important;
+  }
+
+  .article-body blockquote[data-ke-style="style1"]::before {
+    font-size: 40px !important;
   }
 
   .article-body blockquote:not([data-ke-style]),

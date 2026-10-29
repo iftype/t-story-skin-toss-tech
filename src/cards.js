@@ -468,7 +468,12 @@ export function extractListPreviewInfo(articleRoot) {
     takeFromRange(Array.from(explicitPreviewNode.querySelectorAll('p, blockquote, ul, ol')), false)
   }
 
-  // 2. Match precise intro/introduction heading keywords
+  // 2. 첫 제목보다 앞에 있는 글(맨 위 인용문 등)을 가장 먼저 쓴다
+  if (collected.length === 0 && firstHeadingIndex > 0) {
+    takeFromRange(nodes.slice(0, firstHeadingIndex))
+  }
+
+  // 3. 앞부분이 비어 있으면 '들어가며/소개' 제목 아래 문단
   if (collected.length === 0) {
     const previewHeadingIndex = nodes.findIndex((node) => {
       if (!/^H[1-6]$/.test(node.tagName)) return false
@@ -479,11 +484,6 @@ export function extractListPreviewInfo(articleRoot) {
     if (previewHeadingIndex >= 0) {
       takeFromRange(nodes.slice(previewHeadingIndex + 1))
     }
-  }
-
-  // 3. Fallback: text before the first heading
-  if (collected.length === 0 && firstHeadingIndex > 0) {
-    takeFromRange(nodes.slice(0, firstHeadingIndex))
   }
 
   // 4. Fallback: text after the first heading
@@ -560,7 +560,7 @@ export async function hydrateListSummaries() {
   })
 
   const parser = new DOMParser()
-  const cachePrefix = 'docs-list-summary-v4:'
+  const cachePrefix = 'docs-list-summary-v5:'
 
   await Promise.allSettled(items.map(async (item) => {
     const summaryNode = item.querySelector('[data-list-summary]')
@@ -693,7 +693,7 @@ export function recommendationContext() {
 export async function fillRecommendationSummaries(items, parser) {
   if (items.length === 0) return
 
-  const cachePrefix = 'docs-list-summary-v4:'
+  const cachePrefix = 'docs-list-summary-v5:'
 
   await Promise.allSettled(items.map(async (item) => {
     // 1. Try sessionStorage cache first
@@ -938,7 +938,7 @@ export function hydrateArticleRecommendationsFromSidebar() {
 
   if (items.length === 0) return
 
-  const cachePrefix = 'docs-list-summary-v4:'
+  const cachePrefix = 'docs-list-summary-v5:'
   const pendingItems = []
   let hasHydrated = false
 
