@@ -281,7 +281,8 @@ html[data-ui-theme="light"] .article-body {
   line-height: 1 !important;
 }
 
-.article-body blockquote[data-ke-style="style1"] > span:first-child,
+/* 빈 장식 요소만 숨긴다. 글자를 감싼 첫 span 까지 숨기면 인용문 내용이 사라진다 */
+.article-body blockquote[data-ke-style="style1"] > span:first-child:empty,
 .article-body blockquote[data-ke-style="style1"] > div:first-child:empty {
   display: none !important;
 }
