@@ -783,28 +783,33 @@ html[data-ui-theme="light"] .article-body {
 }
 
 
-/* 본문 이미지 클릭 확대 */
+/* 본문 이미지 클릭 확대: 화면 위에 떠서 살짝 크게 */
 @media (min-width: 761px) {
   .article-body img.article-image-zoomable {
     cursor: zoom-in !important;
   }
 }
 
-.article-body .is-image-zoomed img.article-image-zoomable {
-  cursor: zoom-out !important;
+.image-zoom-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
 }
 
-.article-body .is-image-zoomed {
-  position: relative !important;
-  z-index: 5 !important;
+html[data-ui-theme="dark"] .image-zoom-backdrop {
+  background: rgba(0, 0, 0, 0.55);
 }
 
-/* 확대한 이미지가 오른쪽 목차와 겹치지 않게 잠시 목차를 흐리게 숨긴다 */
-.docs-toc {
-  transition: opacity 0.25s ease !important;
-}
-
-body.has-zoomed-image .docs-toc {
-  opacity: 0 !important;
-  pointer-events: none !important;
+.image-zoom-layer {
+  position: fixed;
+  z-index: 1001;
+  margin: 0;
+  border-radius: 12px;
+  object-fit: contain;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+  cursor: zoom-out;
 }

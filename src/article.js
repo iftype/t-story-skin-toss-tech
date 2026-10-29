@@ -1,62 +1,57 @@
 import { cleanTextContent, escapeHtml } from './utils.js'
 
-// 본문 이미지를 누르면 원본 페이지로 이동하는 대신, 제자리에서 살짝 크게 보여준다.
-// 다시 누르거나 Esc 를 누르면 원래 크기로 돌아간다.
+// 본문 이미지를 누르면 이미지만 화면 위에 떠서 살짝 크게 보인다(전체 화면 뷰어 아님).
+// 떠 있는 이미지·빈 곳·다른 곳을 누르거나 Esc·스크롤하면 원래 자리로 돌아간다.
+// 다른 이미지를 누르면 지금 것을 닫고 그 이미지를 띄운다.
 const ZOOM_RATIO = 1.4
-const ZOOM_MS = 320
-const ZOOM_TRANSITION = `width ${ZOOM_MS}ms cubic-bezier(0.22, 1, 0.36, 1), margin-left ${ZOOM_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`
+const ZOOM_MS = 280
+const ZOOM_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)'
 
-function zoomTarget(image) {
-  return image.closest('figure, .imageblock, p') || image.parentElement
-}
+let zoomed = null // { image, layer, backdrop, from }
 
-function setImportant(el, styles) {
-  Object.entries(styles).forEach(([key, value]) => el.style.setProperty(key, value, 'important'))
-}
-
-function clearImportant(el, keys) {
-  keys.forEach((key) => el.style.removeProperty(key))
-}
-
-function zoomIn(image) {
-  const box = zoomTarget(image)
-  const column = box.parentElement.getBoundingClientRect()
-  const current = image.getBoundingClientRect()
-  if (!current.width) return
-
-  const ratio = current.height / current.width
-  const naturalWidth = image.naturalWidth || Number(image.getAttribute('data-origin-width')) || current.width * ZOOM_RATIO
-  const sideGap = 48
-  let width = Math.min(current.width * ZOOM_RATIO, window.innerWidth - sideGap, naturalWidth)
+function targetRect(image, from) {
+  const natural = image.naturalWidth || Number(image.getAttribute('data-origin-width')) || from.width * ZOOM_RATIO
+  const ratio = from.height / from.width
+  let width = Math.min(from.width * ZOOM_RATIO, window.innerWidth - 96, natural)
   width = Math.min(width, (window.innerHeight * 0.85) / ratio)
-  if (width <= current.width + 8) return // 더 키울 여유가 없으면 그대로
-
-  // 줄일 때 돌아갈 크기와 위치(본문 칸 기준)를 기억해 둔다
-  const startLeft = current.left - column.left
-  box.dataset.zoomFromWidth = String(current.width)
-  box.dataset.zoomFromLeft = String(startLeft)
-
-  setImportant(box, { 'max-width': 'none', width: `${current.width}px`, 'margin-left': `${startLeft}px`, transform: 'none' })
-  setImportant(image, { width: '100%', 'max-width': 'none', 'max-height': 'none', height: 'auto', margin: '0' })
-  void box.offsetWidth
-  setImportant(box, { transition: ZOOM_TRANSITION, width: `${width}px`, 'margin-left': `${(column.width - width) / 2}px` })
-  box.classList.add('is-image-zoomed')
-  document.body.classList.add('has-zoomed-image')
-  image.setAttribute('aria-expanded', 'true')
+  width = Math.max(width, from.width) // 작아지지는 않게
+  const height = width * ratio
+  return { left: (window.innerWidth - width) / 2, top: (window.innerHeight - height) / 2, width, height }
 }
 
-function zoomOut(image) {
-  const box = zoomTarget(image)
-  if (!box.classList.contains('is-image-zoomed')) return
-  box.classList.remove('is-image-zoomed')
-  if (!document.querySelector('.is-image-zoomed')) document.body.classList.remove('has-zoomed-image')
-  image.setAttribute('aria-expanded', 'false')
-  setImportant(box, { width: `${box.dataset.zoomFromWidth}px`, 'margin-left': `${box.dataset.zoomFromLeft}px` })
-  window.setTimeout(() => {
-    if (box.classList.contains('is-image-zoomed')) return
-    clearImportant(box, ['transition', 'max-width', 'width', 'margin-left', 'transform'])
-    clearImportant(image, ['width', 'max-width', 'max-height', 'height', 'margin'])
-  }, ZOOM_MS)
+function closeZoom(immediate = false) {
+  if (!zoomed) return
+  const { image, layer, backdrop } = zoomed
+  zoomed = null
+  const back = image.getBoundingClientRect()
+  backdrop.style.opacity = '0'
+  if (immediate || !back.width) {
+    layer.remove(); backdrop.remove(); image.style.visibility = ''
+    return
+  }
+  Object.assign(layer.style, { left: `${back.left}px`, top: `${back.top}px`, width: `${back.width}px`, height: `${back.height}px` })
+  window.setTimeout(() => { layer.remove(); backdrop.remove(); image.style.visibility = '' }, ZOOM_MS)
+}
+
+function openZoom(image) {
+  const from = image.getBoundingClientRect()
+  if (!from.width) return
+  const to = targetRect(image, from)
+
+  const backdrop = document.createElement('div')
+  backdrop.className = 'image-zoom-backdrop'
+  const layer = document.createElement('img')
+  layer.className = 'image-zoom-layer'
+  layer.src = image.currentSrc || image.src
+  layer.alt = image.alt || ''
+  Object.assign(layer.style, { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, transition: `left ${ZOOM_MS}ms ${ZOOM_EASE}, top ${ZOOM_MS}ms ${ZOOM_EASE}, width ${ZOOM_MS}ms ${ZOOM_EASE}, height ${ZOOM_MS}ms ${ZOOM_EASE}` })
+  document.body.append(backdrop, layer)
+  image.style.visibility = 'hidden'
+  zoomed = { image, layer, backdrop }
+
+  void layer.offsetWidth
+  backdrop.style.opacity = '1'
+  Object.assign(layer.style, { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px` })
 }
 
 export function enableArticleImageLinks() {
@@ -67,38 +62,45 @@ export function enableArticleImageLinks() {
     if (image.closest('a, button, .code-frame')) return
     const src = image.getAttribute('src') || ''
     if (!src || src.includes('[##_')) return
-
     image.classList.add('article-image-zoomable')
     image.setAttribute('role', 'button')
     image.setAttribute('tabindex', '0')
-    image.setAttribute('aria-expanded', 'false')
     image.setAttribute('aria-label', `${image.getAttribute('alt') || '이미지'} 크게 보기`)
-
   })
 
-  // 이미지 노드가 나중에 교체돼도 동작하도록 window 캡처 단계에서 한 번만 처리한다.
-  // 캡처에서 먼저 막아야 티스토리 기본 이미지 뷰어(전체 화면)가 열리지 않는다.
-  const toggle = (e) => {
+  // window 캡처 단계에서 처리해야 티스토리 기본 이미지 뷰어(전체 화면)보다 먼저 막을 수 있다.
+  const onClick = (e) => {
     const image = e.target.closest?.('img.article-image-zoomable')
-    if (!image || !image.closest('[data-docs-article]')) return
-    // 모바일은 이미지가 이미 화면 폭을 다 써서 키울 여유가 없다. 아무 동작도 하지 않는다
-    if (window.innerWidth <= 760) { e.preventDefault(); e.stopImmediatePropagation(); return }
-    if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return
+    const isArticleImage = image && image.closest('[data-docs-article]')
+
+    if (zoomed) {
+      const wasSame = isArticleImage && zoomed.image === image
+      closeZoom()
+      // 떠 있는 동안의 클릭은 닫기만 한다(뒤에 있던 링크 등이 눌리지 않게). 다른 이미지면 이어서 띄운다
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      if (wasSame || !isArticleImage) return
+    }
+    if (!isArticleImage) return
     e.preventDefault()
     e.stopImmediatePropagation()
-    if (zoomTarget(image).classList.contains('is-image-zoomed')) zoomOut(image)
-    else zoomIn(image)
+    // 모바일은 이미지가 이미 화면 폭을 다 쓰고 있어 키울 여유가 없다
+    if (window.innerWidth <= 760) return
+    openZoom(image)
   }
-  window.addEventListener('click', toggle, true)
-  window.addEventListener('keydown', toggle, true)
+  window.addEventListener('click', onClick, true)
 
   window.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return
-    document.querySelectorAll('[data-docs-article] .is-image-zoomed img.article-image-zoomable').forEach(zoomOut)
-  })
-  window.addEventListener('resize', () => {
-    document.querySelectorAll('[data-docs-article] .is-image-zoomed img.article-image-zoomable').forEach(zoomOut)
-  })
+    if (e.key === 'Escape') closeZoom()
+    const image = e.target.closest?.('img.article-image-zoomable')
+    if (image && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault()
+      if (zoomed?.image === image) closeZoom()
+      else { closeZoom(true); if (window.innerWidth > 760) openZoom(image) }
+    }
+  }, true)
+  window.addEventListener('scroll', () => closeZoom(), { passive: true })
+  window.addEventListener('resize', () => closeZoom(true))
 }
 
 export function normalizeArticleMedia() {
