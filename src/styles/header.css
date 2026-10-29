@@ -232,17 +232,19 @@ body.can-subscribe:not(.is-admin) .docs-subscribe-actions {
 }
 
 .docs-subscribe-actions--topbar {
-  margin: 0 0 0 12px !important;
+  /* 상단바 왼쪽 묶음의 flex gap 을 상쇄해 블로그 이름 바로 옆에 붙인다 */
+  margin: 0 0 0 -16px !important;
 }
 
 .docs-subscribe-btn {
   border: 0 !important;
   padding: 0 4px !important;
   cursor: pointer !important;
-  color: var(--accent-strong) !important;
+  color: var(--text-soft) !important;
   font-family: inherit !important;
 }
 
-.docs-subscribe-btn.is-subscribed {
-  color: var(--text-soft) !important;
+.docs-subscribe-btn:hover,
+.docs-subscribe-btn:focus-visible {
+  color: var(--accent-strong) !important;
 }
