@@ -236,6 +236,8 @@ body.can-subscribe:not(.is-admin) .docs-subscribe-actions {
 }
 
 .docs-subscribe-btn {
+  border: 0 !important;
+  padding: 0 4px !important;
   cursor: pointer !important;
   color: var(--accent-strong) !important;
   font-family: inherit !important;
