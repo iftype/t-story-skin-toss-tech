@@ -4,7 +4,7 @@ import './styles/motion.css'
 
 import { injectCodeCSS, enhanceCodeBlocks } from './code.js'
 import { getSavedTheme, applyTheme, cleanInlineStyles, preserveWordCombination } from './theme.js'
-import { decorateWriteLinks, showAdminElements, normalizeProfileAvatars, bindGlobalActions, normalizeFooterGithubLink } from './header.js'
+import { decorateWriteLinks, showAdminElements, normalizeProfileAvatars, bindGlobalActions, normalizeFooterGithubLink, setupSubscribeButton } from './header.js'
 import { setupCategoryTree, renderCategoryMap } from './category.js'
 import { attachPostsToCategoryTrees } from './category-posts.js'
 import { markPageState, setupPageHeadEyebrow, showEmptyStateWhenNeeded, normalizeListMeta, normalizeListCards, hydrateHomeFeatured, hydrateListSummaries, setupThumbnailFallbacks, hydrateArticleRecommendationsFromSidebar } from './cards.js'
@@ -24,6 +24,7 @@ function init() {
   applyTheme(getSavedTheme())
   decorateWriteLinks()
   showAdminElements()
+  setupSubscribeButton()
   normalizeProfileAvatars()
   setupThumbnailFallbacks()
   hydrateArticleRecommendationsFromSidebar()

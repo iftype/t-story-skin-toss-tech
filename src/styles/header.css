@@ -219,3 +219,28 @@ body:has(#tistory-admin-bar) .docs-profile-actions {
     padding: 0 10px !important;
   }
 }
+
+/* 방문자용 구독하기: 블로그 주인에게는 관리·글쓰기, 방문자에게는 이 버튼이 같은 자리에 보인다 */
+.docs-subscribe-actions {
+  display: none !important;
+  gap: 6px !important;
+  margin-top: 10px !important;
+}
+
+body.can-subscribe:not(.is-admin) .docs-subscribe-actions {
+  display: flex !important;
+}
+
+.docs-subscribe-actions--topbar {
+  margin: 0 0 0 12px !important;
+}
+
+.docs-subscribe-btn {
+  cursor: pointer !important;
+  color: var(--accent-strong) !important;
+  font-family: inherit !important;
+}
+
+.docs-subscribe-btn.is-subscribed {
+  color: var(--text-soft) !important;
+}

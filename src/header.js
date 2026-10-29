@@ -108,3 +108,36 @@ export function normalizeFooterGithubLink() {
     }
   }
 }
+
+// 티스토리는 방문자에게만 숨은 기본 구독 버튼(.btn_subscription)을 넣어준다(블로그 주인에게는 없음).
+// 상단/사이드바의 "구독하기"는 그 버튼을 대신 눌러주고, 구독 상태 글자를 따라간다.
+export function setupSubscribeButton() {
+  const native = document.querySelector('.btn_subscription')
+  const buttons = Array.from(document.querySelectorAll('.docs-subscribe-btn'))
+  if (!native || buttons.length === 0) return
+  if (window.T?.config?.ROLE === 'owner') return
+
+  document.body.classList.add('can-subscribe')
+
+  const sync = () => {
+    const stateText = native.querySelector('.txt_state')?.textContent || ''
+    const subscribed = /구독중/.test(stateText) || native.classList.contains('on') ||
+      (!stateText && Boolean(window.T?.config?.SUBSCRIPTION?.isConnected))
+    buttons.forEach((button) => {
+      button.textContent = subscribed ? '구독중' : '구독하기'
+      button.classList.toggle('is-subscribed', subscribed)
+      button.setAttribute('aria-pressed', subscribed ? 'true' : 'false')
+    })
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault()
+      native.click()
+      window.setTimeout(sync, 800)
+    })
+  })
+
+  new MutationObserver(sync).observe(native, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class'] })
+  sync()
+}
