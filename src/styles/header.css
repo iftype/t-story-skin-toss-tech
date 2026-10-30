@@ -248,3 +248,25 @@ body.can-subscribe:not(.is-admin) .docs-subscribe-actions {
 .docs-subscribe-btn:focus-visible {
   color: var(--accent-strong) !important;
 }
+
+/* 모바일 상단바는 공간이 좁아 블로그 이름과 겹친다. 구독하기는 사이드바(햄버거 메뉴)에만 둔다 */
+@media (max-width: 760px) {
+  body.can-subscribe:not(.is-admin) .docs-subscribe-actions--topbar {
+    display: none !important;
+  }
+}
+
+/* 글 작성자: 데스크톱에서는 수정/삭제를 상단바(관리·글쓰기 옆)에 둔다. 모바일은 상단바가 좁아 본문 위 그대로 */
+.docs-profile-actions__link--article {
+  display: none !important;
+}
+
+@media (min-width: 761px) {
+  body.is-admin.has-article-page .docs-topbar .docs-profile-actions__link--article {
+    display: inline-flex !important;
+  }
+
+  body.is-admin.has-article-page.has-header-article-actions .docs-article__meta-admin-group {
+    display: none !important;
+  }
+}

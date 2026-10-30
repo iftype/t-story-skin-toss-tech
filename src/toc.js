@@ -57,7 +57,13 @@ export function generateTOC() {
   const tocNav = document.getElementById('toc-content')
   const tocContainer = document.querySelector('.docs-toc')
   const layout = document.querySelector('.docs-layout')
-  if (!article || !tocNav) return
+  if (!tocNav) return
+  if (!article) {
+    // 보호글처럼 본문이 없으면 "목차" 제목만 남지 않게 숨긴다
+    document.body.classList.add('no-toc')
+    if (tocContainer) tocContainer.style.display = 'none'
+    return
+  }
 
   if (layout) layout.classList.add('has-article')
   if (tocContainer) tocContainer.style.display = ''

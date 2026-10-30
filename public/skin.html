@@ -468,17 +468,21 @@
                     <h1 class="docs-article__title">[##_article_rep_title_##]</h1>
                   </header>
                   <div class="docs-protected">
-                    <p>보호된 글입니다. 비밀번호를 입력하면 내용을 볼 수 있습니다.</p>
+                    <svg class="docs-protected__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                    <p class="docs-protected__title">비밀번호로 보호된 글이에요</p>
+                    <p class="docs-protected__desc">비밀번호를 입력하면 내용을 볼 수 있어요.</p>
                     <div class="docs-protected__row">
-                      <label for="[##_article_password_##]">Password</label>
+                      <label class="a11y-hidden" for="[##_article_password_##]">비밀번호</label>
                       <input
                         id="[##_article_password_##]"
                         type="password"
                         maxlength="16"
+                        placeholder="비밀번호"
+                        autocomplete="off"
                         name="[##_article_password_##]"
                         onkeydown="if (event.keyCode == 13) [##_article_dissolve_##]"
                       >
-                      <button type="button" onclick="[##_article_dissolve_##]">Open</button>
+                      <button type="button" onclick="[##_article_dissolve_##]">확인</button>
                     </div>
                   </div>
                 </article>

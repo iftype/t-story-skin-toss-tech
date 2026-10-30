@@ -141,3 +141,17 @@ export function setupSubscribeButton() {
   new MutationObserver(sync).observe(native, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class'] })
   sync()
 }
+
+// 글 작성자일 때 본문 위 "수정 / 삭제" 링크를 상단바 관리·글쓰기 옆에도 만든다(데스크톱에서만 보임, CSS)
+export function addArticleActionsToHeader() {
+  const sources = Array.from(document.querySelectorAll('.docs-article__meta-admin-group .docs-article__meta-admin-link'))
+  const target = document.querySelector('.docs-topbar .docs-profile-actions')
+  if (sources.length === 0 || !target || target.querySelector('.docs-profile-actions__link--article')) return
+
+  sources.forEach((source) => {
+    const link = source.cloneNode(true)
+    link.className = 'docs-profile-actions__link docs-profile-actions__link--article'
+    target.appendChild(link)
+  })
+  document.body.classList.add('has-header-article-actions')
+}

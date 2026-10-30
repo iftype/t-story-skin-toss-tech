@@ -1453,12 +1453,6 @@ body.has-list-page .docs-list-item__summary[data-list-summary]:not([data-preview
     width: 114.285% !important;
   }
 
-  .docs-protected input {
-    font-size: 16px !important;
-    transform: scale(0.875) !important;
-    transform-origin: left center !important;
-    width: 114.285% !important;
-  }
 }
 
 /* Smooth dark mode theme transition for topbar background and border */

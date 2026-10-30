@@ -815,3 +815,74 @@ html[data-ui-theme="dark"] .image-zoom-backdrop {
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
   cursor: zoom-out;
 }
+
+/* 보호글(비밀번호) 화면 */
+.docs-protected {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 8px 0 0 !important;
+  padding: 40px 24px !important;
+  border: 1px solid var(--line-soft) !important;
+  border-radius: 16px !important;
+  background: var(--bg-soft) !important;
+  text-align: center !important;
+}
+
+.docs-protected__icon {
+  color: var(--text-soft);
+  margin-bottom: 6px;
+}
+
+.docs-protected__title {
+  margin: 0 !important;
+  color: var(--text-heading) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+}
+
+.docs-protected__desc {
+  margin: 0 0 14px !important;
+  color: var(--text-muted) !important;
+  font-size: 14px !important;
+}
+
+.docs-protected__row {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 340px !important;
+  margin: 0 !important;
+}
+
+.docs-protected__row input {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  padding: 0 14px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 10px !important;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-size: 16px !important;
+  outline: none !important;
+}
+
+.docs-protected__row input:focus {
+  border-color: var(--accent) !important;
+}
+
+.docs-protected__row button {
+  flex: none !important;
+  height: 44px !important;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: var(--accent) !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
