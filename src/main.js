@@ -7,7 +7,7 @@ import { getSavedTheme, applyTheme, cleanInlineStyles, preserveWordCombination }
 import { decorateWriteLinks, showAdminElements, normalizeProfileAvatars, bindGlobalActions, normalizeFooterGithubLink, setupSubscribeButton, addArticleActionsToHeader } from './header.js'
 import { setupCategoryTree, renderCategoryMap } from './category.js'
 import { attachPostsToCategoryTrees } from './category-posts.js'
-import { markPageState, setupPageHeadEyebrow, showEmptyStateWhenNeeded, normalizeListMeta, normalizeListCards, hydrateHomeFeatured, hydrateListSummaries, setupThumbnailFallbacks, hydrateArticleRecommendationsFromSidebar } from './cards.js'
+import { markPageState, setupPageHeadEyebrow, showEmptyStateWhenNeeded, normalizeListMeta, normalizeListCards, hydrateHomeFeatured, hydrateListSummaries, setupThumbnailFallbacks, hydrateArticleRecommendationsFromSidebar, useOriginalGifThumbnails } from './cards.js'
 import { enableArticleImageLinks, normalizeArticleMedia, normalizeMarkdownListParagraphs, assignHeadingIds, setupHeadingAnchors, renderInlineBackticks, makeTablesScrollable } from './article.js'
 import { generateTOC, updateTocStickyBoundary } from './toc.js'
 import { syncCommentComposerAvatar, normalizeLegacyComments, trackOpenCommentMenus, renderCommentMarkdown, setupCommentFallback, setupCommentReplyClick, setupCommentAvatarLogin } from './comments.js'
@@ -28,6 +28,7 @@ function init() {
   addArticleActionsToHeader()
   normalizeProfileAvatars()
   setupThumbnailFallbacks()
+  useOriginalGifThumbnails()
   hydrateArticleRecommendationsFromSidebar()
   renderCategoryMap()
   setupCategoryTree()

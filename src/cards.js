@@ -1098,3 +1098,21 @@ export function hydrateNativeRecommendations() {
     item.style.setProperty('--recommend-label', `"${label}"`)
   })
 }
+
+// 티스토리 썸네일 CDN(img1.daumcdn.net/thumb/R750x0 등)은 움직이는 GIF 를 앞부분 10~15프레임(0.3~0.6초)만 남겨 줄인다.
+// 그래서 목록·슬라이더의 GIF 가 계속 처음으로 돌아가는 것처럼 보인다. GIF 는 원본 주소(fname)로 바꿔 끝까지 재생되게 한다.
+export function useOriginalGifThumbnails(root = document) {
+  root.querySelectorAll('img[src*="daumcdn.net/thumb/"]').forEach((img) => {
+    if (img.closest('[data-docs-article]')) return
+    const src = img.getAttribute('src') || ''
+    let original = ''
+    try {
+      original = new URL(src, location.href).searchParams.get('fname') || ''
+    } catch (_) {
+      return
+    }
+    if (!/\.gif(?:$|\?)/i.test(decodeURIComponent(original.split('?')[0]))) return
+    img.removeAttribute('srcset')
+    img.setAttribute('src', original)
+  })
+}
