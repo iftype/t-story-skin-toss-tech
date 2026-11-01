@@ -184,6 +184,23 @@ export function applyGeneratedListPlaceholder(item) {
   thumb.appendChild(labelEl)
 }
 
+// 홈 슬라이더: 이미지 주소별로 <img> 를 한 번만 만들어 재사용한다(초기화가 두 번 돌아도 같은 요소를 쓴다)
+function featuredSlideImage(root, mediaContainer, data) {
+  if (!mediaContainer) return null
+  root.__featuredImages = root.__featuredImages || new Map()
+  let img = root.__featuredImages.get(data.imageSrc)
+  if (!img || !img.isConnected) {
+    img = document.createElement('img')
+    img.className = 'featured-slide-img'
+    img.decoding = 'async'
+    img.src = data.imageSrc
+    mediaContainer.appendChild(img)
+    root.__featuredImages.set(data.imageSrc, img)
+  }
+  img.alt = data.title
+  return img
+}
+
 export async function hydrateHomeFeatured() {
   const root = document.querySelector('[data-home-featured]')
   if (!root || !document.body.classList.contains('is-home-page')) return
@@ -325,10 +342,15 @@ export async function hydrateHomeFeatured() {
       if (existingEmoji) existingEmoji.remove()
 
       const hasImage = data.imageSrc && !data.imageSrc.includes('[##_')
-      if (imageNode && hasImage) {
-        imageNode.setAttribute('src', data.imageSrc)
-        imageNode.setAttribute('alt', data.title)
-        imageNode.style.display = ''
+      // 슬라이드마다 이미지 요소를 따로 두고 보이기/숨기기만 바꾼다.
+      // 하나의 <img> 에 src 를 갈아 끼우면 GIF 썸네일이 슬라이드가 돌아올 때마다 처음부터 다시 재생된다.
+      const slideImage = hasImage ? featuredSlideImage(root, mediaContainer, data) : null
+      mediaContainer?.querySelectorAll('img.featured-slide-img').forEach((img) => {
+        img.classList.toggle('is-current', img === slideImage)
+      })
+      if (imageNode) imageNode.style.display = 'none'
+
+      if (hasImage) {
         if (mediaContainer) {
           mediaContainer.classList.remove('is-empty')
           mediaContainer.classList.remove('is-generated')
@@ -337,11 +359,6 @@ export async function hydrateHomeFeatured() {
         }
         root.classList.remove('has-no-image')
       } else {
-        if (imageNode) {
-          imageNode.setAttribute('src', '') // Clear stale src to fully purge previous slide's image
-          imageNode.setAttribute('alt', '')
-          imageNode.style.display = 'none'
-        }
         if (mediaContainer) {
           mediaContainer.classList.add('is-empty')
           mediaContainer.classList.add('is-generated')

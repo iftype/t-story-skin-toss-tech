@@ -1506,3 +1506,16 @@ body.is-search-empty-body .docs-content {
   margin-left: auto !important;
   margin-right: auto !important;
 }
+
+/* 홈 슬라이더: 슬라이드별 이미지를 겹쳐 두고 현재 것만 보인다(GIF 가 처음부터 다시 재생되지 않게) */
+body.is-home-page .docs-home-featured__media img.featured-slide-img {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+}
+
+body.is-home-page .docs-home-featured .docs-home-featured__media img.featured-slide-img:not(.is-current),
+body.is-home-page .docs-home-featured .docs-home-featured__media.is-empty img.featured-slide-img {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
