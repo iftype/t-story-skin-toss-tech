@@ -326,3 +326,23 @@ export function renderInlineBackticks() {
     node.parentNode.replaceChild(fragment, node)
   })
 }
+
+// 모바일에서 열이 많은 표는 칸이 좁아져 "100 / ms", "140m / s" 처럼 글자가 세로로 쪼개진다.
+// 표를 가로 스크롤 상자로 감싸고, 짧은 칸(숫자·단위 등)은 줄바꿈하지 않게 표시한다.
+export function makeTablesScrollable() {
+  const article = document.querySelector('[data-docs-article]')
+  if (!article) return
+
+  article.querySelectorAll('table').forEach((table) => {
+    if (table.closest('.table-scroll, .code-frame')) return
+    const wrapper = document.createElement('div')
+    wrapper.className = 'table-scroll'
+    table.parentNode.insertBefore(wrapper, table)
+    wrapper.appendChild(table)
+
+    table.querySelectorAll('th, td').forEach((cell) => {
+      const text = (cell.textContent || '').trim()
+      if (text.length > 0 && text.length <= 12) cell.classList.add('is-short-cell')
+    })
+  })
+}

@@ -886,3 +886,47 @@ html[data-ui-theme="dark"] .image-zoom-backdrop {
   font-weight: 600 !important;
   cursor: pointer !important;
 }
+
+/* 표: 넓으면 가로로 스크롤, 짧은 칸은 한 줄 유지 */
+.article-body .table-scroll {
+  width: 100%;
+  margin: 24px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.article-body .table-scroll > table {
+  margin: 0 !important;
+  min-width: 100%;
+}
+
+.article-body th.is-short-cell,
+.article-body td.is-short-cell {
+  white-space: nowrap !important;
+}
+
+.article-body th,
+.article-body td {
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}
+
+@media (max-width: 760px) {
+  .article-body .table-scroll > table {
+    width: max-content !important;
+  }
+
+  .article-body th,
+  .article-body td {
+    padding: 10px 12px !important;
+    font-size: var(--article-body-3-size) !important;
+    line-height: 1.5 !important;
+    min-width: 72px;
+    max-width: 220px;
+  }
+
+  .article-body th *,
+  .article-body td * {
+    font-size: inherit !important;
+  }
+}
