@@ -2218,94 +2218,95 @@ body .docs-comments .tt-comment-cont iframe {
 }
 
 /* ==========================================================================
-   토스 테크 스타일 댓글 입력칸 (비로그인)
+   토스 테크 스타일 댓글 UI (모양만 바꾼다. 이름·비밀번호 등 입력 방식은 티스토리 그대로)
    ========================================================================== */
-body .docs-comments .tt-area-write.is-guest-compose .tt-box-account {
-  position: relative !important;
+
+/* "댓글 0" 제목 */
+body .docs-comments .tt-box-total {
+  gap: 6px !important;
+  margin: 0 0 28px !important;
+  color: var(--text-heading) !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
 }
 
-/* 티스토리가 요구하는 비밀번호는 자동으로 채우고 숨긴다 */
-body .docs-comments .tt-area-write.is-guest-compose .tt-box-account input[type="password"] {
-  display: none !important;
+body .docs-comments .tt-box-total .tt_txt_g,
+body .docs-comments .tt-box-total .tt_num_g {
+  font: inherit !important;
+  color: inherit !important;
 }
 
-body .docs-comments .tt-area-write.is-guest-compose .tt-box-account input[type="text"] {
-  padding-right: 104px !important;
+/* 입력칸: 둥근 큰 칸, 흰 바탕 */
+body .docs-comments .tt-area-write .tt-box-account input,
+body .docs-comments .tt-area-write .tt-wrap-account input {
+  height: 52px !important;
+  min-height: 52px !important;
+  padding: 0 18px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 14px !important;
+  background: var(--bg) !important;
   font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 52px !important;
 }
 
-body .docs-comments .docs-nickname-shuffle {
-  position: absolute !important;
-  top: 50% !important;
-  right: 8px !important;
-  transform: translateY(-50%) !important;
-  height: 32px !important;
-  min-height: 32px !important;
-  min-width: 0 !important;
-  padding: 0 12px !important;
-  border: 0 !important;
-  border-radius: 8px !important;
-  background: var(--bg-soft) !important;
-  color: var(--text-muted) !important;
-  font-family: var(--font-sans) !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  line-height: 32px !important;
-  cursor: pointer !important;
+body .docs-comments .tt-area-write .tt-cmt,
+body .docs-comments .tt-area-write [contenteditable="true"] {
+  min-height: 140px !important;
+  padding: 16px 18px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 14px !important;
+  background: var(--bg) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
 }
 
-body .docs-comments .docs-nickname-shuffle:hover {
-  color: var(--text) !important;
+body .docs-comments .tt-area-write {
+  --cmt-form-avatar: 52px;
 }
 
-/* 아바타: 닉네임에 맞춘 이모지 */
-body .docs-comments .tt-area-write.is-guest-compose > .tt-box-thumb[data-emoji] {
-  position: relative !important;
-}
-
-body .docs-comments .tt-area-write.is-guest-compose > .tt-box-thumb[data-emoji] .tt-thumbnail {
-  background-image: none !important;
-  background-color: #efe7fb !important;
-}
-
-html[data-ui-theme="dark"] body .docs-comments .tt-area-write.is-guest-compose > .tt-box-thumb[data-emoji] .tt-thumbnail {
-  background-color: #3a3346 !important;
-}
-
-body .docs-comments .tt-area-write.is-guest-compose > .tt-box-thumb[data-emoji]::after {
-  content: attr(data-emoji);
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: calc(var(--cmt-form-avatar) * 0.5);
-  line-height: 1;
-  pointer-events: none;
-}
-
-/* 안내 문구 */
-body .docs-comments .tt-area-write.is-guest-compose .tt-cmt:empty::before {
-  content: "입력한 댓글은 수정하거나 삭제할 수 없어요. 또한 허위사실, 욕설, 사칭 등 댓글은 통보없이 삭제될 수 있습니다." !important;
-  color: var(--comment-muted) !important;
-}
-
-body .docs-comments .tt-area-write.is-guest-compose .tt-cmt {
-  min-height: 120px !important;
-}
-
-/* 등록 버튼 → "댓글 남기기" */
+/* 등록 버튼: "댓글 남기기", 둥근 파란 버튼 (내용 없으면 연하게) */
 body .docs-comments .tt-area-write .tt-btn_register {
+  height: 48px !important;
+  min-height: 48px !important;
+  padding: 0 22px !important;
+  border-radius: 14px !important;
   font-size: 0 !important;
-  padding: 0 20px !important;
-  border-radius: 12px !important;
+  line-height: 48px !important;
 }
 
 body .docs-comments .tt-area-write .tt-btn_register::after {
   content: "댓글 남기기";
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 
 body .docs-comments .tt-area-write .tt-btn_register:disabled {
+  background: var(--accent) !important;
+  color: #fff !important;
   opacity: 0.45 !important;
+}
+
+@media (max-width: 760px) {
+  body .docs-comments .tt-box-total {
+    font-size: 17px !important;
+    margin-bottom: 20px !important;
+  }
+
+  body .docs-comments .tt-area-write {
+    --cmt-form-avatar: 40px;
+  }
+
+  body .docs-comments .tt-area-write .tt-box-account input,
+  body .docs-comments .tt-area-write .tt-wrap-account input {
+    height: 46px !important;
+    min-height: 46px !important;
+    line-height: 46px !important;
+  }
+
+  body .docs-comments .tt-area-write .tt-cmt,
+  body .docs-comments .tt-area-write [contenteditable="true"] {
+    min-height: 110px !important;
+  }
 }

@@ -12,7 +12,6 @@ import { enableArticleImageLinks, normalizeArticleMedia, normalizeMarkdownListPa
 import { generateTOC, updateTocStickyBoundary } from './toc.js'
 import { syncCommentComposerAvatar, normalizeLegacyComments, trackOpenCommentMenus, renderCommentMarkdown, setupCommentFallback, setupCommentReplyClick, setupCommentAvatarLogin } from './comments.js'
 import { setupFloatingLikeButton, arrangeLikeButton } from './likes.js'
-import { setupGuestCommentCompose } from './comment-compose.js'
 import { setupLikeMotion, setupPressFeedback } from './motion.js'
 
 // 모듈 로드 즉시 페이지 상태 클래스를 설정하여 CSS 레이아웃 깜빡임(FOUC) 방지
@@ -60,7 +59,6 @@ function init() {
   // 기존 리액트 댓글 노드를 파괴하지 않고 바로 하위에 별도로 생성된 격리 노드(.docs-comment-markdown)에만 
   // 마크다운 번역 결과를 인젝션하므로, React Virtual DOM 붕괴(Minified React Error) 우려가 전혀 없는 100% 안전한 기법입니다.
   renderCommentMarkdown()
-  setupGuestCommentCompose()
   const commentsRoot = document.querySelector('.docs-comments')
   if (commentsRoot && 'MutationObserver' in window) {
     let commentsTimer = null
