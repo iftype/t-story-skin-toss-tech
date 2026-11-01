@@ -267,3 +267,9 @@ html[data-ui-theme="light"] .code-frame .token.string-property {
     font-size: 13px !important;
   }
 }
+
+/* 첫 줄 주석으로 지정한 파일 이름은 대문자로 바꾸지 않고 그대로 보여 준다 */
+.code-title.code-title--file {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}

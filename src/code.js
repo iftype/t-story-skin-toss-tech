@@ -1,4 +1,4 @@
-import { getHljs } from './utils.js'
+import { getHljs, escapeHtml } from './utils.js'
 
 export function injectCodeCSS() {
   if (document.getElementById('docs-code-colors')) return
@@ -268,18 +268,33 @@ export function stripCodeMetaDirective(block) {
   if (match) block.textContent = lines.slice(1).join('\n')
 }
 
-// 첫 줄이 `// bash`, `# python`처럼 언어 이름만 있는 주석이면 그 언어로 쓰고 줄은 지운다
-// 아는 언어 이름일 때만 인식해서 `// todo` 같은 일반 주석은 건드리지 않는다
+// 코드 블록 첫 줄 주석 규칙
+// 1) `// test.tsx`, `# scripts/build.sh` 처럼 파일 이름이면: 확장자로 하이라이팅하고, 위 제목에 파일 이름을 그대로 보여 준다
+// 2) `// bash`, `# python` 처럼 언어 이름만 있으면: 그 언어로 하이라이팅하고 제목도 언어 이름
+// 아는 확장자/언어일 때만 인식해서 `// todo` 같은 일반 주석은 건드리지 않는다. 인식한 줄은 코드에서 지운다
+const EXTENSION_MAP = { kt: 'kotlin', kts: 'kotlin', mjs: 'javascript', cjs: 'javascript', mts: 'typescript', cts: 'typescript', htm: 'html', scss: 'css' }
+
 export function takeCodeLanguageDirective(block) {
   const lines = (block.textContent || '').split('\n')
-  const match = lines[0]?.trim().match(/^(?:\/\/|#)\s*([a-z0-9_+#-]+)$/i)
-  if (!match) return null
+  const first = lines[0]?.trim() || ''
+  const knows = (name) => name in LANGUAGE_MAP || Boolean(getHljs().getLanguage(name))
 
-  const name = match[1].toLowerCase()
-  if (!(name in LANGUAGE_MAP) && !getHljs().getLanguage(name)) return null
+  const file = first.match(/^(?:\/\/|#|--)\s*((?:[\w@.-]+\/)*[\w@.-]*\.([a-z0-9+#]+))\s*$/i)
+  if (file) {
+    const ext = file[2].toLowerCase()
+    const lang = EXTENSION_MAP[ext] || ext
+    if (knows(lang)) {
+      block.textContent = lines.slice(1).join('\n')
+      return { lang, fileName: file[1] }
+    }
+  }
 
-  block.textContent = lines.slice(1).join('\n')
-  return name
+  const named = first.match(/^(?:\/\/|#)\s*([a-z0-9_+#-]+)$/i)
+  if (named && knows(named[1].toLowerCase())) {
+    block.textContent = lines.slice(1).join('\n')
+    return { lang: named[1].toLowerCase(), fileName: null }
+  }
+  return null
 }
 
 export async function enhanceCodeBlocks() {
@@ -290,9 +305,9 @@ export async function enhanceCodeBlocks() {
     const pre = block.parentElement
     if (pre.dataset.enhanced) return
     
-    const directiveLang = takeCodeLanguageDirective(block)
-    const meta = directiveLang
-      ? { displayLang: directiveLang, hljsLang: resolveCodeLanguage(directiveLang).hljs }
+    const directive = takeCodeLanguageDirective(block)
+    const meta = directive
+      ? { displayLang: directive.fileName || directive.lang, hljsLang: resolveCodeLanguage(directive.lang).hljs, isFileName: Boolean(directive.fileName) }
       : getCodeBlockMeta(pre, block)
     block.className = block.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
     pre.className = pre.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
@@ -330,7 +345,7 @@ export async function enhanceCodeBlocks() {
     header.className = 'code-header'
     header.innerHTML = `
       <div class="code-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-      ${meta.displayLang ? `<div class="code-title">${meta.displayLang}</div>` : ''}
+      ${meta.displayLang ? `<div class="code-title${meta.isFileName ? ' code-title--file' : ''}">${escapeHtml(meta.displayLang)}</div>` : ''}
     `
 
     pre.parentNode.insertBefore(wrapper, pre)
