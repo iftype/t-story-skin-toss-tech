@@ -308,7 +308,7 @@ export async function enhanceCodeBlocks() {
     const directive = takeCodeLanguageDirective(block)
     const meta = directive
       ? { displayLang: directive.fileName || directive.lang, hljsLang: resolveCodeLanguage(directive.lang).hljs, isFileName: Boolean(directive.fileName) }
-      : getCodeBlockMeta(pre, block)
+      : { ...getCodeBlockMeta(pre, block), displayLang: '' } // 첫 줄 주석이 없으면 제목은 비워 두고, 색만 에디터에서 고른 언어로 입힌다
     block.className = block.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
     pre.className = pre.className.replace(/\blanguage-[a-z0-9_-]+\b/gi, '')
     
