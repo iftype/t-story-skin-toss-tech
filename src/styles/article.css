@@ -231,8 +231,8 @@ html[data-ui-theme="light"] .article-body {
 .article-body ul,
 .article-body ol {
   margin: 20px 0 10px !important;
-  padding-left: 0 !important;
-  list-style-position: inside !important;
+  padding-left: 1.4em !important;
+  list-style-position: outside !important; /* 두 줄로 넘어가도 글자 시작 위치에 맞춰 줄이 이어진다 */
 }
 
 .article-body li {
@@ -554,8 +554,8 @@ html[data-ui-theme="light"] .article-body {
   .article-body ul,
   .article-body ol {
     margin: 18px 0 6px !important;
-    padding-left: 0 !important;
-    list-style-position: inside !important;
+    padding-left: 1.3em !important;
+    list-style-position: outside !important;
   }
 
   .article-body li {

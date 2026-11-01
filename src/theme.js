@@ -163,7 +163,7 @@ export function cleanZeroWidthSpaces(container) {
   const nodes = []
   let currentNode = walker.nextNode()
   while (currentNode) {
-    if (/[\u200b\u200c\u200d\ufeff\u00ad]/.test(currentNode.nodeValue)) {
+    if (/[\u200b\u200c\u200d\ufeff\u00ad]/.test(currentNode.nodeValue) || (currentNode.nodeValue.includes('\u00a0') && /[^\s\u00a0]/.test(currentNode.nodeValue))) {
       nodes.push(currentNode)
     }
     currentNode = walker.nextNode()
@@ -171,6 +171,10 @@ export function cleanZeroWidthSpaces(container) {
 
   nodes.forEach(node => {
     node.nodeValue = node.nodeValue.replace(/[\u200b\u200c\u200d\ufeff\u00ad]/g, '')
+    // 에디터가 넣은 줄바꿈 금지 공백(&nbsp;)이 글자 사이에 있으면 문장 전체가 한 덩어리가 되어
+    // "배운 점:" 뒤에서 통째로 다음 줄로 넘어간다. 글자가 있는 줄에서는 보통 공백으로 바꾼다.
+    // (&nbsp; 만 있는 빈 문단은 간격용이라 그대로 둔다)
+    if (/[^\s\u00a0]/.test(node.nodeValue)) node.nodeValue = node.nodeValue.replace(/\u00a0/g, ' ')
   })
 }
 
