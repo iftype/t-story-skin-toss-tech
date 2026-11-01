@@ -229,7 +229,13 @@ export async function hydrateHomeFeatured() {
         const doc = parser.parseFromString(html, 'text/html')
 
         // 1. Extract thumbnail
-        let imageSrc = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || ''
+        // 홈 목록 카드에 이미 있는 대표이미지를 먼저 쓴다. og:image 는 비공개 글처럼 비어 있을 때가 있어
+        // 본문 첫 이미지로 넘어가 버리고, 같은 주소를 써야 목록과 슬라이더의 GIF 가 서로를 다시 재생시키지 않는다.
+        const listCard = Array.from(document.querySelectorAll('.docs-list-item[data-card-href]'))
+          .find((card) => card.dataset.cardHref === href || card.dataset.cardHref === new URL(href, location.origin).pathname)
+        const listThumb = listCard?.querySelector('.docs-list-item__thumb img')?.getAttribute('src') || ''
+        let imageSrc = listThumb && !isDefaultThumbnailUrl(listThumb) ? listThumb : ''
+        if (!imageSrc) imageSrc = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || ''
         if (imageSrc && (imageSrc.includes('tistory.com/static') || imageSrc.includes('img_blank'))) {
           imageSrc = ''
         }
@@ -388,6 +394,11 @@ export async function hydrateHomeFeatured() {
     startAutoplay() // 수동으로 넘기면 다음 자동 전환까지의 시간을 처음부터 다시 센다
   }
   root.__featuredAutoplay = { start: startAutoplay, stop: stopAutoplay }
+
+  // 슬라이드 이미지를 처음에 한꺼번에 만들어 둔다. 보는 중에 새 <img> 가 생기면 같은 GIF 를 쓰는 다른 곳까지 처음부터 다시 재생된다
+  slides.forEach((slide) => {
+    if (slide.imageSrc && !slide.imageSrc.includes('[##_')) featuredSlideImage(root, mediaContainer, slide)
+  })
 
   // Initial render
   showSlide(0)
