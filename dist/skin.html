@@ -11,8 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script>
 	      (function () {
-	        var savedTheme = localStorage.getItem('docs-theme');
-	        var theme = savedTheme || 'dark';
+	        // 처음 온 사람은 라이트 모드. 테마 버튼을 직접 누른 사람만 그 선택을 기억한다
+	        var savedTheme = null;
+	        try { savedTheme = localStorage.getItem('docs-theme-choice'); } catch (e) {}
+	        var theme = savedTheme === 'dark' ? 'dark' : 'light';
 	        var path = window.location.pathname.replace(/\/+$/, '') || '/';
 	        document.documentElement.setAttribute('data-theme', theme === 'light' ? 'github-light' : 'github-dark');
 	        document.documentElement.setAttribute('data-ui-theme', theme);

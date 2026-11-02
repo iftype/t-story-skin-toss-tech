@@ -1,10 +1,15 @@
 import { escapeHtml } from './utils.js'
 
-const STORAGE_KEY = 'docs-theme'
+// 예전 키('docs-theme')는 페이지를 열 때마다 자동으로 저장돼서, 고르지 않은 사람도 다크로 고정됐다.
+// 새 키는 테마 버튼을 직접 눌렀을 때만 저장한다. 고르지 않았으면 라이트로 시작한다.
+const STORAGE_KEY = 'docs-theme-choice'
 
 export function getSavedTheme() {
-  const saved = window.localStorage.getItem(STORAGE_KEY)
-  return saved || 'dark'
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) === 'dark' ? 'dark' : 'light'
+  } catch (_) {
+    return 'light'
+  }
 }
 
 export function cleanInlineStyles() {
@@ -268,14 +273,16 @@ export function preserveWordCombination() {
   })
 }
 
-export function applyTheme(theme) {
+export function applyTheme(theme, { remember = false } = {}) {
   const normalized = theme === 'dark' ? 'dark' : 'light'
   document.documentElement.setAttribute('data-ui-theme', normalized)
-  window.localStorage.setItem(STORAGE_KEY, normalized)
+  if (remember) {
+    try { window.localStorage.setItem(STORAGE_KEY, normalized) } catch (_) {}
+  }
   cleanInlineStyles()
 }
 
 export function toggleTheme() {
   const current = document.documentElement.getAttribute('data-ui-theme') === 'dark' ? 'dark' : 'light'
-  applyTheme(current === 'dark' ? 'light' : 'dark')
+  applyTheme(current === 'dark' ? 'light' : 'dark', { remember: true })
 }

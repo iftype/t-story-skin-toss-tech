@@ -1519,3 +1519,9 @@ body.is-home-page .docs-home-featured .docs-home-featured__media.is-empty img.fe
   opacity: 0 !important;
   pointer-events: none !important;
 }
+
+
+/* 카테고리 폴더를 펼쳐 페이지가 길어질 때 세로 스크롤바가 생기며 화면이 옆으로 밀리지 않게 스크롤바 자리를 항상 비워 둔다 */
+html {
+  scrollbar-gutter: stable;
+}
