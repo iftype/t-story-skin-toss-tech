@@ -66,7 +66,7 @@
       <name>profileGithub</name>
       <label><![CDATA[프로필 GitHub URL]]></label>
       <type>STRING</type>
-      <default><![CDATA[]]></default>
+      <default><![CDATA[https://github.com/iftype]]></default>
     </variable>
     <variable>
       <name>profileLinkedin</name>
