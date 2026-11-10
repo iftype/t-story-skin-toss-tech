@@ -341,15 +341,14 @@ export async function enhanceCodeBlocks() {
     const wrapper = document.createElement('div')
     wrapper.className = 'code-frame'
 
-    const header = document.createElement('div')
-    header.className = 'code-header'
-    header.innerHTML = `
-      <div class="code-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-      ${meta.displayLang ? `<div class="code-title${meta.isFileName ? ' code-title--file' : ''}">${escapeHtml(meta.displayLang)}</div>` : ''}
-    `
-
+    // 맥 창 모양(빨강·노랑·초록 점)은 쓰지 않는다. 첫 줄 주석으로 제목을 정한 블록에만 제목 줄을 둔다
     pre.parentNode.insertBefore(wrapper, pre)
-    wrapper.appendChild(header)
+    if (meta.displayLang) {
+      const header = document.createElement('div')
+      header.className = 'code-header'
+      header.innerHTML = `<div class="code-title${meta.isFileName ? ' code-title--file' : ''}">${escapeHtml(meta.displayLang)}</div>`
+      wrapper.appendChild(header)
+    }
     wrapper.appendChild(pre)
     pre.dataset.enhanced = 'true'
   })

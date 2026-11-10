@@ -273,3 +273,8 @@ html[data-ui-theme="light"] .code-frame .token.string-property {
   text-transform: none !important;
   letter-spacing: 0 !important;
 }
+
+/* 맥 창 모양 점은 쓰지 않는다(예전 HTML 이 남아 있어도 숨김) */
+.code-dots {
+  display: none !important;
+}
