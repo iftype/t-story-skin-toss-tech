@@ -4,12 +4,12 @@
     <name>Dev Docs Tistory</name>
     <version>2.0.0</version>
     <description><![CDATA[개발 문서 사이트 레이아웃을 참고한 티스토리 문서형 스킨입니다. 커스텀 댓글 UI, 홈 슬라이더, 자동 썸네일 대체 이미지, 목차 강조, 코드 블록 가독성에 초점을 맞췄습니다.]]></description>
-    <license><![CDATA[Personal and commercial use allowed with attribution.]]></license>
+    <license><![CDATA[MIT. 출처(저장소 링크)를 남기면 개인·상업 블로그 모두 자유롭게 쓸 수 있습니다.]]></license>
   </information>
   <author>
-    <name>OpenAI Codex</name>
-    <homepage>https://openai.com</homepage>
-    <email>support@openai.com</email>
+    <name>iftype</name>
+    <homepage>https://github.com/iftype/t-story-skin-toss-tech</homepage>
+    <email>conditionaltype@gmail.com</email>
   </author>
   <default>
     <recentEntries>8</recentEntries>

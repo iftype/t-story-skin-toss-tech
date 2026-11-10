@@ -99,14 +99,15 @@ export function bindGlobalActions() {
   })
 }
 
+// 푸터의 GitHub·LinkedIn·이메일은 스킨 옵션(또는 skin.config.json)에 값이 있을 때만 보인다
 export function normalizeFooterGithubLink() {
-  const githubLink = document.querySelector('.docs-footer__github')
-  if (githubLink) {
-    const href = githubLink.getAttribute('href')
-    if (!href || href.trim() === '' || href.includes('[##_var_')) {
-      githubLink.setAttribute('href', 'https://github.com')
-    }
-  }
+  document.querySelectorAll('[data-profile-link]').forEach((link) => {
+    const href = (link.getAttribute('href') || '').trim()
+    const empty = !href || href.includes('[##_var_') || href === 'mailto:' || href === 'https://github.com'
+    link.hidden = empty
+  })
+  const footer = document.querySelector('.docs-footer')
+  if (footer && !footer.querySelector('[data-profile-link]:not([hidden])')) footer.classList.add('is-empty')
 }
 
 // 티스토리는 방문자에게만 숨은 기본 구독 버튼(.btn_subscription)을 넣어준다(블로그 주인에게는 없음).

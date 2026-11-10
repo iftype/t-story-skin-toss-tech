@@ -668,6 +668,15 @@ body.is-home-page .docs-footer {
   font-size: 13px !important;
 }
 
+.docs-footer__inner {
+  gap: 14px !important;
+}
+
+.docs-footer__link[hidden] {
+  display: none !important;
+}
+
+.docs-footer__link,
 .docs-footer__github {
   color: var(--text-soft) !important;
   transition: color 0.2s ease, transform 0.2s ease !important;
@@ -675,6 +684,7 @@ body.is-home-page .docs-footer {
   align-items: center !important;
 }
 
+.docs-footer__link:hover,
 .docs-footer__github:hover {
   color: var(--text-heading) !important;
   transform: scale(1.1) !important;

@@ -85,6 +85,37 @@
 
 ---
 
+## ⚙️ 내 블로그에 맞게 설정하기
+
+개인 정보는 코드에 없고 `skin.config.json` 한 곳에 모여 있습니다. 기본값은 모두 빈칸입니다.
+
+```json
+{
+  "skin": {
+    "name": "Toss Tech Style",
+    "description": "스킨 보관함에 보이는 설명"
+  },
+  "owner": {
+    "github": "https://github.com/내아이디",
+    "email": "me@example.com",
+    "linkedin": "https://www.linkedin.com/in/내아이디"
+  }
+}
+```
+
+| 항목 | 쓰이는 곳 | 빈칸이면 |
+|---|---|---|
+| `skin.name`, `skin.description` | 스킨 보관함의 이름·설명 | 기본 이름 |
+| `owner.github` | 푸터 GitHub 아이콘 | 아이콘 숨김 |
+| `owner.linkedin` | 푸터 LinkedIn 아이콘 | 아이콘 숨김 |
+| `owner.email` | 푸터 메일 아이콘 (`mailto:`) | 아이콘 숨김 |
+
+채운 뒤 `npm run build` 하면 `dist/index.xml`의 스킨 옵션 기본값에 들어갑니다. 버전은 `package.json`의 `version`을 따릅니다.
+
+빌드하지 않고 받은 zip을 그대로 쓴다면, 스킨을 적용한 뒤 **꾸미기 > 스킨 편집 > 스킨 옵션**에서 `프로필 GitHub URL` 같은 칸을 채워도 됩니다. 이미 적용된 스킨은 스킨 옵션 값이 우선합니다.
+
+---
+
 ## 🛠️ 스킨 등록하기
 
 처음 한 번만 등록하면 됩니다.
@@ -116,6 +147,7 @@ npm run test:local   # 티스토리 치환자 fixture 기반 Playwright 스모�
 | `src/*.js` | 스킨 동작 (`main.js`가 진입점) |
 | `src/styles/` | 스타일 |
 | `src/highlight/` | 코드 하이라이터 (Prism을 스킨에 직접 포함) |
+| `skin.config.json` | 블로그 주인 정보·스킨 이름 (빌드할 때 `index.xml`에 들어감) |
 
 ---
 
@@ -124,6 +156,7 @@ npm run test:local   # 티스토리 치환자 fixture 기반 Playwright 스모�
 버전 태그를 push하면 GitHub Actions가 빌드하고 릴리즈를 만듭니다.
 
 ```bash
+# package.json 의 version 을 올린 뒤
 git tag v2.1.0
 git push origin v2.1.0
 ```
